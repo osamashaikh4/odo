@@ -10,7 +10,6 @@ const LoginForm = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const data = Object.fromEntries(new FormData(e.currentTarget));
   };
 
