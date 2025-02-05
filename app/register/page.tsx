@@ -1,4 +1,5 @@
 import LoginForm from "@/components/login/LoginForm";
+import RegistrationForm from "@/components/register/RegistrationForm";
 import { Button } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,17 +18,17 @@ export default function page() {
         />
       </div>
       <div className="w-full justify-center items-center flex flex-col">
-        <LoginForm />
+        <RegistrationForm />
         <div className="mx-auto p-8 flex items-center">
-          <span className="text-sm">New here?</span>{" "}
-          <Link href="/register">
+          <span className="text-sm">Already have an account?</span>{" "}
+          <Link href="/login">
             <Button
               variant="light"
               color="primary"
               className="underline p-2 hover:!bg-transparent"
               radius="sm"
             >
-              Create a free account
+              Sign In
             </Button>
           </Link>
         </div>

@@ -68,3 +68,12 @@ body {
 ::-webkit-scrollbar-track {
   border-radius: 2rem;
 }
+
+.intl-phone-input .PhoneInputInput {
+  --tw-bg-opacity: 1;
+  background-color: hsl(
+    var(--heroui-default-100) /
+      var(--heroui-default-100-opacity, var(--tw-bg-opacity))
+  );
+  outline: none;
+}

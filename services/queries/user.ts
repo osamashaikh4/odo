@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, register } from "../api/user";
+import { emailCheck, login, register } from "../api/user";
 import { MutationParams } from "./types";
 import { defaultParams } from "./utils";
 
@@ -23,5 +23,11 @@ export const useRegisterUserMutation = (params: MutationParams) =>
 export const useLoginUserMutation = (params: MutationParams) =>
   useMutation({
     mutationFn: login,
+    ...params,
+  });
+
+export const useEmailCheckMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: emailCheck,
     ...params,
   });

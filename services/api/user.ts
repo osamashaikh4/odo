@@ -6,3 +6,6 @@ export const register = (data: User) =>
 
 export const login = (data: User) =>
   axios.post("/users/login", data).then((res) => res.data);
+
+export const emailCheck = async (data: { email: string }) =>
+  await axios.post("/users/email-check", data);

@@ -20,7 +20,7 @@ const LoginForm = () => {
       setCookie("odo-access-token", accessToken, { expires: today });
       localStorage.setItem("odo-access-token", accessToken);
       localStorage.setItem("odo-refresh-token", refreshToken);
-      window.location.href = "/";
+      window.location.href = "/home";
     }
   };
 
@@ -46,8 +46,8 @@ const LoginForm = () => {
       onSubmit={onSubmit}
       validationBehavior="native"
     >
-      <div className="w-[28rem] sm:w-[34rem] bg-white border border-gray-200 rounded flex flex-col py-8 px-12 gap-6">
-        <h3 className="text-3xl font-bold mb-4">Welcome back!</h3>
+      <div className="w-[28rem] sm:w-[36rem] bg-white border border-gray-200 rounded flex flex-col py-8 px-12 gap-6">
+        <h3 className="text-3xl font-semibold mb-4">Welcome back!</h3>
         <Input
           size="md"
           className="w-full"

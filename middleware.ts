@@ -19,7 +19,7 @@ export default async function middleware(req: NextRequest) {
         decoded.user.type !== "admin" &&
         path.startsWith("/admin"))
     ) {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/home", req.url));
     }
   } else {
     if (path.startsWith("/home")) {
