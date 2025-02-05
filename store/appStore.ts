@@ -1,8 +1,9 @@
+import { User } from "@/services/queries/user";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface AppState {
-  user?: any;
+  user?: User;
   update: (attrs: Partial<AppState>) => void;
 }
 
