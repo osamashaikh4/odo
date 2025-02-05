@@ -8,15 +8,9 @@ const axiosInstance = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-const baseToken = process.env.NEXT_PUBLIC_BASE_TOKEN;
-
-const getToken = () => {
-  return localStorage.getItem("accessToken");
-};
-
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("odo-access-token");
     if (accessToken) {
       config.headers["auth-token"] = accessToken;
     }
@@ -69,7 +63,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = localStorage.getItem("refreshToken");
+      const refreshToken = localStorage.getItem("odo-refresh-token");
 
       return new Promise((resolve, reject) => {
         axios
@@ -79,7 +73,7 @@ axiosInstance.interceptors.response.use(
             },
           })
           .then(({ data }) => {
-            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("odo-access-token", data.accessToken);
             axiosInstance.defaults.headers.common["auth-token"] =
               data.accessToken;
             originalRequest.headers["auth-token"] = data.accessToken;
@@ -88,10 +82,9 @@ axiosInstance.interceptors.response.use(
           })
           .catch((err) => {
             if (err.response && err.response.data.message === "Token refresh") {
-              localStorage.removeItem("user");
-              localStorage.removeItem("accessToken");
-              localStorage.removeItem("refreshToken");
-              localStorage.removeItem("viewMap");
+              localStorage.removeItem("odo-store");
+              localStorage.removeItem("odo-access-token");
+              localStorage.removeItem("odo-refresh-token");
               window.location.href = "/";
             }
           })

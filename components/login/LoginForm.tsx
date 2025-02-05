@@ -1,16 +1,43 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input } from "@heroui/react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { useAppStore } from "@/store/appStore";
+import { useLoginUserMutation } from "@/services/queries/user";
+import { toast } from "react-toastify";
+import { setCookie } from "cookies-next";
 
 const LoginForm = () => {
-  const [isVisible, setIsVisible] = React.useState(false);
+  const appStore = useAppStore();
+  const [isVisible, setIsVisible] = useState(false);
+
+  const onSuccess = (data: any) => {
+    if (data.userID) {
+      const { accessToken, refreshToken, ...user } = data;
+      const today = new Date();
+      today.setTime(today.getTime() + 1000 * 24 * 60 * 60 * 1000);
+      appStore.update({ user });
+      setCookie("odo-access-token", accessToken, { expires: today });
+      localStorage.setItem("odo-access-token", accessToken);
+      localStorage.setItem("odo-refresh-token", refreshToken);
+      window.location.href = "/";
+    }
+  };
+
+  const onError = (error: any) => {
+    toast.error(error.response.data.error);
+  };
+
+  const loginUser = useLoginUserMutation({ onSuccess, onError });
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    const values: any = Object.fromEntries(
+      new FormData(e.currentTarget as any)
+    );
+    loginUser.mutate({ ...values, email: values.email.toLowerCase() });
   };
 
   return (
@@ -28,6 +55,7 @@ const LoginForm = () => {
           type="email"
           radius="sm"
           isRequired
+          name="email"
           labelPlacement="outside"
           placeholder="Enter your email"
         />
@@ -52,10 +80,16 @@ const LoginForm = () => {
           labelPlacement="outside"
           placeholder=" "
           label="Password"
+          name="password"
           radius="sm"
           type={isVisible ? "text" : "password"}
         />
-        <Button type="submit" color="primary" radius="sm">
+        <Button
+          isLoading={loginUser.isPending}
+          type="submit"
+          color="primary"
+          radius="sm"
+        >
           Log in to my account
         </Button>
       </div>
