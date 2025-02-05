@@ -15,7 +15,9 @@ const Tabs = ({ options, selected }: TabsProps) => {
     <HeroTabs
       classNames={{ tabList: "pb-0" }}
       variant="underlined"
-      onSelectionChange={(k: any) => router.push(k)}
+      onSelectionChange={(k: any) =>
+        router.push(options.find((o) => o.key === k)?.href ?? k)
+      }
       selectedKey={options.find((o) => o.href === pathname)?.key ?? selected}
     >
       {options.map((o) => (

@@ -29,6 +29,14 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.bg-custom-grey {
+  background-color: rgba(235, 235, 235, 1);
+}
+
+.transparent-bg {
+  background: rgb(240, 240, 240);
+}
+
 [data-overlay-container="true"] {
   height: 100%;
   width: 100%;

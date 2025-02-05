@@ -59,7 +59,7 @@ const Sidebar = ({ active }: SidebarProps) => {
   return (
     <div
       id="sidebar"
-      className="w-[217px] h-full sticky top-0 z-50 overflow-hidden flex flex-col border-r border-r-gray-200 transition-all duration-300 ease-in-out justify-between"
+      className="w-[220px] h-full sticky top-0 z-50 overflow-hidden flex flex-col border-r border-r-gray-200 transition-all duration-300 ease-in-out justify-between"
     >
       <div
         className="h-full bg-white"
@@ -81,9 +81,9 @@ const Sidebar = ({ active }: SidebarProps) => {
               {SidebarItems.map((sidebarItem) => (
                 <li key={sidebarItem.value}>
                   <Link
-                    href={sidebarItem.value}
+                    href={`/${sidebarItem.value}`}
                     className={cn(
-                      "text-lg text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group",
+                      "text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group",
                       active === sidebarItem.value ? "bg-gray-100" : ""
                     )}
                   >

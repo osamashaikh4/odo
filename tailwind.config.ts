@@ -18,6 +18,13 @@ export default {
   },
   plugins: [
     heroui({
+      layout: {
+        radius: {
+          small: "5px",
+          medium: "8px",
+          large: "10px",
+        },
+      },
       themes: {
         light: {
           colors: {
