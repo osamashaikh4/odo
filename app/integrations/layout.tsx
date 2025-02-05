@@ -1,8 +1,8 @@
+import React from "react";
 import Header from "@/components/common/Header";
 import SectionHeader from "@/components/common/SectionHeader";
 import Sidebar from "@/components/common/Sidebar";
 import Tabs from "@/components/common/Tabs";
-import React from "react";
 
 export default function RootLayout({
   children,
