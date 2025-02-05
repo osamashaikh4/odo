@@ -28,3 +28,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+[data-overlay-container="true"] {
+  height: 100%;
+  width: 100%;
+}
+
+.grid-view {
+  display: grid;
+  gap: 2.6rem;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: auto;
+}
+
+.maxlines-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  max-height: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2rem;
+}

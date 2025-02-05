@@ -81,11 +81,7 @@ const Sidebar = ({ active }: SidebarProps) => {
               {SidebarItems.map((sidebarItem) => (
                 <li key={sidebarItem.value}>
                   <Link
-                    href={
-                      sidebarItem.value === "dashboard"
-                        ? "/admin"
-                        : "/admin/" + sidebarItem.value
-                    }
+                    href={sidebarItem.value}
                     className={cn(
                       "text-lg text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group",
                       active === sidebarItem.value ? "bg-gray-100" : ""
