@@ -11,11 +11,13 @@ export type Integration = {
   updatedAt: string;
 };
 
+type GetIntegrationsResponse = { results: Integration[]; count: number };
+
 export const useIntegrationsQuery = (
-  params?: Omit<UseQueryOptions<Integration[]>, "queryKey">
+  params?: Omit<UseQueryOptions<GetIntegrationsResponse>, "queryKey">
 ) =>
-  useQuery<Integration[]>({
+  useQuery<GetIntegrationsResponse>({
     queryKey: ["integrations"],
-    queryFn: () => getIntegrations(),
+    queryFn: getIntegrations,
     ...params,
   });

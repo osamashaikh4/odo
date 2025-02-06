@@ -21,7 +21,7 @@ const Tabs = ({ options, selected }: TabsProps) => {
       selectedKey={options.find((o) => o.href === pathname)?.key ?? selected}
     >
       {options.map((o) => (
-        <HeroTab className="text-base" key={o.key} title={o.title} />
+        <HeroTab className="text-sm" key={o.key} title={o.title} />
       ))}
     </HeroTabs>
   );
