@@ -1,5 +1,5 @@
-import {onErrorToast, onSuccessToast} from '../../helpers';
-import {MutationParams} from './types';
+import { MutationParams } from "./types";
+import { onErrorToast, onSuccessToast } from "@/helpers/toast";
 
 export const defaultParams = (params: MutationParams) => ({
   onError(error: any) {

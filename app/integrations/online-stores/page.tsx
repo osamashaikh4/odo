@@ -1,6 +1,6 @@
 import React from "react";
-import StoreCard from "@/components/integrations/StoreCard";
 import StoresHolderCard from "@/components/integrations/StoresHolderCard";
+import OnlineStores from "@/components/integrations/OnlineStores";
 
 export default function page() {
   return (
@@ -9,9 +9,7 @@ export default function page() {
       description="Connect your online store to our dashboard for real-time order
               sync. No more manual data entry—enjoy seamless efficiency!"
     >
-      <div className="grid-view">
-        <StoreCard />
-      </div>
+      <OnlineStores />
     </StoresHolderCard>
   );
 }
