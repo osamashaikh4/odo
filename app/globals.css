@@ -77,3 +77,10 @@ body {
   );
   outline: none;
 }
+
+.integration-detail-grid-view {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0rem;
+  overflow: auto;
+}

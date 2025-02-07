@@ -1,5 +1,12 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getIntegrations } from "../api/integration";
+import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  authorizeIntegration,
+  getIntegration,
+  getIntegrations,
+  saveIntegration,
+} from "../api/integration";
+import { MutationParams } from "./types";
+import { defaultParams } from "./utils";
 
 export type Integration = {
   integrationID: string;
@@ -9,6 +16,8 @@ export type Integration = {
   integrationImage: string;
   createdAt: string;
   updatedAt: string;
+  integrationAbout: string;
+  connectionMethod: string;
 };
 
 type GetIntegrationsResponse = { results: Integration[]; count: number };
@@ -20,4 +29,28 @@ export const useIntegrationsQuery = (
     queryKey: ["integrations"],
     queryFn: getIntegrations,
     ...params,
+  });
+
+export const useIntegrationQuery = (
+  id: string,
+  params?: Omit<UseQueryOptions<Integration>, "queryKey">
+) =>
+  useQuery<Integration>({
+    queryKey: ["integration", id],
+    queryFn: () => getIntegration(id),
+    ...params,
+  });
+
+export const useAuthorizeIntegrationMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: authorizeIntegration,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useSaveIntegrationMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: saveIntegration,
+    ...params,
+    ...defaultParams(params),
   });
