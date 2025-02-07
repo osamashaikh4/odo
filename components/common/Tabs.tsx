@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Tabs as HeroTabs, Tab as HeroTab } from "@heroui/react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface TabsProps {
   selected: string;
@@ -10,7 +10,6 @@ interface TabsProps {
 
 const Tabs = ({ options, selected }: TabsProps) => {
   const router = useRouter();
-  const pathname = usePathname();
   return (
     <HeroTabs
       classNames={{ tabList: "pb-0" }}
@@ -18,7 +17,7 @@ const Tabs = ({ options, selected }: TabsProps) => {
       onSelectionChange={(k: any) =>
         router.push(options.find((o) => o.key === k)?.href ?? k)
       }
-      selectedKey={options.find((o) => o.href === pathname)?.key ?? selected}
+      selectedKey={selected}
     >
       {options.map((o) => (
         <HeroTab className="text-sm" key={o.key} title={o.title} />

@@ -1,12 +1,14 @@
 import { Integration } from "@/services/queries/integration";
 import { Button } from "@heroui/react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
-// "https://storage.googleapis.com/tryoto-public/sales-channels-logo/salla.png";
+
 const StoreCard = ({
   integrationName,
   integrationDescription,
   integrationImage,
+  integrationSlug,
 }: Integration) => {
   return (
     <div className="flex rounded-md border border-gray-100 px-4 py-5 w-full gap-4">
@@ -29,9 +31,11 @@ const StoreCard = ({
             {integrationDescription}
           </p>
         </div>
-        <Button variant="bordered" radius="sm">
-          Explore Integration
-        </Button>
+        <Link href={`/integrations/${integrationSlug}`}>
+          <Button variant="bordered" radius="sm">
+            Explore Integration
+          </Button>
+        </Link>
       </div>
     </div>
   );

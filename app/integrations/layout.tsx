@@ -16,27 +16,7 @@ export default function RootLayout({
         <Header />
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto py-10">
-            <div className="px-10">
-              <SectionHeader title="Integrations" icon="apps" />
-            </div>
-            <div className="px-6">
-              <Tabs
-                selected="online-stores"
-                options={[
-                  {
-                    title: "All Integrations",
-                    key: "online-stores",
-                    href: "/integrations/online-stores",
-                  },
-                  {
-                    title: "Connected Integrations",
-                    key: "connected-stores",
-                    href: "/integrations/connected-stores",
-                  },
-                ]}
-              />
-              {children}
-            </div>
+            {children}
           </div>
         </div>
       </div>
