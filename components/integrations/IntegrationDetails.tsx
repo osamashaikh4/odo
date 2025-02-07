@@ -39,7 +39,7 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
   const saveIntegration = useSaveIntegrationMutation({
     onSuccess(data) {
       setLoading(false);
-      router.push("/integration");
+      router.push("/integrations");
     },
   });
 
@@ -69,12 +69,14 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
   };
 
   useEffect(() => {
-    window.addEventListener("message", handleMessage, false);
+    if (integration) {
+      window.addEventListener("message", handleMessage, false);
+    }
     return () => {
       window.removeEventListener("message", handleMessage, false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [integration]);
 
   return integration ? (
     <div>

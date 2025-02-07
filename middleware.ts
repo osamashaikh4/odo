@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
 
+const protectedRoutes = [
+  "home",
+  "shipments",
+  "integrations",
+  "shipping-partners",
+  "pickup-location",
+];
+
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const cookieStore = req.cookies;
@@ -22,7 +30,7 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/home", req.url));
     }
   } else {
-    if (path.startsWith("/home")) {
+    if (protectedRoutes.some((pr) => path.includes(pr))) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
