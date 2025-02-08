@@ -32,6 +32,10 @@ export default {
               foreground: "#FFFFFF",
               DEFAULT: "#506efe",
             },
+            danger: {
+              foreground: "#FFFFFF",
+              DEFAULT: "#ea5151",
+            },
           },
         },
         dark: {
