@@ -1,8 +1,7 @@
 import React from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
-import Image from "next/image";
-import SectionHeader from "@/components/common/SectionHeader";
+import PickupLocation from "@/components/pickup-location/PickupLocation";
 
 export default function page() {
   return (
@@ -11,9 +10,7 @@ export default function page() {
       <div className="flex flex-col w-0 flex-1">
         <Header />
         <div className="flex flex-col flex-1 relative overflow-auto">
-          <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto p-10">
-            <SectionHeader title="Pickup Location" icon="location" />
-          </div>
+          <PickupLocation />
         </div>
       </div>
     </div>

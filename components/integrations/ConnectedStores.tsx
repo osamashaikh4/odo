@@ -76,7 +76,7 @@ const ConnectedStores = () => {
                     Are you sure you want to remove the connection with{" "}
                     {alert.integration.integrationName}?
                   </p>
-                  <p className="text-[0.8rem] text-default-600">
+                  <p className="text-[0.8rem] text-foreground-500">
                     Removing the store's connection will delete its credentials,
                     requiring you to reconnect from the beginning.
                   </p>

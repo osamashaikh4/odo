@@ -47,10 +47,11 @@ const ConnectedStoreCard = ({
           </p>
           {storeName && (
             <p className="text-sm">
-              <span className="text-default-600">Store Name:</span> {storeName}
+              <span className="text-foreground-500">Store Name:</span>{" "}
+              {storeName}
             </p>
           )}
-          <p className="text-xs text-default-600">
+          <p className="text-xs text-foreground-500">
             added {moment(createdAt).fromNow()}
           </p>
         </div>

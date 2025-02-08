@@ -27,7 +27,7 @@ const StoreCard = ({
       <div className="flex flex-col flex-1 gap-3">
         <div className="flex flex-col gap-1">
           <p className="text-base font-semibold">{integrationName}</p>
-          <p className="leading-tight text-xs maxlines-3 overflow-hidden text-ellipsis">
+          <p className="text-foreground-600 leading-tight text-xs maxlines-3 overflow-hidden text-ellipsis">
             {integrationDescription}
           </p>
         </div>

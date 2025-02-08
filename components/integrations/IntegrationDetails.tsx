@@ -120,11 +120,11 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
             width={64}
             height={64}
           />
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col">
             <p className="text-lg font-semibold">
               {integration.integrationName}
             </p>
-            <p className="text-sm text-default-600">
+            <p className="text-[0.825rem] text-foreground-600">
               Check the guidelines below to integrate your Salla store into your
               account.
             </p>
@@ -135,7 +135,7 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
             <p className="text-lg font-semibold">
               About {integration.integrationName}
             </p>
-            <p className="text-sm text-default-600">
+            <p className="text-[0.825rem] text-foreground-600">
               {integration.integrationAbout}
             </p>
           </div>
