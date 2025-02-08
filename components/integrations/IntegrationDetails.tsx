@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@heroui/react";
+import { Button, Tooltip } from "@heroui/react";
 import Link from "next/link";
 import { MdArrowBack } from "react-icons/md";
 import Image from "next/image";
@@ -93,12 +93,17 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
           </div>
         </div>
         <Button
+          isDisabled={
+            integration.connections && integration.connections.length > 0
+          }
           isLoading={authorizeIntegration.isPending || loading}
           radius="sm"
           color="primary"
           onPress={onConnect}
         >
-          Connect
+          {integration.connections && integration.connections.length > 0
+            ? "Connected"
+            : "Connect"}
         </Button>
       </div>
       <div className="">

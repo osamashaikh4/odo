@@ -5,6 +5,7 @@ type Props = {
   params: { slug: string };
 };
 
-export default function page({ params }: Props) {
-  return <IntegrationDetails id={params.slug} />;
+export default async function page({ params }: Props) {
+  const { slug } = await params;
+  return <IntegrationDetails id={slug} />;
 }

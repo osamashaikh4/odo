@@ -1,16 +1,12 @@
 import React from "react";
-import SectionHeader from "../common/SectionHeader";
-import Tabs from "../common/Tabs";
+import SectionHeader from "@/components/common/SectionHeader";
+import Tabs from "@/components/common/Tabs";
 
-interface WrapperProps {
-  activeTab?: string;
-  children: React.ReactNode;
-}
-
-const IntegrationWrapper = ({
-  activeTab = "online-stores",
+export default function RootLayout({
   children,
-}: WrapperProps) => {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <>
       <div className="px-10">
@@ -18,7 +14,7 @@ const IntegrationWrapper = ({
       </div>
       <div className="px-6">
         <Tabs
-          selected={activeTab}
+          selected="online-stores"
           options={[
             {
               title: "All Integrations",
@@ -36,6 +32,4 @@ const IntegrationWrapper = ({
       </div>
     </>
   );
-};
-
-export default IntegrationWrapper;
+}

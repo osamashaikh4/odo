@@ -20,6 +20,7 @@ export type Integration = {
   updatedAt: string;
   integrationAbout: string;
   connectionMethod: string;
+  connections?: Connection[];
 };
 
 export type Connection = {
