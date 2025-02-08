@@ -1,6 +1,12 @@
 import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { MutationParams } from "./types";
-import { getCountries, getStates, uploadImage } from "../api/common";
+import {
+  getCities,
+  getCountries,
+  getDistricts,
+  getStates,
+  uploadImage,
+} from "../api/common";
 import { defaultParams } from "./utils";
 
 export type Country = {
@@ -36,11 +42,22 @@ export const useStatesQuery = (
   });
 
 export const useCitiesQuery = (
+  state?: string,
   params?: Omit<UseQueryOptions<City[]>, "queryKey">
 ) =>
   useQuery<City[]>({
-    queryKey: ["cities"],
-    queryFn: getStates,
+    queryKey: ["cities", state],
+    queryFn: () => getCities(state),
+    ...params,
+  });
+
+export const useDistrictsQuery = (
+  city?: string,
+  params?: Omit<UseQueryOptions<{ name: string }[]>, "queryKey">
+) =>
+  useQuery<{ name: string }[]>({
+    queryKey: ["districts", city],
+    queryFn: () => getDistricts(city),
     ...params,
   });
 

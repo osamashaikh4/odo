@@ -6,8 +6,13 @@ export const getCountries = () =>
 export const getStates = () =>
   axios.get("/enums/states?countryCode=SA").then((res) => res.data);
 
-export const getCities = () =>
-  axios.get("/enums/cities?countryCode=SA").then((res) => res.data);
+export const getCities = (state?: string) =>
+  axios
+    .get("/enums/cities?countryCode=SA" + (state ? `&stateCode=${state}` : ""))
+    .then((res) => res.data);
+
+export const getDistricts = (city?: string) =>
+  axios.get("/enums/districts?cityName=" + city).then((res) => res.data);
 
 export const uploadImage = (formData: FormData) =>
   axios

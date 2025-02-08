@@ -18,11 +18,11 @@ export type Warehouse = {
   warehouseAddress: string;
   warehouseCity: string;
   warehouseState: string;
-  warehouseDistrict?: string;
-  warehouseZipCode?: number;
-  warehouseStreetName?: string;
-  warehouseBuilding?: string;
-  warehouseStatus?: number;
+  warehouseDistrict: string;
+  warehouseZipCode: number;
+  warehouseStreetName: string;
+  warehouseBuilding: string;
+  warehouseStatus: number;
 };
 
 export const useWarehouseQuery = (
