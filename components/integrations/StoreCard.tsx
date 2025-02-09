@@ -32,7 +32,7 @@ const StoreCard = ({
           </p>
         </div>
         <Link href={`/integrations/${integrationSlug}`}>
-          <Button variant="bordered" radius="sm">
+          <Button variant="bordered" radius="sm" className="border-small">
             Explore Integration
           </Button>
         </Link>

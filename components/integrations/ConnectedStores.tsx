@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   Connection,
+  Integration,
   useConnectionsQuery,
   useRemoveConnectionMutation,
 } from "@/services/queries/integration";
@@ -13,11 +14,15 @@ import Search from "../common/Search";
 import useDebounce from "@/hooks/useDebounce";
 import EmptyRecords from "../common/EmptyRecords";
 import List from "../common/List";
+import SyncOrdersModal from "./SyncOrdersModal";
 
 const ConnectedStores = () => {
   const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce<string>(query, 500);
+  const [syncOrdersModal, setSyncOrdersModal] = useState<Integration | null>(
+    null
+  );
   const [alert, setAlert] = useState<Connection | null>(null);
   const { data: connections = [], isFetching } = useConnectionsQuery();
 
@@ -31,7 +36,9 @@ const ConnectedStores = () => {
   });
 
   const onAction = (action: string, data?: Connection) => {
-    if (action === "remove") {
+    if (action === "sync-orders") {
+      if (data?.integration) setSyncOrdersModal(data?.integration);
+    } else if (action === "remove") {
       if (data) setAlert(data);
     } else if (action === "confirm-remove") {
       if (alert) {
@@ -67,6 +74,12 @@ const ConnectedStores = () => {
               )}
             />
           </div>
+          {syncOrdersModal && (
+            <SyncOrdersModal
+              integration={syncOrdersModal}
+              onClose={() => setSyncOrdersModal(null)}
+            />
+          )}
           {alert && (
             <AlertModal
               title="Remove Integration"

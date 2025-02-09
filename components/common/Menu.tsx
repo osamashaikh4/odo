@@ -5,10 +5,12 @@ import {
   DropdownMenu,
   DropdownTrigger,
   MenuItemProps,
+  DropdownProps,
 } from "@heroui/react";
 import React from "react";
 
 interface MenuProps {
+  placement?: DropdownProps["placement"];
   options: {
     label: string;
     value: string;
@@ -20,9 +22,14 @@ interface MenuProps {
   onAction: (key: any) => void;
 }
 
-const Menu = ({ options, children, onAction }: MenuProps) => {
+const Menu = ({
+  options,
+  children,
+  onAction,
+  placement = "bottom-end",
+}: MenuProps) => {
   return (
-    <Dropdown placement="bottom-end">
+    <Dropdown placement={placement}>
       <DropdownTrigger>{children}</DropdownTrigger>
       <DropdownMenu variant="flat" onAction={onAction}>
         {options.map((option) => (

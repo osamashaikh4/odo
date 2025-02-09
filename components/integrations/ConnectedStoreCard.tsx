@@ -5,12 +5,18 @@ import Image from "next/image";
 import { Button } from "@heroui/react";
 import { LuEllipsis, LuTrash2 } from "react-icons/lu";
 import Menu from "../common/Menu";
+import { GoSync } from "react-icons/go";
 
 interface ConnectedStoreCardProps extends Connection {
   onAction: (action: string) => void;
 }
 
 const Options: any = [
+  {
+    label: "Sync Orders",
+    value: "sync-orders",
+    icon: <GoSync fontSize="1.125rem" />,
+  },
   {
     label: "Remove",
     value: "remove",

@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/helpers";
+import { Avatar, Button } from "@heroui/react";
+import UserAvatar from "./UserAvatar";
 
 interface SidebarProps {
   active: string;
@@ -98,7 +100,9 @@ const Sidebar = ({ active }: SidebarProps) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col p-4 z-50 bg-white"></div>
+      <div className="flex flex-col py-4 px-2 z-50 bg-white">
+        <UserAvatar />
+      </div>
     </div>
   );
 };

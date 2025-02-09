@@ -6,6 +6,7 @@ import { useAppStore } from "@/store/appStore";
 import { useLoginUserMutation } from "@/services/queries/user";
 import { toast } from "react-toastify";
 import { setCookie } from "cookies-next";
+import FormInput from "../common/FormInput";
 
 const LoginForm = () => {
   const appStore = useAppStore();
@@ -48,7 +49,7 @@ const LoginForm = () => {
     >
       <div className="w-[28rem] sm:w-[36rem] bg-white border border-gray-200 rounded flex flex-col py-8 px-12 gap-6">
         <h3 className="text-3xl font-semibold mb-4">Welcome back!</h3>
-        <Input
+        <FormInput
           size="md"
           className="w-full"
           label="Email"
@@ -59,7 +60,7 @@ const LoginForm = () => {
           labelPlacement="outside"
           placeholder="Enter your email"
         />
-        <Input
+        <FormInput
           size="md"
           isRequired
           className="w-full"

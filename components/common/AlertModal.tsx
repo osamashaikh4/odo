@@ -46,7 +46,12 @@ const AlertModal = ({
               <Button color="danger" variant="light" onPress={onClose}>
                 Cancel
               </Button>
-              <Button isLoading={isLoading} color="danger" onPress={onAction}>
+              <Button
+                radius="sm"
+                isLoading={isLoading}
+                color="danger"
+                onPress={onAction}
+              >
                 Remove Integration
               </Button>
             </ModalFooter>

@@ -19,3 +19,6 @@ export const saveIntegration = (data: {
 
 export const removeConnection = (id: string) =>
   axios.delete("/integrations/connections/" + id).then((res) => res.data);
+
+export const syncOrders = (data: any) =>
+  axios.post("/integrations/sync-orders", data).then((res) => res.data);

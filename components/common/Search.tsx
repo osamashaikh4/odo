@@ -1,7 +1,6 @@
 import React from "react";
-import { Input, InputProps } from "@heroui/react";
-
-interface SearchProps extends InputProps {}
+import { InputProps } from "@heroui/react";
+import FormInput from "./FormInput";
 
 export const SearchIcon = (props: any) => {
   return (
@@ -33,13 +32,10 @@ export const SearchIcon = (props: any) => {
   );
 };
 
-const Search = (props: SearchProps) => {
+const Search = (props: InputProps) => {
   return (
-    <Input
+    <FormInput
       {...props}
-      classNames={{
-        inputWrapper: "rounded",
-      }}
       startContent={
         <SearchIcon className="text-black/75 mb-0.5 pointer-events-none flex-shrink-0" />
       }

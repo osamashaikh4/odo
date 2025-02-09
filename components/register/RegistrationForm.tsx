@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Form, Input } from "@heroui/react";
+import { Button, Form } from "@heroui/react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useAppStore } from "@/store/appStore";
 import {
@@ -9,8 +9,9 @@ import {
 } from "@/services/queries/user";
 import { toast } from "react-toastify";
 import { setCookie } from "cookies-next";
-import PhoneInput from "react-phone-number-input";
+import PhoneInputWithCountrySelect from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import FormInput from "../common/FormInput";
 
 const SignupForm = ({ isLoading }: { isLoading: boolean }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,7 +19,7 @@ const SignupForm = ({ isLoading }: { isLoading: boolean }) => {
 
   return (
     <>
-      <Input
+      <FormInput
         size="md"
         className="w-full"
         label="Email"
@@ -29,7 +30,7 @@ const SignupForm = ({ isLoading }: { isLoading: boolean }) => {
         labelPlacement="outside"
         placeholder="Enter your email"
       />
-      <Input
+      <FormInput
         size="md"
         isRequired
         className="w-full"
@@ -65,7 +66,7 @@ const AboutForm = ({ isLoading }: { isLoading: boolean }) => {
   const [phone, setPhone] = useState("");
   return (
     <>
-      <Input
+      <FormInput
         size="md"
         className="w-full"
         label="First Name"
@@ -75,7 +76,7 @@ const AboutForm = ({ isLoading }: { isLoading: boolean }) => {
         labelPlacement="outside"
         placeholder="First Name"
       />
-      <Input
+      <FormInput
         size="md"
         className="w-full"
         label="Last Name"
@@ -86,17 +87,17 @@ const AboutForm = ({ isLoading }: { isLoading: boolean }) => {
         placeholder="Last Name"
       />
       <div>
-        <PhoneInput
+        <PhoneInputWithCountrySelect
           international
           countryCallingCodeEditable={false}
           defaultCountry="SA"
-          className="intl-phone-input p-3 bg-default-100 rounded-[5px]"
+          className="intl-phone-input px-3 py-1.5 border-small border-default-200 shadow-sm rounded-[5px]"
           limitMaxLength={true}
-          placeholder="Mobile Number *"
           value={phone}
+          placeholder="Mobile Number *"
           onChange={(e: any) => setPhone(e)}
         />
-        <Input
+        <FormInput
           size="md"
           classNames={{
             inputWrapper: "invisible h-0 min-h-0",

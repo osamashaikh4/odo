@@ -12,8 +12,8 @@ export const onSuccessToast = (data: any) => {
           <div className="toast-identifier success" />
           <div className="flex justify-between items-center w-full toast-body">
             <div className="flex items-center gap-3">
-              <FaRegCircleCheck fontSize="1.5em" color="#007C52" />
-              <p className="font-secondary text-sm font-bold leading-4 break-words text-dark">
+              <FaRegCircleCheck className="w-9 h-9" color="#007C52" />
+              <p className="text-sm leading-tight font-bold break-words text-dark">
                 {data.message}
               </p>
             </div>
@@ -23,7 +23,7 @@ export const onSuccessToast = (data: any) => {
               variant="bordered"
               style={{ height: 30, width: 30 }}
             >
-              <GoX fontSize="1.35em" color="#2d2e2f" />
+              <GoX fontSize="1.35rem" color="#2d2e2f" />
             </Button>
           </div>
         </div>
@@ -42,8 +42,8 @@ export const onErrorToast = (error: any) => {
           <div className="toast-identifier error" />
           <div className="flex justify-between items-center w-full toast-body">
             <div className="flex items-center gap-3">
-              <FaRegTimesCircle fontSize="1.5em" color="#d71616" />
-              <p className="font-secondary text-sm font-bold leading-4 break-words text-dark">
+              <FaRegTimesCircle className="w-9 h-9" color="#d71616" />
+              <p className="text-sm leading-tight break-words text-dark">
                 {error?.response?.data?.error}
               </p>
             </div>
@@ -53,7 +53,7 @@ export const onErrorToast = (error: any) => {
               variant="bordered"
               style={{ height: 30, width: 30 }}
             >
-              <GoX fontSize="1.35em" color="#2d2e2f" />
+              <GoX fontSize="1.35rem" color="#2d2e2f" />
             </Button>
           </div>
         </div>

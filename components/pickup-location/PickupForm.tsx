@@ -21,6 +21,7 @@ import {
   Warehouse,
 } from "@/services/queries/warehouse";
 import { useQueryClient } from "@tanstack/react-query";
+import FormInput from "../common/FormInput";
 
 interface PickupFormProps {
   warehouse?: Warehouse;
@@ -93,7 +94,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
         className="overflow-auto w-full gap-6 border border-gray-200 rounded flex flex-col p-8 max-h-full mx-auto max-w-[58rem] min-w-[58rem]"
         style={{ height: "calc(100% - 2rem)" }}
       >
-        <Input
+        <FormInput
           size="md"
           className="w-[42rem] mx-auto"
           label="Pickup Location Name"
@@ -104,7 +105,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           labelPlacement="outside"
           placeholder=" "
         />
-        <Input
+        <FormInput
           size="md"
           className="w-[42rem] mx-auto"
           label="Sender Name"
@@ -115,7 +116,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           labelPlacement="outside"
           placeholder=" "
         />
-        <Input
+        <FormInput
           size="md"
           type="email"
           className="w-[42rem] mx-auto"
@@ -135,12 +136,12 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             international
             countryCallingCodeEditable={false}
             defaultCountry="SA"
-            className="intl-phone-input p-3 bg-default-100 rounded-[5px]"
+            className="intl-phone-input px-3 py-1.5 border-small border-default-200 shadow-sm rounded-[5px]"
             limitMaxLength={true}
             value={senderPhone}
             onChange={(e: any) => setSenderPhone(e)}
           />
-          <Input
+          <FormInput
             size="md"
             classNames={{
               inputWrapper: "invisible h-0 min-h-0",
@@ -166,6 +167,8 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             setCity("");
             setDistrict("");
           }}
+          variant="bordered"
+          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           isDisabled
           defaultSelectedKey="SA"
           labelPlacement="outside"
@@ -178,7 +181,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
           )}
         </Autocomplete>
-        <Input
+        <FormInput
           size="md"
           className="w-[42rem] mx-auto"
           label="Full Address Line"
@@ -197,6 +200,8 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           }))}
           label="State/Region"
           isRequired
+          variant="bordered"
+          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           selectedKey={state}
           onSelectionChange={(k) => {
             setCity("");
@@ -223,6 +228,8 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             setCity(k as any);
             setDistrict("");
           }}
+          variant="bordered"
+          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           label="City"
           isRequired
           labelPlacement="outside"
@@ -245,6 +252,8 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           onSelectionChange={(k) => {
             setDistrict(k as any);
           }}
+          variant="bordered"
+          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           label="District"
           labelPlacement="outside"
           name="warehouseDistrict"
@@ -256,7 +265,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
           )}
         </Autocomplete>
-        <Input
+        <FormInput
           size="md"
           className="w-[42rem] mx-auto"
           label="Street Name"
@@ -266,7 +275,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           labelPlacement="outside"
           placeholder=" "
         />
-        <Input
+        <FormInput
           size="md"
           className="w-[42rem] mx-auto"
           label="Building No/Name"
@@ -276,7 +285,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           defaultValue={warehouse?.warehouseBuilding}
           placeholder=" "
         />
-        <Input
+        <FormInput
           size="md"
           className="w-[42rem] mx-auto"
           label="ZIP Code"
