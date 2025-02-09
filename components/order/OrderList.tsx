@@ -3,8 +3,8 @@ import DataGrid from "../common/DataGrid";
 import { useOrdersQuery } from "@/services/queries/order";
 
 const OrderList = () => {
-  const { data } = useOrdersQuery();
-  return <DataGrid />;
+  const { data, isFetching } = useOrdersQuery();
+  return <DataGrid isLoading={isFetching} />;
 };
 
 export default OrderList;

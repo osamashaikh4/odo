@@ -2,7 +2,11 @@
 import React from "react";
 import Table from "./Table";
 
-const DataGrid = () => {
+interface DataGridProps {
+  isLoading?: boolean;
+}
+
+const DataGrid = ({ isLoading }: DataGridProps) => {
   return (
     <div className="rounded border border-gray-200 overflow-hidden p-2">
       <Table
@@ -10,7 +14,7 @@ const DataGrid = () => {
           { field: "id", headerName: "ID" },
           { field: "title", headerName: "Title" },
         ]}
-        // isLoading
+        isLoading={isLoading}
         limit={10}
         onAction={console.log}
         rows={[
