@@ -8,14 +8,12 @@ interface AutoCompleteMultiProps {
   items: { label: string; value: string }[];
   selectedKeys: string[];
   onSelectionChange: (selectedKeys: string[]) => void;
-  primaryKey: "value" | string;
 }
 
 const AutoCompleteMulti = ({
   items = [],
   selectedKeys = [],
   onSelectionChange = () => null,
-  primaryKey = "value",
   ...props
 }: AutoCompleteMultiProps) => {
   const [inputValue, setInputValue] = useState("");

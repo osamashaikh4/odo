@@ -18,11 +18,12 @@ const columns = [
     ),
     type: "date",
   },
-  { field: "orderState", headerName: "Status" },
+  { field: "orderState", headerName: "Status", type: "dropdown" },
   {
     field: "warehouse",
     headerName: "Pickup Location",
     render: () => <span className="whitespace-nowrap">Default Warehouse</span>,
+    type: "dropdown",
   },
   {
     field: "customerName",
@@ -45,6 +46,7 @@ const columns = [
     field: "city",
     headerName: "Destination City",
     render: (_: string, row: Order) => <>{row.address.city}</>,
+    type: "dropdown",
   },
   {
     field: "orderAmount",
@@ -65,6 +67,7 @@ const columns = [
     render: (paymentMethod: string) => (
       <>{PaymentMethodsMap[paymentMethod] || paymentMethod}</>
     ),
+    type: "dropdown",
   },
 ];
 
@@ -77,6 +80,7 @@ const OrderList = () => {
       rows={data.results}
       isLoading={isFetching}
       columns={columns}
+      entity="order"
     />
   );
 };

@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import { Button } from "@heroui/react";
 import { LuEllipsis } from "react-icons/lu";
 import FormInput from "./FormInput";
+import FilterList from "./FilterList";
 
 export type Column = {
   align?: "center" | "left" | "right";
@@ -21,6 +22,7 @@ export interface TableProps {
   onAction: (action: string, row: any) => void;
   isLoading?: boolean;
   actions?: string[];
+  entity?: string;
 }
 
 export default function Table({
@@ -28,6 +30,7 @@ export default function Table({
   rows,
   isLoading,
   limit,
+  entity = "",
   onAction,
   actions = ["edit", "delete"],
 }: TableProps) {
@@ -68,6 +71,8 @@ export default function Table({
                             <FormInput size="sm" placeholder="Min" />
                             <FormInput size="sm" placeholder="Max" />
                           </div>
+                        ) : column.type === "dropdown" ? (
+                          <FilterList column={column.field} entity={entity} />
                         ) : null}
                       </div>
                     </th>
