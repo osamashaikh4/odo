@@ -80,7 +80,7 @@ const OrderList = () => {
       rows={data.results}
       isLoading={isFetching}
       columns={columns}
-      entity="order"
+      entity="orders"
     />
   );
 };
