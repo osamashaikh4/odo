@@ -1,5 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { getOrders } from "../api/order";
+import { Filter } from "./types";
 
 export type Order = {
   orderID: string;
@@ -32,10 +33,11 @@ export interface Address {
 type GetOrdersResponse = { results: Order[]; count: number };
 
 export const useOrdersQuery = (
+  filters: Filter,
   params?: Omit<UseQueryOptions<GetOrdersResponse>, "queryKey">
 ) =>
   useQuery<GetOrdersResponse>({
-    queryKey: ["orders"],
-    queryFn: getOrders,
+    queryKey: ["orders", filters],
+    queryFn: () => getOrders(filters),
     ...params,
   });

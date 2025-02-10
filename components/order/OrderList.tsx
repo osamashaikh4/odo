@@ -4,7 +4,13 @@ import DataGrid from "../common/DataGrid";
 import { Order, useOrdersQuery } from "@/services/queries/order";
 import { NumericFormat } from "react-number-format";
 import moment from "moment";
-import { PaymentMethodsMap } from "@/helpers";
+import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
+import { useRouter } from "next/navigation";
+import queryString from "query-string";
+
+interface OrderListProps {
+  searchParams?: { [key: string]: any };
+}
 
 const columns = [
   { field: "orderNumber", headerName: "Order ID", type: "text" },
@@ -18,11 +24,20 @@ const columns = [
     ),
     type: "date",
   },
-  { field: "orderState", headerName: "Status", type: "dropdown" },
+  {
+    field: "orderState",
+    headerName: "Status",
+    type: "dropdown",
+    render: (v: string) => (
+      <span className="whitespace-nowrap">{OrderStateMap[v] || v}</span>
+    ),
+  },
   {
     field: "warehouse",
     headerName: "Pickup Location",
-    render: () => <span className="whitespace-nowrap">Default Warehouse</span>,
+    render: (v: any) => (
+      <span className="whitespace-nowrap">{v.warehouseName}</span>
+    ),
     type: "dropdown",
   },
   {
@@ -71,16 +86,31 @@ const columns = [
   },
 ];
 
-const OrderList = () => {
-  const { data = { results: [] }, isFetching } = useOrdersQuery();
+const OrderList = ({ searchParams }: OrderListProps) => {
+  const router = useRouter();
+  const filters = {
+    limit: 10,
+    offset: 0,
+    ...searchParams,
+  };
+
+  const { data = { results: [], count: 0 }, isFetching } =
+    useOrdersQuery(filters);
+
   return (
     <DataGrid
       onAction={console.log}
-      limit={10}
+      filters={filters}
+      count={data.count}
       rows={data.results}
       isLoading={isFetching}
       columns={columns}
       entity="orders"
+      onFilter={(c, v) => {
+        router.push(
+          `/shipments?${queryString.stringify({ ...filters, [c]: v })}`
+        );
+      }}
     />
   );
 };

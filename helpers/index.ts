@@ -14,3 +14,7 @@ export const PaymentMethodsMap = PaymentMethods.reduce((acc: any, curr) => {
   acc[curr.value] = curr.label;
   return acc;
 }, {});
+
+export const OrderStateMap: { [key: string]: string } = {
+  assigned: "Assigned to Warehouse",
+};

@@ -22,3 +22,6 @@ export const uploadImage = (formData: FormData) =>
       },
     })
     .then((res) => res.data);
+
+export const getEntityFilters = (entity: string, column: string) =>
+  axios.get("/enums/" + entity + "?column=" + column).then((res) => res.data);

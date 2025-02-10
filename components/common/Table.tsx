@@ -23,6 +23,8 @@ export interface TableProps {
   isLoading?: boolean;
   actions?: string[];
   entity?: string;
+  filters: any;
+  onFilter?: (column: string, value: any) => void;
 }
 
 export default function Table({
@@ -32,7 +34,8 @@ export default function Table({
   limit,
   entity = "",
   onAction,
-  actions = ["edit", "delete"],
+  filters,
+  onFilter = () => {},
 }: TableProps) {
   return (
     <div className="flex flex-col">
@@ -65,14 +68,25 @@ export default function Table({
                       <div className="flex flex-col gap-2">
                         <span>{column.headerName}</span>
                         {column.type === "text" ? (
-                          <FormInput size="sm" />
+                          <FormInput
+                            size="sm"
+                            defaultValue={filters[column.field]}
+                            onChange={(e) =>
+                              onFilter(column.field, e.target.value)
+                            }
+                          />
                         ) : column.type === "number" ? (
                           <div className="flex items-center gap-2">
                             <FormInput size="sm" placeholder="Min" />
                             <FormInput size="sm" placeholder="Max" />
                           </div>
                         ) : column.type === "dropdown" ? (
-                          <FilterList column={column.field} entity={entity} />
+                          <FilterList
+                            filters={filters}
+                            column={column.field}
+                            entity={entity}
+                            onFilter={onFilter}
+                          />
                         ) : column.type === "date" ? (
                           <FormInput size="sm" />
                         ) : null}

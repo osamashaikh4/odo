@@ -4,6 +4,7 @@ import {
   getCities,
   getCountries,
   getDistricts,
+  getEntityFilters,
   getStates,
   uploadImage,
 } from "../api/common";
@@ -58,6 +59,16 @@ export const useDistrictsQuery = (
   useQuery<{ name: string }[]>({
     queryKey: ["districts", city],
     queryFn: () => getDistricts(city),
+    ...params,
+  });
+
+export const useEntityFiltersQuery = (
+  { entity, column }: { entity: string; column: string },
+  params?: Omit<UseQueryOptions<string[]>, "queryKey">
+) =>
+  useQuery<string[]>({
+    queryKey: ["entity_filters", entity, column],
+    queryFn: () => getEntityFilters(entity, column),
     ...params,
   });
 
