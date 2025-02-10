@@ -62,7 +62,7 @@ export default function Table({
                         column.align ? `text-${column.align}` : ""
                       )}
                     >
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <span>{column.headerName}</span>
                         {column.type === "text" ? (
                           <FormInput size="sm" />
@@ -73,6 +73,8 @@ export default function Table({
                           </div>
                         ) : column.type === "dropdown" ? (
                           <FilterList column={column.field} entity={entity} />
+                        ) : column.type === "date" ? (
+                          <FormInput size="sm" />
                         ) : null}
                       </div>
                     </th>
