@@ -4,3 +4,13 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const PaymentMethods = [
+  { label: "Paid", value: "paid" },
+  { label: "Cash on Delivery", value: "cod" },
+];
+
+export const PaymentMethodsMap = PaymentMethods.reduce((acc: any, curr) => {
+  acc[curr.value] = curr.label;
+  return acc;
+}, {});

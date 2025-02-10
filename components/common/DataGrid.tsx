@@ -1,27 +1,21 @@
 "use client";
 import React from "react";
-import Table from "./Table";
+import Table, { TableProps } from "./Table";
+import TableFooter from "./TableFooter";
 
-interface DataGridProps {
-  isLoading?: boolean;
-}
+interface DataGridProps extends TableProps {}
 
-const DataGrid = ({ isLoading }: DataGridProps) => {
+const DataGrid = ({ columns, rows, isLoading }: DataGridProps) => {
   return (
     <div className="rounded border border-gray-200 overflow-hidden p-2">
       <Table
-        columns={[
-          { field: "id", headerName: "ID" },
-          { field: "title", headerName: "Title" },
-        ]}
+        columns={columns}
         isLoading={isLoading}
         limit={10}
         onAction={console.log}
-        rows={[
-          { id: 0, title: "Example" },
-          { id: 1, title: "Demo" },
-        ]}
+        rows={rows}
       />
+      <TableFooter />
     </div>
   );
 };

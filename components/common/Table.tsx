@@ -3,22 +3,24 @@ import React from "react";
 import Menu from "./Menu";
 import { Button } from "@heroui/react";
 import { LuEllipsis } from "react-icons/lu";
+import FormInput from "./FormInput";
 
 export type Column = {
   align?: "center" | "left" | "right";
   field: string;
+  width?: string | number;
   headerName: string;
+  type?: string;
   render?: (value: any, row: any) => React.ReactElement;
 };
 
-interface TableProps {
+export interface TableProps {
   columns: Column[];
   rows: any[];
   limit: number;
   onAction: (action: string, row: any) => void;
   isLoading?: boolean;
   actions?: string[];
-  statusColumn?: string;
 }
 
 export default function Table({
@@ -28,7 +30,6 @@ export default function Table({
   limit,
   onAction,
   actions = ["edit", "delete"],
-  statusColumn,
 }: TableProps) {
   return (
     <div className="flex flex-col">
@@ -54,11 +55,16 @@ export default function Table({
                       key={column.field}
                       scope="col"
                       className={cn(
-                        "py-2 px-4 text-left text-sm font-medium whitespace-nowrap",
+                        "py-3 px-4 text-left text-sm font-medium whitespace-nowrap",
                         column.align ? `text-${column.align}` : ""
                       )}
                     >
-                      {column.headerName}
+                      <div className="space-y-2">
+                        <span>{column.headerName}</span>
+                        {column.type === "text" ? (
+                          <FormInput size="sm" />
+                        ) : null}
+                      </div>
                     </th>
                   ))}
                   <th scope="col" className="p-4"></th>
@@ -95,16 +101,25 @@ export default function Table({
                       >
                         {columns.map((column, ind) => (
                           <td
-                            className="py-2 px-4 whitespace-nowrap text-sm text-dark"
+                            className="py-2 px-4 overflow-hidden text-ellipsis text-sm text-dark"
                             key={`row-${i}-col-${ind}`}
+                            style={{
+                              minWidth: 45,
+                              width: column.width,
+                              maxWidth: column.width,
+                            }}
                           >
-                            {column.render
-                              ? column.render(row[column.field], row)
-                              : row[column.field]}
+                            {column.render ? (
+                              column.render(row[column.field], row)
+                            ) : (
+                              <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
+                                {row[column.field]}
+                              </span>
+                            )}
                           </td>
                         ))}
                         <td className="py-2 px-4 whitespace-nowrap space-x-2 text-right">
-                          <Menu onAction={console.log} options={[]}>
+                          <Menu onAction={(a) => onAction(a, row)} options={[]}>
                             <Button isIconOnly variant="light">
                               <LuEllipsis fontSize="1.25rem" />
                             </Button>

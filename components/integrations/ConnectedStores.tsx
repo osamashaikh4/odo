@@ -15,6 +15,7 @@ import useDebounce from "@/hooks/useDebounce";
 import EmptyRecords from "../common/EmptyRecords";
 import List from "../common/List";
 import SyncOrdersModal from "./SyncOrdersModal";
+import { useWarehouseQuery } from "@/services/queries/warehouse";
 
 const ConnectedStores = () => {
   const queryClient = useQueryClient();
@@ -24,6 +25,7 @@ const ConnectedStores = () => {
     null
   );
   const [alert, setAlert] = useState<Connection | null>(null);
+  const { data: warehouse } = useWarehouseQuery();
   const { data: connections = [], isFetching } = useConnectionsQuery();
 
   const removeConnection = useRemoveConnectionMutation({
@@ -37,7 +39,11 @@ const ConnectedStores = () => {
 
   const onAction = (action: string, data?: Connection) => {
     if (action === "sync-orders") {
-      if (data?.integration) setSyncOrdersModal(data?.integration);
+      if (warehouse?.warehouseID) {
+        if (data?.integration) setSyncOrdersModal(data?.integration);
+      } else {
+        window.alert("Please add a pickup location first");
+      }
     } else if (action === "remove") {
       if (data) setAlert(data);
     } else if (action === "confirm-remove") {
