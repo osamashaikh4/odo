@@ -57,6 +57,7 @@ const columns = [
         displayType="text"
       />
     ),
+    type: "number",
   },
   {
     field: "paymentMethod",

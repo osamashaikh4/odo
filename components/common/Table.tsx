@@ -63,6 +63,11 @@ export default function Table({
                         <span>{column.headerName}</span>
                         {column.type === "text" ? (
                           <FormInput size="sm" />
+                        ) : column.type === "number" ? (
+                          <div className="flex items-center gap-2">
+                            <FormInput size="sm" placeholder="Min" />
+                            <FormInput size="sm" placeholder="Max" />
+                          </div>
                         ) : null}
                       </div>
                     </th>
