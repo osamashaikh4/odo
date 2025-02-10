@@ -75,7 +75,10 @@ const AutoCompleteMulti = ({
         <FormInput
           radius="sm"
           size="sm"
-          classNames={{ input: "cursor-pointer h-full", inputWrapper: "!p-0" }}
+          classNames={{
+            input: "cursor-pointer h-full pl-2 !pr-0",
+            inputWrapper: "!p-0",
+          }}
           placeholder="Select"
           isReadOnly
           value={selectedKeys
