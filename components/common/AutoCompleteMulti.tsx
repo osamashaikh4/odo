@@ -26,7 +26,6 @@ const AutoCompleteMulti = ({
   items = [],
   selectedKeys = [],
   onSelectionChange = () => null,
-  ...props
 }: AutoCompleteMultiProps) => {
   const [open, setOpen] = useState(false);
   const [selection, setSelection] = useState<string[]>([]);

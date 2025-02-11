@@ -7,6 +7,7 @@ import moment from "moment";
 import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
+import Image from "next/image";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -104,6 +105,20 @@ const OrderList = ({ searchParams }: OrderListProps) => {
       count={data.count}
       rows={data.results}
       isLoading={isFetching}
+      options={[
+        {
+          label: "Create Shipment",
+          value: "create-shipment",
+          icon: (
+            <Image
+              src="/assets/icons/truck.svg"
+              alt="truck"
+              width={22}
+              height={22}
+            />
+          ),
+        },
+      ]}
       columns={columns}
       entity="orders"
       onFilter={(f) => {

@@ -1,11 +1,9 @@
 import { cn } from "@/helpers";
 import React from "react";
-import Menu from "./Menu";
+import Menu, { MenuProps } from "./Menu";
 import { Button, DateRangePicker } from "@heroui/react";
 import { LuEllipsis } from "react-icons/lu";
-import FormInput from "./FormInput";
 import FilterList from "./FilterList";
-import moment from "moment";
 import FilterInput from "./FilterInput";
 import EmptyRecords from "./EmptyRecords";
 
@@ -27,6 +25,7 @@ export interface TableProps {
   actions?: string[];
   entity?: string;
   filters: any;
+  options?: MenuProps["options"];
   onFilter?: (filter: any) => void;
 }
 
@@ -39,6 +38,7 @@ export default function Table({
   onAction,
   filters,
   onFilter = () => {},
+  options = [],
 }: TableProps) {
   return (
     <div className="flex flex-col">
@@ -185,7 +185,10 @@ export default function Table({
                         </td>
                       ))}
                       <td className="py-2 px-4 whitespace-nowrap space-x-2 text-right">
-                        <Menu onAction={(a) => onAction(a, row)} options={[]}>
+                        <Menu
+                          onAction={(a) => onAction(a, row)}
+                          options={options}
+                        >
                           <Button isIconOnly variant="light">
                             <LuEllipsis fontSize="1.25rem" />
                           </Button>

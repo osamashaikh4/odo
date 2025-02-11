@@ -15,10 +15,12 @@ const DataGrid = ({
   filters,
   count,
   onFilter,
+  options,
 }: DataGridProps) => {
   return (
     <div className="rounded border border-gray-200 overflow-hidden p-2">
       <Table
+        options={options}
         columns={columns}
         isLoading={isLoading}
         limit={filters.limit}

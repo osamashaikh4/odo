@@ -9,7 +9,7 @@ import {
 } from "@heroui/react";
 import React from "react";
 
-interface MenuProps {
+export interface MenuProps {
   placement?: DropdownProps["placement"];
   options: {
     label: string;
@@ -29,7 +29,7 @@ const Menu = ({
   placement = "bottom-end",
 }: MenuProps) => {
   return (
-    <Dropdown placement={placement}>
+    <Dropdown placement={placement} radius="sm">
       <DropdownTrigger>{children}</DropdownTrigger>
       <DropdownMenu variant="flat" onAction={onAction}>
         {options.map((option) => (
