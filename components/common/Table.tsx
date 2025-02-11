@@ -6,6 +6,7 @@ import { LuEllipsis } from "react-icons/lu";
 import FormInput from "./FormInput";
 import FilterList from "./FilterList";
 import moment from "moment";
+import FilterInput from "./FilterInput";
 
 export type Column = {
   align?: "center" | "left" | "right";
@@ -69,7 +70,7 @@ export default function Table({
                       <div className="flex flex-col gap-2">
                         <span>{column.headerName}</span>
                         {column.type === "text" ? (
-                          <FormInput
+                          <FilterInput
                             size="sm"
                             defaultValue={filters[column.field]}
                             onChange={(e) =>
@@ -78,8 +79,26 @@ export default function Table({
                           />
                         ) : column.type === "number" ? (
                           <div className="flex items-center gap-2">
-                            <FormInput size="sm" placeholder="Min" />
-                            <FormInput size="sm" placeholder="Max" />
+                            <FilterInput
+                              size="sm"
+                              placeholder="Min"
+                              defaultValue={filters[column.field + "Min"]}
+                              onChange={(e) =>
+                                onFilter({
+                                  [column.field + "Min"]: e.target.value,
+                                })
+                              }
+                            />
+                            <FilterInput
+                              size="sm"
+                              placeholder="Max"
+                              defaultValue={filters[column.field + "Max"]}
+                              onChange={(e) =>
+                                onFilter({
+                                  [column.field + "Max"]: e.target.value,
+                                })
+                              }
+                            />
                           </div>
                         ) : column.type === "dropdown" ? (
                           <FilterList
