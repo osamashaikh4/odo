@@ -76,7 +76,8 @@ const AutoCompleteMulti = ({
           radius="sm"
           size="sm"
           classNames={{
-            input: "cursor-pointer h-full pl-2 !pr-0",
+            input:
+              "cursor-pointer h-full pl-2 !pr-0 w-[88%] overflow-hidden text-ellipsis whitespace-nowrap",
             inputWrapper: "!p-0",
           }}
           placeholder="Select"
@@ -107,7 +108,7 @@ const AutoCompleteMulti = ({
                   onSelectionChange([]);
                 }}
               >
-                <GoX className="size-4" />
+                <GoX className="size-5" />
               </Button>
             </div>
           }

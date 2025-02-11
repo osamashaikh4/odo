@@ -7,6 +7,7 @@ import FormInput from "./FormInput";
 import FilterList from "./FilterList";
 import moment from "moment";
 import FilterInput from "./FilterInput";
+import EmptyRecords from "./EmptyRecords";
 
 export type Column = {
   align?: "center" | "left" | "right";
@@ -101,12 +102,14 @@ export default function Table({
                             />
                           </div>
                         ) : column.type === "dropdown" ? (
-                          <FilterList
-                            filters={filters}
-                            column={column.field}
-                            entity={entity}
-                            onFilter={onFilter}
-                          />
+                          <div className="w-full">
+                            <FilterList
+                              filters={filters}
+                              column={column.field}
+                              entity={entity}
+                              onFilter={onFilter}
+                            />
+                          </div>
                         ) : column.type === "date" ? (
                           <DateRangePicker
                             size="sm"
@@ -133,18 +136,18 @@ export default function Table({
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {isLoading
-                  ? Array.from({ length: limit }).map((_, i) => (
-                      <tr key={`skeleton-${i}`} className="animate-pulse h-12">
-                        {columns.map((_, ind) => (
-                          <td
-                            key={`skeleton-${i}-col-${ind}`}
-                            className="py-2 px-4 whitespace-nowrap"
-                          >
-                            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-                          </td>
-                        ))}
-                        {/* <td className="p-2 whitespace-nowrap space-x-2">
+                {isLoading ? (
+                  Array.from({ length: limit }).map((_, i) => (
+                    <tr key={`skeleton-${i}`} className="animate-pulse h-12">
+                      {columns.map((_, ind) => (
+                        <td
+                          key={`skeleton-${i}-col-${ind}`}
+                          className="py-2 px-4 whitespace-nowrap"
+                        >
+                          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                        </td>
+                      ))}
+                      {/* <td className="p-2 whitespace-nowrap space-x-2">
                           <div className="inline-flex space-x-2">
                             {actions.map((action) => (
                               <div
@@ -154,41 +157,49 @@ export default function Table({
                             ))}
                           </div>
                         </td> */}
-                      </tr>
-                    ))
-                  : rows.map((row, i) => (
-                      <tr
-                        className="hover:bg-foreground-50 h-12"
-                        key={`row-${i}`}
-                      >
-                        {columns.map((column, ind) => (
-                          <td
-                            className="py-2 px-4 overflow-hidden text-ellipsis text-sm text-dark"
-                            key={`row-${i}-col-${ind}`}
-                            style={{
-                              minWidth: 45,
-                              width: column.width,
-                              maxWidth: column.width,
-                            }}
-                          >
-                            {column.render ? (
-                              column.render(row[column.field], row)
-                            ) : (
-                              <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
-                                {row[column.field]}
-                              </span>
-                            )}
-                          </td>
-                        ))}
-                        <td className="py-2 px-4 whitespace-nowrap space-x-2 text-right">
-                          <Menu onAction={(a) => onAction(a, row)} options={[]}>
-                            <Button isIconOnly variant="light">
-                              <LuEllipsis fontSize="1.25rem" />
-                            </Button>
-                          </Menu>
+                    </tr>
+                  ))
+                ) : rows.length > 0 ? (
+                  rows.map((row, i) => (
+                    <tr
+                      className="hover:bg-foreground-50 h-12"
+                      key={`row-${i}`}
+                    >
+                      {columns.map((column, ind) => (
+                        <td
+                          className="py-2 px-4 overflow-hidden text-ellipsis text-sm text-dark"
+                          key={`row-${i}-col-${ind}`}
+                          style={{
+                            minWidth: 45,
+                            width: column.width,
+                            maxWidth: column.width,
+                          }}
+                        >
+                          {column.render ? (
+                            column.render(row[column.field], row)
+                          ) : (
+                            <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
+                              {row[column.field]}
+                            </span>
+                          )}
                         </td>
-                      </tr>
-                    ))}
+                      ))}
+                      <td className="py-2 px-4 whitespace-nowrap space-x-2 text-right">
+                        <Menu onAction={(a) => onAction(a, row)} options={[]}>
+                          <Button isIconOnly variant="light">
+                            <LuEllipsis fontSize="1.25rem" />
+                          </Button>
+                        </Menu>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className="hover:bg-foreground-50 h-12">
+                    <td colSpan={6}>
+                      <EmptyRecords />
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
