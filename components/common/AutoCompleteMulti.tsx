@@ -77,7 +77,7 @@ const AutoCompleteMulti = ({
           size="sm"
           classNames={{
             input:
-              "cursor-pointer h-full pl-2 !pr-0 w-[88%] overflow-hidden text-ellipsis whitespace-nowrap",
+              "cursor-pointer h-full pl-2 !pr-0 w-[86%] overflow-hidden text-ellipsis whitespace-nowrap",
             inputWrapper: "!p-0",
           }}
           placeholder="Select"
