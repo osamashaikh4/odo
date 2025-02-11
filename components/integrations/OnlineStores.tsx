@@ -15,6 +15,7 @@ const OnlineStores = () => {
   const { data = { results: [] }, isFetching } = useIntegrationsQuery({
     refetchOnMount: true,
   });
+
   return (
     <>
       <Search

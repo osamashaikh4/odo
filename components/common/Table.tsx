@@ -26,7 +26,14 @@ export interface TableProps {
   entity?: string;
   filters: any;
   options?: MenuProps["options"];
+  outerAction?: (row: any) => React.ReactNode;
   onFilter?: (filter: any) => void;
+  classNames?: {
+    container?: string;
+    table?: string;
+    thead?: string;
+    tbody?: string;
+  };
 }
 
 export default function Table({
@@ -39,14 +46,27 @@ export default function Table({
   filters,
   onFilter = () => {},
   options = [],
+  outerAction,
+  classNames,
 }: TableProps) {
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto">
         <div className="align-middle inline-block min-w-full">
           <div className="shadow overflow-hidden">
-            <table className="table-fixed min-w-full divide-y divide-gray-200">
-              <thead className="bg-foreground-50 border">
+            <table
+              className={cn(
+                "table-fixed min-w-full divide-y divide-gray-200",
+                classNames?.table ?? ""
+              )}
+            >
+              <thead
+                className={cn(
+                  "bg-foreground-50 border",
+                  classNames?.thead ?? ""
+                )}
+                id="thead"
+              >
                 <tr>
                   {/* <th scope="col" className="p-4">
                     <div className="flex items-center">
@@ -185,14 +205,18 @@ export default function Table({
                         </td>
                       ))}
                       <td className="py-2 px-4 whitespace-nowrap space-x-2 text-right">
-                        <Menu
-                          onAction={(a) => onAction(a, row)}
-                          options={options}
-                        >
-                          <Button isIconOnly variant="light">
-                            <LuEllipsis fontSize="1.25rem" />
-                          </Button>
-                        </Menu>
+                        {outerAction ? (
+                          outerAction(row)
+                        ) : (
+                          <Menu
+                            onAction={(a) => onAction(a, row)}
+                            options={options}
+                          >
+                            <Button isIconOnly variant="light">
+                              <LuEllipsis fontSize="1.25rem" />
+                            </Button>
+                          </Menu>
+                        )}
                       </td>
                     </tr>
                   ))

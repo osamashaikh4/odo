@@ -62,11 +62,20 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
+  background: #3d475145;
   border-radius: 2rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6c87a0;
 }
 
 ::-webkit-scrollbar-track {
   border-radius: 2rem;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .intl-phone-input .PhoneInputInput {
@@ -121,4 +130,24 @@ body {
 
 .toast-body {
   padding-right: 8px;
+}
+
+.partner-grid-view {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  -webkit-box-pack: start;
+  place-content: flex-start;
+  max-height: calc(100dvh - 28rem);
+  overflow: auto;
+}
+
+.partner-img {
+  width: 105px;
+  height: 105px;
+  transition: all 0.2s ease 0s;
+}
+
+.partner-img:hover {
+  width: 100px;
 }

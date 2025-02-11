@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import DataGrid from "../common/DataGrid";
 import { Order, useOrdersQuery } from "@/services/queries/order";
 import { NumericFormat } from "react-number-format";
@@ -8,6 +8,7 @@ import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
 import Image from "next/image";
+import RateModal from "../shipments/RateModal";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -89,6 +90,7 @@ const columns = [
 
 const OrderList = ({ searchParams }: OrderListProps) => {
   const router = useRouter();
+  const [rateModal, setRateModal] = useState<Order[] | null>(null);
   const filters = {
     limit: 10,
     offset: 0,
@@ -98,35 +100,46 @@ const OrderList = ({ searchParams }: OrderListProps) => {
   const { data = { results: [], count: 0 }, isFetching } =
     useOrdersQuery(filters);
 
+  const handleAction = (action: string, data: any) => {
+    if (action === "create-shipment") {
+      setRateModal([data]);
+    }
+  };
+
   return (
-    <DataGrid
-      onAction={console.log}
-      filters={filters}
-      count={data.count}
-      rows={data.results}
-      isLoading={isFetching}
-      options={[
-        {
-          label: "Create Shipment",
-          value: "create-shipment",
-          icon: (
-            <Image
-              src="/assets/icons/truck.svg"
-              alt="truck"
-              width={22}
-              height={22}
-            />
-          ),
-        },
-      ]}
-      columns={columns}
-      entity="orders"
-      onFilter={(f) => {
-        router.push(
-          `/shipments?${queryString.stringify({ ...filters, ...f })}`
-        );
-      }}
-    />
+    <>
+      <DataGrid
+        onAction={handleAction}
+        filters={filters}
+        count={data.count}
+        rows={data.results}
+        isLoading={isFetching}
+        options={[
+          {
+            label: "Create Shipment",
+            value: "create-shipment",
+            icon: (
+              <Image
+                src="/assets/icons/truck.svg"
+                alt="truck"
+                width={22}
+                height={22}
+              />
+            ),
+          },
+        ]}
+        columns={columns}
+        entity="orders"
+        onFilter={(f) => {
+          router.push(
+            `/shipments?${queryString.stringify({ ...filters, ...f })}`
+          );
+        }}
+      />
+      {rateModal && (
+        <RateModal orders={rateModal} onClose={() => setRateModal(null)} />
+      )}
+    </>
   );
 };
 
