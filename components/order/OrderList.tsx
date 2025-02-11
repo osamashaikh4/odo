@@ -106,9 +106,9 @@ const OrderList = ({ searchParams }: OrderListProps) => {
       isLoading={isFetching}
       columns={columns}
       entity="orders"
-      onFilter={(c, v) => {
+      onFilter={(f) => {
         router.push(
-          `/shipments?${queryString.stringify({ ...filters, [c]: v })}`
+          `/shipments?${queryString.stringify({ ...filters, ...f })}`
         );
       }}
     />

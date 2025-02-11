@@ -7,7 +7,7 @@ interface FilterListProps {
   column: string;
   entity: string;
   filters: any;
-  onFilter: (column: string, value: any) => void;
+  onFilter: (filter: any) => void;
 }
 
 const DefaultValue: { [key: string]: any } = {
@@ -34,7 +34,7 @@ const FilterList = ({ column, entity, filters, onFilter }: FilterListProps) => {
           : []
       }
       onSelectionChange={(s) => {
-        onFilter(column, s);
+        onFilter({ [column]: s });
       }}
     />
   );

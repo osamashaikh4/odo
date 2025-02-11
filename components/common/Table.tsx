@@ -1,10 +1,11 @@
 import { cn } from "@/helpers";
 import React from "react";
 import Menu from "./Menu";
-import { Button } from "@heroui/react";
+import { Button, DateRangePicker } from "@heroui/react";
 import { LuEllipsis } from "react-icons/lu";
 import FormInput from "./FormInput";
 import FilterList from "./FilterList";
+import moment from "moment";
 
 export type Column = {
   align?: "center" | "left" | "right";
@@ -24,7 +25,7 @@ export interface TableProps {
   actions?: string[];
   entity?: string;
   filters: any;
-  onFilter?: (column: string, value: any) => void;
+  onFilter?: (filter: any) => void;
 }
 
 export default function Table({
@@ -72,7 +73,7 @@ export default function Table({
                             size="sm"
                             defaultValue={filters[column.field]}
                             onChange={(e) =>
-                              onFilter(column.field, e.target.value)
+                              onFilter({ [column.field]: e.target.value })
                             }
                           />
                         ) : column.type === "number" ? (
@@ -88,7 +89,23 @@ export default function Table({
                             onFilter={onFilter}
                           />
                         ) : column.type === "date" ? (
-                          <FormInput size="sm" />
+                          <DateRangePicker
+                            size="sm"
+                            radius="sm"
+                            onChange={(v) => {
+                              if (v) {
+                                onFilter({
+                                  startDate: v.start.toString(),
+                                  endDate: v.end.toString(),
+                                });
+                              } else {
+                                onFilter({
+                                  startDate: undefined,
+                                  endDate: undefined,
+                                });
+                              }
+                            }}
+                          />
                         ) : null}
                       </div>
                     </th>
