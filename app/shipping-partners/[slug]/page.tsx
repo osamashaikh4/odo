@@ -1,3 +1,4 @@
+import PartnerDetails from "@/components/shipping-partners/PartnerDetails";
 import React from "react";
 
 type Props = {
@@ -6,5 +7,5 @@ type Props = {
 
 export default async function page({ params }: Props) {
   const { slug } = await params;
-  return <p>{slug}</p>;
+  return <PartnerDetails id={slug} />;
 }
