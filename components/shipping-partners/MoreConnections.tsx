@@ -36,11 +36,11 @@ const MoreConnections = () => {
                   size="sm"
                 >
                   <Link href={`/shipping-partners/jandt-express`}>
-                    <div className="inline-block relative cursor-pointer">
+                    <div className="inline-block relative cursor-pointer rounded overflow-hidden">
                       <img
                         width={105}
                         height={105}
-                        className="block object-contain rounded-sm cursor-pointer partner-img"
+                        className="block object-contain cursor-pointer partner-img"
                         src="https://storage.googleapis.com/tryoto-public/delivery-logo/jandt.png"
                       />
                     </div>
