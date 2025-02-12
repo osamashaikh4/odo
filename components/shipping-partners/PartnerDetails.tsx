@@ -78,25 +78,60 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 label="Customer Code"
                 labelPlacement="outside"
                 isRequired
+                defaultValue="J0086005003"
                 placeholder=" "
               />
               <FormInput
                 label="apiAccount"
                 labelPlacement="outside"
                 isRequired
+                defaultValue="344471219040423945"
                 placeholder=" "
               />
               <FormInput
                 label="privateKey"
                 labelPlacement="outside"
                 isRequired
+                defaultValue="17e26fb32fc440f3b4497651dbb2159e"
                 placeholder=" "
               />
               <FormInput
                 label="Password"
                 labelPlacement="outside"
                 isRequired
+                defaultValue="Aa12345678"
                 placeholder=" "
+              />
+              {/* Type of service: 02 store delivery; 01 door-to-door pickup */}
+              <FormInput
+                label="Service Type"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="02"
+              />
+              {/* Order type (customer number is monthly settlement) 1. Individual customers; 2. Monthly settlement; */}
+              <FormInput
+                label="orderType"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="1"
+              />
+              {/* Delivery type: 03 home delivery Delivery Type: 06 Store Pickup */}
+              <FormInput
+                label="Delivery Method"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="03"
+              />
+              <FormInput
+                label="expressType"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="EZKSA"
               />
               <div>
                 <Button
