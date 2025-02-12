@@ -1,27 +1,40 @@
 "use client";
-import React, { useState } from "react";
-import { Alert, Button, Form } from "@heroui/react";
+import React from "react";
+import { Alert, Button, Form, Spinner } from "@heroui/react";
 import Link from "next/link";
 import { MdArrowBack } from "react-icons/md";
 import Image from "next/image";
 import { IoChevronForward } from "react-icons/io5";
 import FormInput from "../common/FormInput";
 import { FaPlug } from "react-icons/fa";
+import {
+  useShippingPartnerQuery,
+  useTestConnectionMutation,
+} from "@/services/queries/shipping-partner";
+import EmptyRecords from "../common/EmptyRecords";
 
 interface PartnerDetailsProps {
   id: string;
 }
 
 const PartnerDetails = ({ id }: PartnerDetailsProps) => {
-  const [loading, setLoading] = useState(false);
+  const { data: shippingPartner, isFetching } = useShippingPartnerQuery(id);
+  const testConnection = useTestConnectionMutation({});
 
   const onConnect = () => {};
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const values: any = Object.fromEntries(
+      new FormData(e.currentTarget as any)
+    );
+    testConnection.mutate({
+      ...values,
+      shippingPartnerID: shippingPartner?.shippingPartnerID,
+    });
   };
 
-  return (
+  return shippingPartner ? (
     <div className="h-full">
       <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100 min-h-14 gap-4 -mt-10 mb-7">
         <div className="flex items-center gap-4">
@@ -33,7 +46,12 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button radius="sm" color="primary" variant="bordered">
+          <Button
+            radius="sm"
+            color="primary"
+            variant="bordered"
+            className="border-small"
+          >
             Cancel
           </Button>
           <Button
@@ -55,17 +73,19 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
           >
             <div className="flex items-center gap-3 w-fit">
               <Image
-                src="https://storage.googleapis.com/tryoto-public/delivery-logo/jandt.png"
+                src={shippingPartner.shippingPartnerLogo}
                 style={{
                   display: "block",
                   width: "3rem",
                   height: "3rem",
                 }}
-                alt="J&T Express"
+                alt={shippingPartner.shippingPartnerName}
                 width={42}
                 height={42}
               />
-              <p className="text-base font-semibold">J&T Express</p>
+              <p className="text-base font-semibold">
+                {shippingPartner.shippingPartnerName}
+              </p>
             </div>
             <div className="w-full flex items-center my-3">
               <Alert
@@ -78,11 +98,13 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 label="Customer Code"
                 labelPlacement="outside"
                 isRequired
+                name="customerCode"
                 defaultValue="J0086005003"
                 placeholder=" "
               />
               <FormInput
                 label="apiAccount"
+                name="apiAccount"
                 labelPlacement="outside"
                 isRequired
                 defaultValue="344471219040423945"
@@ -90,6 +112,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
               />
               <FormInput
                 label="privateKey"
+                name="privateKey"
                 labelPlacement="outside"
                 isRequired
                 defaultValue="17e26fb32fc440f3b4497651dbb2159e"
@@ -97,14 +120,24 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
               />
               <FormInput
                 label="Password"
+                name="password"
                 labelPlacement="outside"
                 isRequired
                 defaultValue="Aa12345678"
                 placeholder=" "
               />
+              {/* <FormInput
+                label="constant"
+                name="constant"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="jadada236t2"
+              /> */}
               {/* Type of service: 02 store delivery; 01 door-to-door pickup */}
               <FormInput
                 label="Service Type"
+                name="serviceType"
                 labelPlacement="outside"
                 isRequired
                 placeholder=" "
@@ -113,6 +146,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
               {/* Order type (customer number is monthly settlement) 1. Individual customers; 2. Monthly settlement; */}
               <FormInput
                 label="orderType"
+                name="orderType"
                 labelPlacement="outside"
                 isRequired
                 placeholder=" "
@@ -121,6 +155,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
               {/* Delivery type: 03 home delivery Delivery Type: 06 Store Pickup */}
               <FormInput
                 label="Delivery Method"
+                name="deliveryMethod"
                 labelPlacement="outside"
                 isRequired
                 placeholder=" "
@@ -128,10 +163,37 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
               />
               <FormInput
                 label="expressType"
+                name="expressType"
                 labelPlacement="outside"
                 isRequired
                 placeholder=" "
                 defaultValue="EZKSA"
+              />
+              {/* Dropdown CC_CASH, PP_PM */}
+              {/* <FormInput
+                label="payType"
+                name="payType"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+              /> */}
+              {/* Dropdown 0, 1 */}
+              <FormInput
+                label="isNeedOfferFee"
+                name="isNeedOfferFee"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="1"
+              />
+              {/* Dropdown True, False */}
+              <FormInput
+                label="sendItems"
+                name="sendItems"
+                labelPlacement="outside"
+                isRequired
+                placeholder=" "
+                defaultValue="1"
               />
               <div>
                 <Button
@@ -148,6 +210,12 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
         </div>
       </div>
     </div>
+  ) : isFetching ? (
+    <div className="w-full h-full flex items-center justify-center">
+      <Spinner size="lg" />
+    </div>
+  ) : (
+    <EmptyRecords />
   );
 };
 

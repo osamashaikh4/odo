@@ -11,6 +11,7 @@ import {
 } from "@/services/queries/integration";
 import { Spinner } from "@heroui/spinner";
 import { useRouter } from "next/navigation";
+import EmptyRecords from "../common/EmptyRecords";
 
 interface IntegrationDetailsProps {
   id: string;
@@ -21,7 +22,7 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
   const targetWindow = useRef<any>(null);
   const [loading, setLoading] = useState(false);
 
-  const { data: integration } = useIntegrationQuery(id);
+  const { data: integration, isFetching } = useIntegrationQuery(id);
   const authorizeIntegration = useAuthorizeIntegrationMutation({
     onSuccess(data) {
       if (data.appInstallUrl) {
@@ -142,10 +143,12 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
         </div>
       </div>
     </div>
-  ) : (
+  ) : isFetching ? (
     <div className="w-full h-full flex items-center justify-center">
       <Spinner size="lg" />
     </div>
+  ) : (
+    <EmptyRecords />
   );
 };
 
