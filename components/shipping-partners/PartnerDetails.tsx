@@ -107,8 +107,8 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 name="apiAccount"
                 labelPlacement="outside"
                 isRequired
-                // defaultValue="344471219040423945"
-                defaultValue="292508153084379141"
+                defaultValue="344471219040423945"
+                // defaultValue="292508153084379141"
                 placeholder=" "
               />
               <FormInput
@@ -116,8 +116,8 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 name="privateKey"
                 labelPlacement="outside"
                 isRequired
-                defaultValue="a0a1047cce70493c9d5d29704f05d0d9"
-                // defaultValue="17e26fb32fc440f3b4497651dbb2159e"
+                // defaultValue="a0a1047cce70493c9d5d29704f05d0d9"
+                defaultValue="17e26fb32fc440f3b4497651dbb2159e"
                 placeholder=" "
               />
               <FormInput
@@ -163,6 +163,10 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 placeholder=" "
                 defaultValue="03"
               />
+              {/* Express type: only supports EZ: standard (UAE); EZKSA: standard
+              (KSA); Reverse: Reverse (KSA); ReverseUAE: Reverse (UAE) SDD: Same
+              Day (KSA) SDDUAE: Same Day (UAE) SCH: SCHEDULE (KSA) SCHUAE:
+              SCHEDULE (UAE) */}
               <FormInput
                 label="expressType"
                 name="expressType"
