@@ -107,7 +107,8 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 name="apiAccount"
                 labelPlacement="outside"
                 isRequired
-                defaultValue="344471219040423945"
+                // defaultValue="344471219040423945"
+                defaultValue="292508153084379141"
                 placeholder=" "
               />
               <FormInput
@@ -115,7 +116,8 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 name="privateKey"
                 labelPlacement="outside"
                 isRequired
-                defaultValue="17e26fb32fc440f3b4497651dbb2159e"
+                defaultValue="a0a1047cce70493c9d5d29704f05d0d9"
+                // defaultValue="17e26fb32fc440f3b4497651dbb2159e"
                 placeholder=" "
               />
               <FormInput
@@ -126,14 +128,14 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 defaultValue="Aa12345678"
                 placeholder=" "
               />
-              {/* <FormInput
+              <FormInput
                 label="constant"
                 name="constant"
                 labelPlacement="outside"
                 isRequired
                 placeholder=" "
                 defaultValue="jadada236t2"
-              /> */}
+              />
               {/* Type of service: 02 store delivery; 01 door-to-door pickup */}
               <FormInput
                 label="Service Type"
@@ -170,13 +172,14 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 defaultValue="EZKSA"
               />
               {/* Dropdown CC_CASH, PP_PM */}
-              {/* <FormInput
+              <FormInput
                 label="payType"
                 name="payType"
                 labelPlacement="outside"
                 isRequired
+                defaultValue="PP_PM"
                 placeholder=" "
-              /> */}
+              />
               {/* Dropdown 0, 1 */}
               <FormInput
                 label="isNeedOfferFee"
