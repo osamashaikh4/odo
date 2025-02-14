@@ -35,7 +35,7 @@ const columns = [
 const RateModal = ({ orders, onClose }: RateModalProps) => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  console.log(789);
+
   useEffect(() => {
     onOpen();
   }, []);

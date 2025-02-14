@@ -15,8 +15,11 @@ export default function page() {
           <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto">
             <div className="flex relative items-center justify-between py-10 px-8 bg-[#FAFAFA]">
               <SectionHeader />
-              <Button radius="sm" color="primary">
-                <BsPlus className="h-6 w-6" />
+              <Button
+                radius="sm"
+                startContent={<BsPlus className="h-6 w-6" />}
+                color="primary"
+              >
                 Ship Your First Order
               </Button>
             </div>

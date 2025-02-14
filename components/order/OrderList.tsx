@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import queryString from "query-string";
 import Image from "next/image";
 import RateModal from "../shipments/RateModal";
+import SectionHeader from "../shipments/SectionHeader";
+import OrderModal from "../shipments/OrderModal";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -90,6 +92,7 @@ const columns = [
 
 const OrderList = ({ searchParams }: OrderListProps) => {
   const router = useRouter();
+  const [orderModal, setOrderModal] = useState<any>(null);
   const [rateModal, setRateModal] = useState<Order[] | null>(null);
   const filters = {
     limit: 10,
@@ -108,6 +111,7 @@ const OrderList = ({ searchParams }: OrderListProps) => {
 
   return (
     <>
+      <SectionHeader onAdd={() => setOrderModal({})} />
       <DataGrid
         onAction={handleAction}
         filters={filters}
@@ -136,6 +140,7 @@ const OrderList = ({ searchParams }: OrderListProps) => {
           );
         }}
       />
+      {orderModal && <OrderModal onClose={() => setOrderModal(null)} />}
       {rateModal && (
         <RateModal orders={rateModal} onClose={() => setRateModal(null)} />
       )}

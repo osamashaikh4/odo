@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "@/components/common/Header";
 import Sidebar from "@/components/common/Sidebar";
-import SectionHeader from "@/components/common/SectionHeader";
 import OrderList from "@/components/order/OrderList";
 
 type Props = {
@@ -17,7 +16,6 @@ export default async function page({ searchParams }: Props) {
         <Header />
         <div className="flex flex-col flex-1 relative overflow-auto">
           <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto p-10">
-            <SectionHeader title="Shipments" icon="shipment" />
             <OrderList searchParams={await searchParams} />
           </div>
         </div>
