@@ -25,6 +25,7 @@ export interface TableProps {
   actions?: string[];
   entity?: string;
   filters: any;
+  showEmptyMessage?: boolean;
   options?: MenuProps["options"];
   outerAction?: (row: any) => React.ReactNode;
   onFilter?: (filter: any) => void;
@@ -48,6 +49,7 @@ export default function Table({
   options = [],
   outerAction,
   classNames,
+  showEmptyMessage = true,
 }: TableProps) {
   return (
     <div className="flex flex-col">
@@ -134,7 +136,12 @@ export default function Table({
                           <DateRangePicker
                             size="sm"
                             radius="sm"
-                            onChange={(v) => {
+                            classNames={{
+                              inputWrapper:
+                                "rounded border-small shadow-none border-borderGrey border-1 bg-white",
+                            }}
+                            selectorButtonPlacement="start"
+                            onChange={(v: any) => {
                               if (v) {
                                 onFilter({
                                   startDate: v.start.toString(),
@@ -220,13 +227,13 @@ export default function Table({
                       </td>
                     </tr>
                   ))
-                ) : (
+                ) : showEmptyMessage ? (
                   <tr className="hover:bg-foreground-50 h-12">
                     <td colSpan={6}>
                       <EmptyRecords />
                     </td>
                   </tr>
-                )}
+                ) : null}
               </tbody>
             </table>
           </div>

@@ -39,7 +39,6 @@ const Search = (props: InputProps) => {
       startContent={
         <SearchIcon className="text-black/75 mb-0.5 pointer-events-none flex-shrink-0" />
       }
-      radius="sm"
     />
   );
 };

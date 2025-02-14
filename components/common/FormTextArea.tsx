@@ -1,13 +1,10 @@
-import React from "react";
-import { Input, InputProps } from "@heroui/react";
 import { cn } from "@/helpers";
+import { Textarea, TextAreaProps } from "@heroui/react";
+import React from "react";
 
-const FormInput = (props: InputProps) => {
+const FormTextArea = (props: TextAreaProps) => {
   return (
-    <Input
-      size="md"
-      radius="sm"
-      variant="bordered"
+    <Textarea
       {...props}
       classNames={{
         ...props.classNames,
@@ -16,8 +13,9 @@ const FormInput = (props: InputProps) => {
           props.classNames?.inputWrapper ?? ""
         ),
       }}
+      variant="bordered"
     />
   );
 };
 
-export default FormInput;
+export default FormTextArea;

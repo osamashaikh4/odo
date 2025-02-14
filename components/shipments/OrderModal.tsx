@@ -9,10 +9,7 @@ import {
   Accordion,
   AccordionItem,
   Form,
-  Autocomplete,
-  AutocompleteItem,
-  Select,
-  SelectItem,
+  DatePicker,
 } from "@heroui/react";
 import React, { useEffect, useRef, useState } from "react";
 import FormInput from "../common/FormInput";
@@ -25,19 +22,29 @@ import {
 } from "@/services/queries/common";
 import "react-phone-number-input/style.css";
 import Stepper from "../common/Stepper";
-import { BsPlus } from "react-icons/bs";
-import { PaymentMethods } from "@/helpers";
+import { BsPlus, BsTrash } from "react-icons/bs";
+import { isNumber, PaymentMethods } from "@/helpers";
+import FormSelect from "../common/FormSelect";
+import FormAutoComplete from "../common/FormAutoComplete";
+import { now, getLocalTimeZone } from "@internationalized/date";
+import Table from "../common/Table";
+import FormTextArea from "../common/FormTextArea";
+import QuantityInput from "../common/QuantityInput";
+import { RxCross2 } from "react-icons/rx";
+import { FaPen } from "react-icons/fa";
 
 interface OrderModalProps {
   onClose: () => void;
 }
 
-const ReceiverDetailsForm = () => {
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("SA");
-  const [district, setDistrict] = useState("");
+const ReceiverDetailsForm = ({ values }: any) => {
+  const [customerPhone, setCustomerPhone] = useState(
+    values.customerPhone ?? ""
+  );
+  const [state, setState] = useState(values.state ?? "");
+  const [city, setCity] = useState(values.city ?? "");
+  const [country, setCountry] = useState(values.country ?? "SA");
+  const [district, setDistrict] = useState(values.district ?? "");
   const { data: countries = [] } = useCountriesQuery();
   const { data: states = [] } = useStatesQuery();
   const { data: cities = [] } = useCitiesQuery(state);
@@ -63,11 +70,10 @@ const ReceiverDetailsForm = () => {
       >
         <div className="p-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
           <FormInput
-            size="md"
             className="w-full"
             label="First Name"
             isRequired
-            radius="sm"
+            defaultValue={values.customerFirstName}
             name="customerFirstName"
             labelPlacement="outside"
             placeholder=" "
@@ -76,7 +82,7 @@ const ReceiverDetailsForm = () => {
             size="md"
             className="w-full"
             label="Last Name"
-            radius="sm"
+            defaultValue={values.customerLastName}
             name="customerLastName"
             labelPlacement="outside"
             placeholder=" "
@@ -89,7 +95,7 @@ const ReceiverDetailsForm = () => {
               international
               countryCallingCodeEditable={false}
               defaultCountry="SA"
-              className="intl-phone-input px-3 py-1.5 border-small border-default-200 shadow-sm rounded-[5px]"
+              className="intl-phone-input px-3 py-1.5 border-small border-default-200 rounded-[5px]"
               limitMaxLength={true}
               value={customerPhone}
               onChange={(e: any) => setCustomerPhone(e)}
@@ -106,11 +112,10 @@ const ReceiverDetailsForm = () => {
             />
           </div>
           <FormInput
-            size="md"
             className="w-full"
             label="Email"
             type="email"
-            radius="sm"
+            defaultValue={values.customerEmail}
             name="customerEmail"
             labelPlacement="outside"
             placeholder=" "
@@ -119,7 +124,6 @@ const ReceiverDetailsForm = () => {
       </AccordionItem>
       <AccordionItem
         key="2"
-        tabIndex={-1}
         className="shadow-none rounded border border-gray-200 px-0"
         classNames={{
           trigger: "bg-backgroundGrey px-4 py-3 !outline-none",
@@ -129,9 +133,9 @@ const ReceiverDetailsForm = () => {
         title="Receiver Address Details"
       >
         <div className="p-4 w-full flex flex-col gap-5">
-          <Autocomplete
+          <FormAutoComplete
             className="w-full"
-            defaultItems={countries.map((country) => ({
+            options={countries.map((country) => ({
               label: country.countryName,
               value: country.countryCode,
             }))}
@@ -144,46 +148,30 @@ const ReceiverDetailsForm = () => {
               setCity("");
               setDistrict("");
             }}
-            variant="bordered"
-            inputProps={{
-              classNames: { inputWrapper: "border-small rounded" },
-            }}
             defaultSelectedKey="SA"
             labelPlacement="outside"
             name="country"
-            size="md"
-            radius="sm"
             placeholder=" "
-          >
-            {(item) => (
-              <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-            )}
-          </Autocomplete>
+          />
           <FormInput
             size="md"
             className="w-full"
             label="Full Address Line"
-            radius="sm"
             isRequired
             name="address"
+            defaultValue={values.address}
             labelPlacement="outside"
             placeholder=" "
           />
           <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <Autocomplete
+            <FormAutoComplete
               className="w-full"
-              defaultItems={states.map((state) => ({
+              options={states.map((state) => ({
                 label: state.stateName,
                 value: state.stateCode,
               }))}
               label="State/Region"
               isRequired
-              variant="bordered"
-              inputProps={{
-                classNames: {
-                  inputWrapper: "border-small rounded",
-                },
-              }}
               selectedKey={state}
               onSelectionChange={(k) => {
                 setCity("");
@@ -191,19 +179,11 @@ const ReceiverDetailsForm = () => {
               }}
               labelPlacement="outside"
               name="state"
-              size="md"
-              radius="sm"
               placeholder="State"
-            >
-              {(item) => (
-                <AutocompleteItem key={item.value}>
-                  {item.label}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
-            <Autocomplete
+            />
+            <FormAutoComplete
               className="w-full"
-              defaultItems={cities.map((city) => ({
+              options={cities.map((city) => ({
                 label: city.cityName,
                 value: city.cityName,
               }))}
@@ -212,29 +192,15 @@ const ReceiverDetailsForm = () => {
                 setCity(k as any);
                 setDistrict("");
               }}
-              variant="bordered"
-              inputProps={{
-                classNames: {
-                  inputWrapper: "border-small rounded",
-                },
-              }}
               label="City"
               isRequired
               labelPlacement="outside"
               name="city"
-              size="md"
-              radius="sm"
               placeholder="City"
-            >
-              {(item) => (
-                <AutocompleteItem key={item.value}>
-                  {item.label}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
-            <Autocomplete
+            />
+            <FormAutoComplete
               className="w-full"
-              defaultItems={districts.map((district) => ({
+              options={districts.map((district) => ({
                 label: district.name,
                 value: district.name,
               }))}
@@ -242,31 +208,17 @@ const ReceiverDetailsForm = () => {
               onSelectionChange={(k) => {
                 setDistrict(k as any);
               }}
-              variant="bordered"
-              inputProps={{
-                classNames: {
-                  inputWrapper: "border-small rounded",
-                },
-              }}
               label="District"
               labelPlacement="outside"
               name="district"
-              size="md"
-              radius="sm"
               placeholder="-"
-            >
-              {(item) => (
-                <AutocompleteItem key={item.value}>
-                  {item.label}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
+            />
             <FormInput
               size="md"
               className="w-full"
               label="Street Name"
-              radius="sm"
               name="streetName"
+              defaultValue={values.streetName}
               labelPlacement="outside"
               placeholder=" "
             />
@@ -274,7 +226,7 @@ const ReceiverDetailsForm = () => {
               size="md"
               className="w-full"
               label="Building No/Name"
-              radius="sm"
+              defaultValue={values.building}
               name="building"
               labelPlacement="outside"
               placeholder=" "
@@ -283,15 +235,11 @@ const ReceiverDetailsForm = () => {
               size="md"
               className="w-full"
               label="ZIP Code"
-              radius="sm"
+              defaultValue={values.zipCode}
               name="zipCode"
               labelPlacement="outside"
               placeholder=" "
-              onKeyPress={(e) => {
-                if (!/([0-9])/g.test(e.key)) {
-                  e.preventDefault();
-                }
-              }}
+              onKeyPress={isNumber}
             />
           </div>
         </div>
@@ -301,6 +249,23 @@ const ReceiverDetailsForm = () => {
 };
 
 const OrderDetailsForm = () => {
+  const [rows, setRows] = useState<any[]>([]);
+
+  const onAddNewRow = () => {
+    setRows([
+      ...rows,
+      {
+        id: rows.length + 1,
+        productName: "",
+        orderItemSku: "",
+        orderItemQuantity: "",
+        orderItemPrice: "",
+        orderItemTax: "",
+        orderItemTotal: "",
+      },
+    ]);
+  };
+
   return (
     <Accordion
       defaultSelectedKeys={["1", "2"]}
@@ -323,68 +288,68 @@ const OrderDetailsForm = () => {
             className="w-full"
             label="Order Number"
             isRequired
-            radius="sm"
             name="orderNumber"
             labelPlacement="outside"
             placeholder=" "
           />
-          <FormInput
-            size="md"
-            className="w-full"
-            label="Order Date"
-            isRequired
-            radius="sm"
-            name="orderNumber"
-            labelPlacement="outside"
-            placeholder=" "
-          />
-          <Select
+          <div className="form-date-picker">
+            <DatePicker
+              hideTimeZone
+              selectorButtonPlacement="start"
+              className="w-full"
+              showMonthAndYearPickers
+              defaultValue={now(getLocalTimeZone()) as any}
+              label="Order Date"
+              labelPlacement="outside"
+              variant="bordered"
+              classNames={{ inputWrapper: "hidden" }}
+              isRequired
+              radius="sm"
+              name="orderDate"
+              size="md"
+            />
+          </div>
+          <FormSelect
             name="paymentMethod"
-            radius="sm"
             className="w-full"
             variant="bordered"
             defaultSelectedKeys={["paid"]}
             labelPlacement="outside"
             label="Payment Method"
-          >
-            {PaymentMethods.map((paymentMethod) => (
-              <SelectItem key={paymentMethod.value}>
-                {paymentMethod.label}
-              </SelectItem>
-            ))}
-          </Select>
-          <div className="flex">
+            options={PaymentMethods}
+          />
+
+          <div className="flex items-baseline">
             <FormInput
-              size="md"
               className="w-full"
               label="Order Grand Total"
               isRequired
-              radius="sm"
+              onKeyPress={(e) => {
+                if (!/([0-9])/g.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
               name="orderAmount"
-              classNames={{ inputWrapper: "rounded-tl-none rounded-tr-none" }}
+              classNames={{ inputWrapper: "rounded-br-none rounded-tr-none" }}
               labelPlacement="outside"
               placeholder=" "
             />
-            <Select
+            <FormSelect
               name="orderCurrency"
-              radius="sm"
               className="max-w-[5rem]"
               classNames={{
-                trigger: "rounded-tl-none rounded-tr-none border-l-0",
+                trigger:
+                  "rounded-tl-none rounded-bl-none border-l-0 shadow-none",
               }}
+              options={["SAR"].map((c) => ({ label: c, value: c }))}
               variant="bordered"
               defaultSelectedKeys={["SAR"]}
-            >
-              {["SAR"].map((currency) => (
-                <SelectItem key={currency}>{currency}</SelectItem>
-              ))}
-            </Select>
+            />
           </div>
         </div>
       </AccordionItem>
       <AccordionItem
         key="2"
-        tabIndex={-1}
         className="shadow-none rounded border border-gray-200 px-0"
         classNames={{
           trigger: "bg-backgroundGrey px-4 py-3 !outline-none",
@@ -392,7 +357,136 @@ const OrderDetailsForm = () => {
         }}
         aria-label="Products Details"
         title="Products Details"
-      ></AccordionItem>
+      >
+        <div className="p-4 w-full flex flex-col gap-5">
+          <FormTextArea
+            label="Item Description"
+            labelPlacement="outside"
+            isRequired={rows.length === 0}
+            name="orderDescription"
+            placeholder="Enter product name, code, color & size"
+          />
+          <Table
+            columns={[
+              {
+                field: "orderItemName",
+                headerName: "Product Name",
+                render(_, row) {
+                  return (
+                    <FormInput name={"orderItemName" + row.id} isRequired />
+                  );
+                },
+              },
+              {
+                field: "orderItemSku",
+                headerName: "SKU",
+                render(_, row) {
+                  return (
+                    <FormInput name={"orderItemSku" + row.id} isRequired />
+                  );
+                },
+              },
+              {
+                field: "orderItemQuantity",
+                headerName: "Quantity",
+                render(_, row) {
+                  return (
+                    <QuantityInput
+                      name={"orderItemQuantity" + row.id}
+                      isRequired
+                    />
+                  );
+                },
+              },
+              {
+                field: "orderItemPrice",
+                headerName: "Price",
+                render(_, row) {
+                  return (
+                    <FormInput
+                      name={"orderItemPrice" + row.id}
+                      endContent="SAR"
+                      isRequired
+                      onKeyPress={(e) => {
+                        if (!/([0-9])/g.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  );
+                },
+              },
+              {
+                field: "orderItemTax",
+                headerName: "Tax",
+                render(_, row) {
+                  return (
+                    <FormInput
+                      name={"orderItemTax" + row.id}
+                      isRequired
+                      endContent="SAR"
+                      onKeyPress={(e) => {
+                        if (!/([0-9])/g.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  );
+                },
+              },
+              {
+                field: "orderItemTotal",
+                headerName: "Total",
+                render(_, row) {
+                  return (
+                    <FormInput
+                      name={"orderItemTotal" + row.id}
+                      isRequired
+                      endContent="SAR"
+                      onKeyPress={(e) => {
+                        if (!/([0-9])/g.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  );
+                },
+              },
+            ]}
+            showEmptyMessage={false}
+            limit={10}
+            rows={rows}
+            filters={{}}
+            onAction={console.log}
+            outerAction={(row) => (
+              <Button
+                variant="bordered"
+                color="danger"
+                radius="sm"
+                className="border-small min-w-4 px-3"
+                onPress={() => setRows(rows.filter((r) => r.id !== row.id))}
+              >
+                <BsTrash fontSize="1.125rem" />
+              </Button>
+            )}
+          />
+          <div className="flex items-center gap-2">
+            <Button
+              className="border-small"
+              variant="bordered"
+              radius="sm"
+              color="primary"
+              onPress={onAddNewRow}
+              startContent={<BsPlus className="h-6 w-6" />}
+            >
+              Add New Row
+            </Button>
+            <Button variant="light" color="primary">
+              Adjust Order Value
+            </Button>
+          </div>
+        </div>
+      </AccordionItem>
     </Accordion>
   );
 };
@@ -401,6 +495,7 @@ const OrderModal = ({ onClose }: OrderModalProps) => {
   const submitButtoRef = useRef<HTMLButtonElement>(null);
   const [active, setActive] = useState(0);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [values, setValues] = useState({});
 
   useEffect(() => {
     onOpen();
@@ -413,17 +508,67 @@ const OrderModal = ({ onClose }: OrderModalProps) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData: any = Object.fromEntries(
+      new FormData(e.currentTarget as any)
+    );
     if (active === 0) {
+      setValues(formData);
       setActive(1);
+    } else {
+      const allData = { ...values, ...formData };
+
+      const fin = {
+        orderNumber: allData.orderNumber,
+        orderDate: allData.orderDate,
+        orderTimeZone: allData.orderTimeZone,
+        paymentMethod: allData.paymentMethod,
+        orderAmount: allData.orderAmount,
+        orderCurrency: allData.orderCurrency,
+        orderDescription: allData.orderDescription,
+        customer: {
+          customerFirstName: allData.customerFirstName,
+          customerLastName: allData.customerLastName,
+          customerEmail: allData.customerEmail,
+          customerPhone: allData.customerPhone,
+        },
+        address: {
+          address: allData.address,
+          city: allData.city,
+          state: allData.state,
+          country: allData.country,
+          district: allData.district,
+          zipCode: allData.zipCode,
+          streetName: allData.streetName,
+          building: allData.building,
+        },
+        items: Object.keys(allData)
+          .filter((key) => key.startsWith("orderItemName"))
+          .map((key) => {
+            const index = key.replace("orderItemName", "");
+            return {
+              orderItemName: allData[`orderItemName${index}`],
+              orderItemSku: allData[`orderItemSku${index}`],
+              orderItemQuantity: allData[`orderItemQuantity${index}`],
+              orderItemPrice: allData[`orderItemPrice${index}`],
+              orderItemTax: allData[`orderItemTax${index}`],
+              orderItemTotal: allData[`orderItemTotal${index}`],
+              orderItemCurrency: "SAR",
+            };
+          }),
+      };
+      console.log(fin);
     }
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      scrollBehavior="inside"
+      shouldBlockScroll
+      radius="sm"
+      shouldCloseOnInteractOutside={() => false}
       onOpenChange={handleClose}
-      className="max-h-[calc(100%_-_4rem)] max-w-6xl"
+      closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
+      className="max-h-[calc(100%_-_4rem)] max-w-[90%]"
     >
       <ModalContent>
         {(onClose) => (
@@ -441,9 +586,13 @@ const OrderModal = ({ onClose }: OrderModalProps) => {
                 <div></div>
               </div>
             </ModalHeader>
-            <ModalBody className="px-1">
+            <ModalBody className="px-1 overflow-auto">
               <Form onSubmit={onSubmit} validationBehavior="native">
-                {active === 0 ? <ReceiverDetailsForm /> : <OrderDetailsForm />}
+                {active === 0 ? (
+                  <ReceiverDetailsForm values={values} />
+                ) : (
+                  <OrderDetailsForm />
+                )}
                 <button
                   ref={submitButtoRef}
                   type="submit"
@@ -465,6 +614,7 @@ const OrderModal = ({ onClose }: OrderModalProps) => {
                   color="primary"
                   variant="bordered"
                   radius="sm"
+                  className="border-small"
                   onPress={() => setActive(0)}
                 >
                   Previous

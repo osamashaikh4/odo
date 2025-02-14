@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Autocomplete, AutocompleteItem, Button, Form } from "@heroui/react";
+import { Button, Form } from "@heroui/react";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import {
@@ -16,6 +16,8 @@ import {
 } from "@/services/queries/warehouse";
 import { useQueryClient } from "@tanstack/react-query";
 import FormInput from "../common/FormInput";
+import { isNumber } from "@/helpers";
+import FormAutoComplete from "../common/FormAutoComplete";
 
 interface PickupFormProps {
   warehouse?: Warehouse;
@@ -90,10 +92,8 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
         style={{ height: "calc(100% - 2rem)" }}
       >
         <FormInput
-          size="md"
           className="w-[42rem] mx-auto"
           label="Pickup Location Name"
-          radius="sm"
           isRequired
           defaultValue={warehouse?.warehouseName}
           name="warehouseName"
@@ -101,10 +101,8 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           placeholder=" "
         />
         <FormInput
-          size="md"
           className="w-[42rem] mx-auto"
           label="Sender Name"
-          radius="sm"
           isRequired
           defaultValue={warehouse?.senderName}
           name="senderName"
@@ -112,11 +110,9 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           placeholder=" "
         />
         <FormInput
-          size="md"
           type="email"
           className="w-[42rem] mx-auto"
           label="Email"
-          radius="sm"
           defaultValue={warehouse?.senderEmail}
           isRequired
           name="senderEmail"
@@ -147,9 +143,9 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             value={senderPhone}
           />
         </div>
-        <Autocomplete
+        <FormAutoComplete
           className="w-[42rem] mx-auto"
-          defaultItems={countries.map((country) => ({
+          options={countries.map((country) => ({
             label: country.countryName,
             value: country.countryCode,
           }))}
@@ -162,41 +158,29 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             setCity("");
             setDistrict("");
           }}
-          variant="bordered"
-          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           isDisabled
           defaultSelectedKey="SA"
           labelPlacement="outside"
           name="senderCountry"
-          size="md"
-          radius="sm"
           placeholder=" "
-        >
-          {(item) => (
-            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-          )}
-        </Autocomplete>
+        />
         <FormInput
-          size="md"
           className="w-[42rem] mx-auto"
           label="Full Address Line"
-          radius="sm"
           isRequired
           defaultValue={warehouse?.warehouseAddress}
           name="warehouseAddress"
           labelPlacement="outside"
           placeholder=" "
         />
-        <Autocomplete
+        <FormAutoComplete
           className="w-[42rem] mx-auto"
-          defaultItems={states.map((state) => ({
+          options={states.map((state) => ({
             label: state.stateName,
             value: state.stateCode,
           }))}
           label="State/Region"
           isRequired
-          variant="bordered"
-          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           selectedKey={state}
           onSelectionChange={(k) => {
             setCity("");
@@ -204,17 +188,11 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           }}
           labelPlacement="outside"
           name="warehouseState"
-          size="md"
-          radius="sm"
           placeholder="State"
-        >
-          {(item) => (
-            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-          )}
-        </Autocomplete>
-        <Autocomplete
+        />
+        <FormAutoComplete
           className="w-[42rem] mx-auto"
-          defaultItems={cities.map((city) => ({
+          options={cities.map((city) => ({
             label: city.cityName,
             value: city.cityName,
           }))}
@@ -223,23 +201,15 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             setCity(k as any);
             setDistrict("");
           }}
-          variant="bordered"
-          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           label="City"
           isRequired
           labelPlacement="outside"
           name="warehouseCity"
-          size="md"
-          radius="sm"
           placeholder="City"
-        >
-          {(item) => (
-            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-          )}
-        </Autocomplete>
-        <Autocomplete
+        />
+        <FormAutoComplete
           className="w-[42rem] mx-auto"
-          defaultItems={districts.map((district) => ({
+          options={districts.map((district) => ({
             label: district.name,
             value: district.name,
           }))}
@@ -247,44 +217,30 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           onSelectionChange={(k) => {
             setDistrict(k as any);
           }}
-          variant="bordered"
-          inputProps={{ classNames: { inputWrapper: "border-small rounded" } }}
           label="District"
           labelPlacement="outside"
           name="warehouseDistrict"
-          size="md"
-          radius="sm"
           placeholder="-"
-        >
-          {(item) => (
-            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-          )}
-        </Autocomplete>
+        />
         <FormInput
-          size="md"
           className="w-[42rem] mx-auto"
           label="Street Name"
-          radius="sm"
           name="warehouseStreetName"
           defaultValue={warehouse?.warehouseStreetName}
           labelPlacement="outside"
           placeholder=" "
         />
         <FormInput
-          size="md"
           className="w-[42rem] mx-auto"
           label="Building No/Name"
-          radius="sm"
           name="warehouseBuilding"
           labelPlacement="outside"
           defaultValue={warehouse?.warehouseBuilding}
           placeholder=" "
         />
         <FormInput
-          size="md"
           className="w-[42rem] mx-auto"
           label="ZIP Code"
-          radius="sm"
           defaultValue={
             warehouse?.warehouseZipCode
               ? warehouse?.warehouseZipCode.toString()
@@ -293,11 +249,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           name="warehouseZipCode"
           labelPlacement="outside"
           placeholder=" "
-          onKeyPress={(e) => {
-            if (!/([0-9])/g.test(e.key)) {
-              e.preventDefault();
-            }
-          }}
+          onKeyPress={isNumber}
         />
       </div>
     </Form>

@@ -50,18 +50,15 @@ const LoginForm = () => {
       <div className="w-[28rem] sm:w-[36rem] bg-white border border-gray-200 rounded flex flex-col py-8 px-12 gap-6">
         <h3 className="text-3xl font-semibold mb-4">Welcome back!</h3>
         <FormInput
-          size="md"
           className="w-full"
           label="Email"
           type="email"
-          radius="sm"
           isRequired
           name="email"
           labelPlacement="outside"
           placeholder="Enter your email"
         />
         <FormInput
-          size="md"
           isRequired
           className="w-full"
           endContent={
@@ -82,7 +79,6 @@ const LoginForm = () => {
           placeholder=" "
           label="Password"
           name="password"
-          radius="sm"
           type={isVisible ? "text" : "password"}
         />
         <Button

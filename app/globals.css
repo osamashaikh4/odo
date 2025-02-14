@@ -7,6 +7,7 @@
   --foreground: #171717;
   --blue: #506efe;
   --border-color: #dee3e7;
+  --border-grey: #e0e0e0;
   --background-lightGrey: #f2f2f2;
   --green: #79c736;
 }
@@ -234,4 +235,11 @@ body {
   border-bottom-width: 1px;
   border-top-color: var(--border-color);
   border-bottom-color: var(--border-color);
+}
+
+.form-date-picker [data-slot="base"] [data-slot="input-wrapper"] {
+  border-radius: 5px;
+  box-shadow: none;
+  border-width: 1px;
+  border-color: var(--border-grey);
 }
