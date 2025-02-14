@@ -15,6 +15,7 @@ export default {
         foreground: "var(--foreground)",
         backgroundGrey: "var(--background-lightGrey)",
         borderGrey: "var(--border-grey)",
+        blue: "var(--blue)",
       },
     },
   },

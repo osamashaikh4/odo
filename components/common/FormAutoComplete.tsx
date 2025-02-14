@@ -29,7 +29,7 @@ const FormAutoComplete = ({
           classNames: {
             ...props.inputProps?.classNames,
             inputWrapper: cn(
-              "rounded border-small shadow-none border-borderGrey border-1 bg-white",
+              "rounded border-small shadow-none border-borderGrey border-1 bg-white group-data-[focus=true]:border-default-400",
               props.inputProps?.classNames?.inputWrapper ?? ""
             ),
           },
