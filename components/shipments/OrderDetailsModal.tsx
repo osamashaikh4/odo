@@ -38,7 +38,7 @@ const OrderDetailsModal = ({
   const [selectedTab, setSelectedTab] = useState("receiver-details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { data, isFetching } = useOrderQuery(orderID);
+  const { data, isFetching, refetch } = useOrderQuery(orderID);
 
   useEffect(() => {
     onOpen();
@@ -51,6 +51,7 @@ const OrderDetailsModal = ({
 
   const updateOrder = useUpdateOrderMutation({
     onSuccess() {
+      refetch();
       queryClient.invalidateQueries({
         queryKey: ["orders"],
       });
@@ -60,13 +61,11 @@ const OrderDetailsModal = ({
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData: any = Object.fromEntries(
+    let values;
+    const allData: any = Object.fromEntries(
       new FormData(e.currentTarget as any)
     );
 
-    const allData = { ...formData };
-    const parsedDateTime = parseZonedDateTime(allData.orderDate);
-    let values;
     if (selectedTab === "receiver-details") {
       values = {
         receiver: {
@@ -87,9 +86,12 @@ const OrderDetailsModal = ({
             building: allData.building,
           },
         },
+        orderID: data?.orderID,
       };
     } else if (selectedTab === "order-details") {
+      const parsedDateTime = parseZonedDateTime(allData.orderDate);
       values = {
+        orderID: data?.orderID,
         order: {
           orderDate: parsedDateTime.toAbsoluteString(),
           orderTimeZone: parsedDateTime.timeZone,
@@ -144,7 +146,8 @@ const OrderDetailsModal = ({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {isView ? "View Order" : "Edit Order"}
+              {isView ? "View Order" : "Edit Order"}{" "}
+              {data?.orderNumber ? `(${data.orderNumber})` : ""}
             </ModalHeader>
             <ModalBody className="px-1 overflow-auto">
               {isFetching && (

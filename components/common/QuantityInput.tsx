@@ -5,11 +5,12 @@ import { isNumber } from "@/helpers";
 import { BsPlus } from "react-icons/bs";
 import { FiMinus } from "react-icons/fi";
 
-const QuantityInput = (props: InputProps) => {
+const QuantityInput = ({ isDisabled, ...props }: InputProps) => {
   const [value, setValue] = useState<any>(props.defaultValue);
   return (
     <div className="flex w-32">
       <Button
+        isDisabled={isDisabled}
         variant="bordered"
         radius="sm"
         onPress={() => {
@@ -25,12 +26,14 @@ const QuantityInput = (props: InputProps) => {
       </Button>
       <FormInput
         {...props}
+        isDisabled={isDisabled}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyPress={isNumber}
         classNames={{ inputWrapper: "px-0 rounded-none", input: "text-center" }}
       />
       <Button
+        isDisabled={isDisabled}
         variant="bordered"
         radius="sm"
         onPress={() => {
