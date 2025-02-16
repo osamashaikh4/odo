@@ -13,6 +13,9 @@ export const getOrders = (filters: Filter) =>
     )
     .then((res) => res.data);
 
+export const getOrder = (orderID: string) =>
+  axios.get("/orders/" + orderID).then((res) => res.data);
+
 export const getOrderNumber = () =>
   axios.get("/orders/getOrderNumber").then((res) => res.data);
 

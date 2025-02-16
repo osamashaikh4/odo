@@ -165,11 +165,11 @@ export default function Table({
               <tbody className="bg-white divide-y divide-gray-200">
                 {isLoading ? (
                   Array.from({ length: limit }).map((_, i) => (
-                    <tr key={`skeleton-${i}`} className="animate-pulse h-12">
+                    <tr key={`skeleton-${i}`} className="animate-pulse h-10">
                       {columns.map((_, ind) => (
                         <td
                           key={`skeleton-${i}-col-${ind}`}
-                          className="py-2 px-4 whitespace-nowrap"
+                          className="px-4 whitespace-nowrap"
                         >
                           <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                         </td>
@@ -194,7 +194,7 @@ export default function Table({
                     >
                       {columns.map((column, ind) => (
                         <td
-                          className="py-2 px-4 overflow-hidden text-ellipsis text-sm text-dark"
+                          className="py-1 px-4 overflow-hidden text-ellipsis text-sm text-dark"
                           key={`row-${i}-col-${ind}`}
                           style={{
                             minWidth: 45,
@@ -211,7 +211,7 @@ export default function Table({
                           )}
                         </td>
                       ))}
-                      <td className="py-2 px-4 whitespace-nowrap space-x-2 text-right">
+                      <td className="py-1 px-4 whitespace-nowrap space-x-2 text-right">
                         {outerAction ? (
                           outerAction(row)
                         ) : (

@@ -13,6 +13,9 @@ import SectionHeader from "../shipments/SectionHeader";
 import OrderModal from "../shipments/OrderModal";
 import { useWarehouseQuery } from "@/services/queries/warehouse";
 import { onErrorToast } from "@/helpers/toast";
+import { BsPencilSquare } from "react-icons/bs";
+import { FaRegEye } from "react-icons/fa";
+import OrderDetailsModal from "../shipments/OrderDetailsModal";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -94,6 +97,7 @@ const columns = [
 
 const OrderList = ({ searchParams }: OrderListProps) => {
   const router = useRouter();
+  const [orderDetails, setOrderDetails] = useState<any>(null);
   const [orderModal, setOrderModal] = useState<any>(null);
   const [rateModal, setRateModal] = useState<Order[] | null>(null);
   const filters = {
@@ -118,6 +122,10 @@ const OrderList = ({ searchParams }: OrderListProps) => {
           response: { data: { error: "Please add a pickup location first" } },
         });
       }
+    } else if (action === "edit-order") {
+      setOrderDetails({ orderID: data.orderID });
+    } else if (action === "view-order") {
+      setOrderDetails({ isView: true, orderID: data.orderID });
     }
   };
 
@@ -131,6 +139,16 @@ const OrderList = ({ searchParams }: OrderListProps) => {
         rows={data.results}
         isLoading={isFetching}
         options={[
+          {
+            label: "Edit Order",
+            value: "edit-order",
+            icon: <BsPencilSquare fontSize="1.125rem" />,
+          },
+          {
+            label: "View Order",
+            value: "view-order",
+            icon: <FaRegEye fontSize="1.125rem" />,
+          },
           {
             label: "Create Shipment",
             value: "create-shipment",
@@ -153,6 +171,12 @@ const OrderList = ({ searchParams }: OrderListProps) => {
         }}
       />
       {orderModal && <OrderModal onClose={() => setOrderModal(null)} />}
+      {orderDetails && (
+        <OrderDetailsModal
+          {...orderDetails}
+          onClose={() => setOrderDetails(null)}
+        />
+      )}
       {rateModal && (
         <RateModal orders={rateModal} onClose={() => setRateModal(null)} />
       )}

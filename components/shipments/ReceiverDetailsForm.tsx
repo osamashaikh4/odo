@@ -12,14 +12,20 @@ import { Accordion, AccordionItem } from "@heroui/react";
 import FormInput from "../common/FormInput";
 import { isNumber } from "@/helpers";
 
-const ReceiverDetailsForm = ({ values }: any) => {
+interface ReceiverDetailsFormProps {
+  isView?: boolean;
+  values?: { [key: string]: any };
+}
+
+const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
   const [customerPhone, setCustomerPhone] = useState(
-    values.customerPhone ?? ""
+    values?.customerPhone ?? ""
   );
-  const [state, setState] = useState(values.state ?? "");
-  const [city, setCity] = useState(values.city ?? "");
-  const [country, setCountry] = useState(values.country ?? "SA");
-  const [district, setDistrict] = useState(values.district ?? "");
+  console.log(values);
+  const [state, setState] = useState(values?.state ?? "");
+  const [city, setCity] = useState(values?.city ?? "");
+  const [country, setCountry] = useState(values?.country ?? "SA");
+  const [district, setDistrict] = useState(values?.district ?? "");
   const { data: countries = [] } = useCountriesQuery();
   const { data: states = [] } = useStatesQuery();
   const { data: cities = [] } = useCitiesQuery(state);
@@ -48,7 +54,8 @@ const ReceiverDetailsForm = ({ values }: any) => {
             className="w-full"
             label="First Name"
             isRequired
-            defaultValue={values.customerFirstName}
+            isDisabled={isView}
+            defaultValue={values?.customerFirstName}
             name="customerFirstName"
             labelPlacement="outside"
             placeholder=" "
@@ -57,7 +64,8 @@ const ReceiverDetailsForm = ({ values }: any) => {
             size="md"
             className="w-full"
             label="Last Name"
-            defaultValue={values.customerLastName}
+            isDisabled={isView}
+            defaultValue={values?.customerLastName}
             name="customerLastName"
             labelPlacement="outside"
             placeholder=" "
@@ -70,6 +78,7 @@ const ReceiverDetailsForm = ({ values }: any) => {
               international
               countryCallingCodeEditable={false}
               defaultCountry="SA"
+              disabled={isView}
               className="intl-phone-input px-3 py-1.5 border-small border-default-200 rounded-[5px]"
               limitMaxLength={true}
               value={customerPhone}
@@ -77,6 +86,7 @@ const ReceiverDetailsForm = ({ values }: any) => {
             />
             <FormInput
               size="md"
+              isDisabled={isView}
               classNames={{
                 inputWrapper: "invisible h-0 min-h-0",
                 helperWrapper: customerPhone ? "!hidden" : undefined,
@@ -89,8 +99,9 @@ const ReceiverDetailsForm = ({ values }: any) => {
           <FormInput
             className="w-full"
             label="Email"
+            isDisabled={isView}
             type="email"
-            defaultValue={values.customerEmail}
+            defaultValue={values?.customerEmail}
             name="customerEmail"
             labelPlacement="outside"
             placeholder=" "
@@ -114,6 +125,7 @@ const ReceiverDetailsForm = ({ values }: any) => {
               label: country.countryName,
               value: country.countryCode,
             }))}
+            isDisabled={isView}
             label="Country"
             isRequired
             selectedKey={country}
@@ -134,7 +146,8 @@ const ReceiverDetailsForm = ({ values }: any) => {
             label="Full Address Line"
             isRequired
             name="address"
-            defaultValue={values.address}
+            isDisabled={isView}
+            defaultValue={values?.address}
             labelPlacement="outside"
             placeholder=" "
           />
@@ -147,6 +160,7 @@ const ReceiverDetailsForm = ({ values }: any) => {
               }))}
               label="State/Region"
               isRequired
+              isDisabled={isView}
               selectedKey={state}
               onSelectionChange={(k) => {
                 setCity("");
@@ -162,6 +176,7 @@ const ReceiverDetailsForm = ({ values }: any) => {
                 label: city.cityName,
                 value: city.cityName,
               }))}
+              isDisabled={isView}
               selectedKey={city}
               onSelectionChange={(k) => {
                 setCity(k as any);
@@ -179,6 +194,7 @@ const ReceiverDetailsForm = ({ values }: any) => {
                 label: district.name,
                 value: district.name,
               }))}
+              isDisabled={isView}
               selectedKey={district}
               onSelectionChange={(k) => {
                 setDistrict(k as any);
@@ -192,8 +208,9 @@ const ReceiverDetailsForm = ({ values }: any) => {
               size="md"
               className="w-full"
               label="Street Name"
+              isDisabled={isView}
               name="streetName"
-              defaultValue={values.streetName}
+              defaultValue={values?.streetName}
               labelPlacement="outside"
               placeholder=" "
             />
@@ -201,8 +218,9 @@ const ReceiverDetailsForm = ({ values }: any) => {
               size="md"
               className="w-full"
               label="Building No/Name"
-              defaultValue={values.building}
+              defaultValue={values?.building}
               name="building"
+              isDisabled={isView}
               labelPlacement="outside"
               placeholder=" "
             />
@@ -210,8 +228,9 @@ const ReceiverDetailsForm = ({ values }: any) => {
               size="md"
               className="w-full"
               label="ZIP Code"
-              defaultValue={values.zipCode}
+              defaultValue={values?.zipCode}
               name="zipCode"
+              isDisabled={isView}
               labelPlacement="outside"
               placeholder=" "
               onKeyPress={isNumber}

@@ -1,7 +1,11 @@
 import React, { useMemo, useState } from "react";
-import { useGetOrderNumberMutation } from "@/services/queries/order";
+import { Order, useGetOrderNumberMutation } from "@/services/queries/order";
 import { Accordion, AccordionItem, Button, DatePicker } from "@heroui/react";
-import { getLocalTimeZone, now } from "@internationalized/date";
+import {
+  getLocalTimeZone,
+  now,
+  parseZonedDateTime,
+} from "@internationalized/date";
 import FormInput from "../common/FormInput";
 import FormSelect from "../common/FormSelect";
 import FormTextArea from "../common/FormTextArea";
@@ -10,10 +14,24 @@ import { isNumber, PaymentMethods } from "@/helpers";
 import QuantityInput from "../common/QuantityInput";
 import { BsPlus, BsTrash } from "react-icons/bs";
 
-const OrderDetailsForm = () => {
-  const [orderAmount, setOrderAmount] = useState("");
-  const [orderNumber, setOrderNumber] = useState("");
-  const [rows, setRows] = useState<any[]>([]);
+interface OrderDetailsFormProps {
+  values?: Order;
+  isView?: boolean;
+  isEdit?: boolean;
+}
+
+const OrderDetailsForm = ({
+  isView,
+  values,
+  isEdit,
+}: OrderDetailsFormProps) => {
+  const [orderAmount, setOrderAmount] = useState(
+    (values?.orderAmount as any) ?? ""
+  );
+  const [orderNumber, setOrderNumber] = useState(values?.orderNumber ?? "");
+  const [rows, setRows] = useState<any[]>(
+    values?.items ? values.items.map((item, i) => ({ ...item, id: i + 1 })) : []
+  );
 
   const totalRowsAmount = useMemo(
     () =>
@@ -37,7 +55,7 @@ const OrderDetailsForm = () => {
         id: rows.length + 1,
         productName: "",
         orderItemSku: "",
-        orderItemQuantity: "",
+        orderItemQuantity: "1",
         orderItemPrice: "",
         orderItemTax: "",
         orderItemTotal: "",
@@ -81,25 +99,29 @@ const OrderDetailsForm = () => {
               labelPlacement="outside"
               placeholder=" "
               minLength={3}
+              isDisabled={isEdit || isView}
               value={orderNumber}
               onChange={(e) => setOrderNumber(e.target.value)}
             />
-            <Button
-              color="primary"
-              variant="ghost"
-              radius="sm"
-              className="border-small"
-              isLoading={getOrderNumber.isPending}
-              onPress={() => getOrderNumber.mutate()}
-            >
-              Generate
-            </Button>
+            {!isEdit && (
+              <Button
+                color="primary"
+                variant="ghost"
+                radius="sm"
+                className="border-small"
+                isLoading={getOrderNumber.isPending}
+                onPress={() => getOrderNumber.mutate()}
+              >
+                Generate
+              </Button>
+            )}
           </div>
           <div className="form-date-picker">
             <DatePicker
               hideTimeZone
               selectorButtonPlacement="start"
               className="w-full"
+              isDisabled={isView}
               showMonthAndYearPickers
               defaultValue={now(getLocalTimeZone()) as any}
               label="Order Date"
@@ -115,8 +137,9 @@ const OrderDetailsForm = () => {
           <FormSelect
             name="paymentMethod"
             className="w-full"
+            isDisabled={isView}
             variant="bordered"
-            defaultSelectedKeys={["paid"]}
+            defaultSelectedKeys={[values?.paymentMethod ?? "paid"]}
             labelPlacement="outside"
             label="Payment Method"
             options={PaymentMethods}
@@ -127,6 +150,7 @@ const OrderDetailsForm = () => {
               className="w-full"
               label="Order Grand Total"
               isRequired
+              isDisabled={isView}
               onKeyPress={(e) => isNumber(e, true)}
               value={orderAmount}
               onChange={(e) => setOrderAmount(e.target.value)}
@@ -136,6 +160,7 @@ const OrderDetailsForm = () => {
               placeholder=" "
             />
             <FormSelect
+              isDisabled={isView}
               name="orderCurrency"
               className="max-w-[5rem]"
               classNames={{
@@ -163,8 +188,10 @@ const OrderDetailsForm = () => {
           <FormTextArea
             label="Item Description"
             labelPlacement="outside"
+            isDisabled={isView}
             isRequired={rows.length === 0}
             name="orderDescription"
+            defaultValue={values?.orderDescription}
             placeholder="Enter product name, code, color & size"
           />
           <Table
@@ -177,6 +204,8 @@ const OrderDetailsForm = () => {
                     <FormInput
                       name={"orderItemName" + row.id}
                       isRequired
+                      isDisabled={isView}
+                      defaultValue={row.orderItemName}
                       onBlur={(e) => handleChange(row.id, e)}
                     />
                   );
@@ -188,7 +217,9 @@ const OrderDetailsForm = () => {
                 render(_, row) {
                   return (
                     <FormInput
+                      isDisabled={isView}
                       name={"orderItemSku" + row.id}
+                      defaultValue={row.orderItemSku}
                       onBlur={(e) => handleChange(row.id, e)}
                     />
                   );
@@ -203,7 +234,8 @@ const OrderDetailsForm = () => {
                       name={"orderItemQuantity" + row.id}
                       type="number"
                       min={1}
-                      defaultValue="1"
+                      isDisabled={isView}
+                      defaultValue={row.orderItemQuantity ?? "1"}
                       isRequired
                       onBlur={(e) => handleChange(row.id, e)}
                     />
@@ -219,6 +251,8 @@ const OrderDetailsForm = () => {
                       name={"orderItemPrice" + row.id}
                       endContent="SAR"
                       isRequired
+                      isDisabled={isView}
+                      defaultValue={row.orderItemPrice}
                       onBlur={(e) => handleChange(row.id, e)}
                       onKeyPress={(e) => isNumber(e, true)}
                     />
@@ -234,6 +268,8 @@ const OrderDetailsForm = () => {
                       name={"orderItemTax" + row.id}
                       onBlur={(e) => handleChange(row.id, e)}
                       endContent="SAR"
+                      isDisabled={isView}
+                      defaultValue={row.orderItemTax}
                       onKeyPress={(e) => isNumber(e, true)}
                     />
                   );
@@ -247,8 +283,10 @@ const OrderDetailsForm = () => {
                     <FormInput
                       name={"orderItemTotal" + row.id}
                       isRequired
+                      isDisabled={isView}
                       onBlur={(e) => handleChange(row.id, e)}
                       endContent="SAR"
+                      defaultValue={row.orderItemTotal}
                       onKeyPress={(e) => isNumber(e, true)}
                     />
                   );
@@ -260,38 +298,42 @@ const OrderDetailsForm = () => {
             rows={rows}
             filters={{}}
             onAction={console.log}
-            outerAction={(row) => (
-              <Button
-                variant="bordered"
-                color="danger"
-                radius="sm"
-                className="border-small min-w-4 px-3"
-                onPress={() => setRows(rows.filter((r) => r.id !== row.id))}
-              >
-                <BsTrash fontSize="1.125rem" />
-              </Button>
-            )}
+            outerAction={(row) =>
+              isView ? null : (
+                <Button
+                  variant="bordered"
+                  color="danger"
+                  radius="sm"
+                  className="border-small min-w-4 px-3"
+                  onPress={() => setRows(rows.filter((r) => r.id !== row.id))}
+                >
+                  <BsTrash fontSize="1.125rem" />
+                </Button>
+              )
+            }
           />
-          <div className="flex items-center gap-2">
-            <Button
-              className="border-small"
-              variant="bordered"
-              radius="sm"
-              color="primary"
-              onPress={onAddNewRow}
-              startContent={<BsPlus className="h-6 w-6" />}
-            >
-              Add New Row
-            </Button>
-            <Button
-              variant="light"
-              isDisabled={totalRowsAmount <= 0}
-              color="primary"
-              onPress={() => setOrderAmount(totalRowsAmount)}
-            >
-              Adjust Order Value
-            </Button>
-          </div>
+          {!isView && (
+            <div className="flex items-center gap-2">
+              <Button
+                className="border-small"
+                variant="bordered"
+                radius="sm"
+                color="primary"
+                onPress={onAddNewRow}
+                startContent={<BsPlus className="h-6 w-6" />}
+              >
+                Add New Row
+              </Button>
+              <Button
+                variant="light"
+                isDisabled={totalRowsAmount <= 0}
+                color="primary"
+                onPress={() => setOrderAmount(totalRowsAmount)}
+              >
+                Adjust Order Value
+              </Button>
+            </div>
+          )}
         </div>
       </AccordionItem>
     </Accordion>

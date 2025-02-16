@@ -1,6 +1,7 @@
 import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import {
   createOrder,
+  getOrder,
   getOrderNumber,
   getOrders,
   updateOrder,
@@ -12,6 +13,7 @@ export type Order = {
   orderID: string;
   orderNumber: string;
   warehouseID: string;
+  orderDescription: string;
   orderDate: string;
   orderTimeZone: string;
   paymentMethod: string;
@@ -23,7 +25,19 @@ export type Order = {
   updatedAt: string;
   customer: Customer;
   address: Address;
+  items?: OrderItem[];
 };
+
+export interface OrderItem {
+  orderItemID: string;
+  orderItemName: string;
+  orderItemSku: string;
+  orderItemQuantity: number;
+  orderItemPrice: number;
+  orderItemTax: number;
+  orderItemTotal: number;
+  orderItemCurrency: string;
+}
 
 export interface Customer {
   firstName: string;
@@ -45,6 +59,16 @@ export const useOrdersQuery = (
   useQuery<GetOrdersResponse>({
     queryKey: ["orders", filters],
     queryFn: () => getOrders(filters),
+    ...params,
+  });
+
+export const useOrderQuery = (
+  orderID: string,
+  params?: Omit<UseQueryOptions<Order>, "queryKey">
+) =>
+  useQuery<Order>({
+    queryKey: ["order", orderID],
+    queryFn: () => getOrder(orderID),
     ...params,
   });
 

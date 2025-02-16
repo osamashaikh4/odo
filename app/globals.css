@@ -254,3 +254,8 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.modal-backdrop {
+  backdrop-filter: blur(1.5px);
+  background-color: hwb(0deg 15.94% 84.06% / 25%);
+}
