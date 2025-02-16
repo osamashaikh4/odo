@@ -12,3 +12,12 @@ export const getOrders = (filters: Filter) =>
         })
     )
     .then((res) => res.data);
+
+export const getOrderNumber = () =>
+  axios.get("/orders/getOrderNumber").then((res) => res.data);
+
+export const createOrder = (data: any) =>
+  axios.post("/orders", data).then((res) => res.data);
+
+export const updateOrder = ({ orderID, ...data }: any) =>
+  axios.put("/orders/" + orderID, data).then((res) => res.data);

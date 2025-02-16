@@ -20,7 +20,32 @@ export const OrderStateMap: { [key: string]: string } = {
 };
 
 export const isNumber = (e: any, allowDecimal?: boolean) => {
-  if (!/([0-9])/g.test(e.key)) {
-    e.preventDefault();
+  const key = e.key;
+  let value = e.target.value;
+
+  // Allow numbers (0-9)
+  if (/^[0-9]$/.test(key)) {
+    // If the input starts with '0' and another number is typed, replace '0' with the new number
+    if (value === "0") {
+      e.target.value = key; // Replace '0' with the typed number
+      e.preventDefault();
+    }
+    // If there's a decimal, ensure max 7 digits after it
+    const decimalIndex = value.indexOf(".");
+    if (decimalIndex !== -1 && value.length - decimalIndex > 8) {
+      e.preventDefault();
+    }
+    return;
   }
+
+  // Allow one decimal point only after a number
+  if (allowDecimal && key === ".") {
+    if (!value || value.includes(".")) {
+      e.preventDefault(); // Prevent decimal at the start or multiple decimals
+    }
+    return;
+  }
+
+  // Prevent all other characters
+  e.preventDefault();
 };

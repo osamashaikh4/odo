@@ -11,6 +11,8 @@ import Image from "next/image";
 import RateModal from "../shipments/RateModal";
 import SectionHeader from "../shipments/SectionHeader";
 import OrderModal from "../shipments/OrderModal";
+import { useWarehouseQuery } from "@/services/queries/warehouse";
+import { onErrorToast } from "@/helpers/toast";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -100,18 +102,28 @@ const OrderList = ({ searchParams }: OrderListProps) => {
     ...searchParams,
   };
 
+  const { data: warehouse, isLoading } = useWarehouseQuery();
+
   const { data = { results: [], count: 0 }, isFetching } =
     useOrdersQuery(filters);
 
   const handleAction = (action: string, data: any) => {
     if (action === "create-shipment") {
       setRateModal([data]);
+    } else if (action === "add-order") {
+      if (warehouse?.warehouseID) {
+        setOrderModal({});
+      } else {
+        onErrorToast({
+          response: { data: { error: "Please add a pickup location first" } },
+        });
+      }
     }
   };
 
   return (
     <>
-      <SectionHeader onAdd={() => setOrderModal({})} />
+      <SectionHeader onAdd={() => handleAction("add-order", {})} />
       <DataGrid
         onAction={handleAction}
         filters={filters}

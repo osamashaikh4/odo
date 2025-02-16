@@ -16,6 +16,7 @@ import EmptyRecords from "../common/EmptyRecords";
 import List from "../common/List";
 import SyncOrdersModal from "./SyncOrdersModal";
 import { useWarehouseQuery } from "@/services/queries/warehouse";
+import { onErrorToast } from "@/helpers/toast";
 
 const ConnectedStores = () => {
   const queryClient = useQueryClient();
@@ -42,7 +43,9 @@ const ConnectedStores = () => {
       if (warehouse?.warehouseID) {
         if (data?.integration) setSyncOrdersModal(data?.integration);
       } else {
-        window.alert("Please add a pickup location first");
+        onErrorToast({
+          response: { data: { error: "Please add a pickup location first" } },
+        });
       }
     } else if (action === "remove") {
       if (data) setAlert(data);

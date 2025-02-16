@@ -1,6 +1,12 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getOrders } from "../api/order";
-import { Filter } from "./types";
+import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  createOrder,
+  getOrderNumber,
+  getOrders,
+  updateOrder,
+} from "../api/order";
+import { Filter, MutationParams } from "./types";
+import { defaultParams } from "./utils";
 
 export type Order = {
   orderID: string;
@@ -40,4 +46,25 @@ export const useOrdersQuery = (
     queryKey: ["orders", filters],
     queryFn: () => getOrders(filters),
     ...params,
+  });
+
+export const useGetOrderNumberMutation = (params: MutationParams) =>
+  useMutation<{ orderNumber: string }>({
+    mutationFn: getOrderNumber,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useCreateOrderMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: createOrder,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useUpdateOrderMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: updateOrder,
+    ...params,
+    ...defaultParams(params),
   });

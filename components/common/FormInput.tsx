@@ -1,10 +1,11 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Input, InputProps } from "@heroui/react";
 import { cn } from "@/helpers";
 
-const FormInput = (props: InputProps) => {
+const FormInput = forwardRef<any, InputProps>((props, ref) => {
   return (
     <Input
+      ref={ref}
       size="md"
       radius="sm"
       variant="bordered"
@@ -18,6 +19,6 @@ const FormInput = (props: InputProps) => {
       }}
     />
   );
-};
+});
 
 export default FormInput;
