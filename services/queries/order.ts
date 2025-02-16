@@ -1,6 +1,7 @@
 import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import {
   createOrder,
+  getCustomerSuggestion,
   getOrder,
   getOrderNumber,
   getOrders,
@@ -43,12 +44,25 @@ export interface Customer {
   firstName: string;
   lastName: string;
   fullName: string;
+  customerID: string;
+  customerFirstName: string;
+  customerLastName: string;
+  customerPhone: string;
+  customerEmail: string;
 }
 
 export interface Address {
   address: string;
   city: string;
+  state: string;
+  country: string;
+  zipCode: string;
+  streetName: string;
+  building: string;
+  district: string;
 }
+
+type CustomerSuggestion = Customer & Address;
 
 type GetOrdersResponse = { results: Order[]; count: number };
 
@@ -91,4 +105,14 @@ export const useUpdateOrderMutation = (params: MutationParams) =>
     mutationFn: updateOrder,
     ...params,
     ...defaultParams(params),
+  });
+
+export const useCustomerSuggestionQuery = (
+  search?: string,
+  params?: Omit<UseQueryOptions<CustomerSuggestion[]>, "queryKey">
+) =>
+  useQuery<CustomerSuggestion[]>({
+    queryKey: ["customer-suggestion", search],
+    queryFn: () => getCustomerSuggestion(search),
+    ...params,
   });

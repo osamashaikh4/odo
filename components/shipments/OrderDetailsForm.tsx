@@ -4,6 +4,7 @@ import { Accordion, AccordionItem, Button, DatePicker } from "@heroui/react";
 import {
   getLocalTimeZone,
   now,
+  parseAbsoluteToLocal,
   parseZonedDateTime,
 } from "@internationalized/date";
 import FormInput from "../common/FormInput";
@@ -123,7 +124,11 @@ const OrderDetailsForm = ({
               className="w-full"
               isDisabled={isView}
               showMonthAndYearPickers
-              defaultValue={now(getLocalTimeZone()) as any}
+              defaultValue={
+                values?.orderDate
+                  ? parseAbsoluteToLocal(values.orderDate)
+                  : (now(getLocalTimeZone()) as any)
+              }
               label="Order Date"
               labelPlacement="outside"
               variant="bordered"

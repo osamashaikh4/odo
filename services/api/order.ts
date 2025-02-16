@@ -24,3 +24,8 @@ export const createOrder = (data: any) =>
 
 export const updateOrder = ({ orderID, ...data }: any) =>
   axios.put("/orders/" + orderID, data).then((res) => res.data);
+
+export const getCustomerSuggestion = (search?: string) =>
+  axios
+    .get(`/orders/getCustomerSuggestion${search ? `?search=${search}` : ""}`)
+    .then((res) => res.data);

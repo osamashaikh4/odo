@@ -11,27 +11,62 @@ import FormAutoComplete from "../common/FormAutoComplete";
 import { Accordion, AccordionItem } from "@heroui/react";
 import FormInput from "../common/FormInput";
 import { isNumber } from "@/helpers";
+import { useCustomerSuggestionQuery } from "@/services/queries/order";
+import useDebounce from "@/hooks/useDebounce";
 
 interface ReceiverDetailsFormProps {
   isView?: boolean;
+  isEdit?: boolean;
   values?: { [key: string]: any };
 }
 
-const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
+const ReceiverDetailsForm = ({
+  isView,
+  isEdit,
+  values,
+}: ReceiverDetailsFormProps) => {
   const [customerPhone, setCustomerPhone] = useState(
     values?.customerPhone ?? ""
   );
-  console.log(values);
   const [state, setState] = useState(values?.state ?? "");
   const [city, setCity] = useState(values?.city ?? "");
+  const [lastName, setLastName] = useState(values?.customerLastName ?? "");
+  const [email, setEmail] = useState(values?.customerEmail ?? "");
   const [country, setCountry] = useState(values?.country ?? "SA");
+  const [address, setAddress] = useState(values?.address ?? "");
+  const [streetName, setStreetName] = useState(values?.streetName ?? "");
+  const [building, setBuilding] = useState(values?.building ?? "");
   const [district, setDistrict] = useState(values?.district ?? "");
+  const [zipCode, setZipCode] = useState(values?.zipCode ?? "");
   const { data: countries = [] } = useCountriesQuery();
   const { data: states = [] } = useStatesQuery();
   const { data: cities = [] } = useCitiesQuery(state);
   const { data: districts = [] } = useDistrictsQuery(city, {
     enabled: Boolean(city),
   });
+
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce<string>(query, 500);
+
+  const { data: customerSuggestions = [], isFetching } =
+    useCustomerSuggestionQuery(debouncedQuery);
+
+  const onSuggestionSelect = (k: any) => {
+    const match = customerSuggestions.find((c) => c.customerID == k);
+    if (match) {
+      setLastName(match.customerLastName);
+      setEmail(match.customerEmail);
+      setCustomerPhone(match.customerPhone);
+      setState(match.state);
+      setCity(match.city);
+      setCountry(match.country);
+      setDistrict(match.district);
+      setAddress(match.address);
+      setBuilding(match.building);
+      setZipCode(match.zipCode);
+      setStreetName(match.streetName);
+    }
+  };
 
   return (
     <Accordion
@@ -50,25 +85,53 @@ const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
         title="Receiver Contact Details"
       >
         <div className="p-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <FormInput
-            className="w-full"
-            label="First Name"
-            isRequired
-            isDisabled={isView}
-            defaultValue={values?.customerFirstName}
-            name="customerFirstName"
-            labelPlacement="outside"
-            placeholder=" "
-          />
+          {isEdit ? (
+            <FormInput
+              className="w-full"
+              label="First Name"
+              isRequired
+              isDisabled={isView}
+              defaultValue={values?.customerFirstName}
+              name="customerFirstName"
+              labelPlacement="outside"
+              placeholder=" "
+            />
+          ) : (
+            <FormAutoComplete
+              allowsCustomValue
+              className="w-full"
+              name="customerFirstName"
+              labelPlacement="outside"
+              placeholder=" "
+              isRequired
+              onInputChange={setQuery}
+              onSelectionChange={onSuggestionSelect}
+              render={(item) => (
+                <div className="grid grid-cols-3">
+                  <p>{item.customerFirstName}</p>
+                  <p>{item.customerLastName}</p>
+                  <p>{item.customerPhone}</p>
+                </div>
+              )}
+              label="First Name"
+              options={customerSuggestions.map((c, i) => ({
+                label: c.customerFirstName,
+                value: c.customerID,
+                ...c,
+              }))}
+              isLoading={isFetching}
+            />
+          )}
           <FormInput
             size="md"
             className="w-full"
             label="Last Name"
             isDisabled={isView}
-            defaultValue={values?.customerLastName}
             name="customerLastName"
             labelPlacement="outside"
             placeholder=" "
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
           <div className="w-full mx-auto mt-1">
             <label className="pointer-events-none origin-top-left flex-shrink-0 rtl:origin-top-right subpixel-antialiased block text-black after:content-['*'] after:text-danger after:ms-0.5 will-change-auto !duration-200 !ease-out motion-reduce:transition-none transition-[transform,color,left,opacity] group-data-[filled-within=true]:text-foreground group-data-[filled-within=true]:pointer-events-auto pb-0 z-20 top-1/2 -translate-y-1/2 group-data-[filled-within=true]:start-0 start-3 end-auto text-small group-data-[filled-within=true]:-translate-y-[calc(100%_+_theme(fontSize.small)/2_+_20px)] pe-2 max-w-full text-ellipsis overflow-hidden">
@@ -101,8 +164,9 @@ const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
             label="Email"
             isDisabled={isView}
             type="email"
-            defaultValue={values?.customerEmail}
             name="customerEmail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             labelPlacement="outside"
             placeholder=" "
           />
@@ -147,7 +211,8 @@ const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
             isRequired
             name="address"
             isDisabled={isView}
-            defaultValue={values?.address}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             labelPlacement="outside"
             placeholder=" "
           />
@@ -210,7 +275,8 @@ const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
               label="Street Name"
               isDisabled={isView}
               name="streetName"
-              defaultValue={values?.streetName}
+              value={streetName}
+              onChange={(e) => setStreetName(e.target.value)}
               labelPlacement="outside"
               placeholder=" "
             />
@@ -218,8 +284,9 @@ const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
               size="md"
               className="w-full"
               label="Building No/Name"
-              defaultValue={values?.building}
               name="building"
+              value={building}
+              onChange={(e) => setBuilding(e.target.value)}
               isDisabled={isView}
               labelPlacement="outside"
               placeholder=" "
@@ -228,7 +295,8 @@ const ReceiverDetailsForm = ({ isView, values }: ReceiverDetailsFormProps) => {
               size="md"
               className="w-full"
               label="ZIP Code"
-              defaultValue={values?.zipCode}
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
               name="zipCode"
               isDisabled={isView}
               labelPlacement="outside"

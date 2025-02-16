@@ -139,7 +139,7 @@ const OrderDetailsModal = ({
       isDismissable={false}
       onOpenChange={handleClose}
       closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
-      className="max-h-[calc(100%_-_4rem)] max-w-[91rem]"
+      className="max-h-[calc(100%_-_4rem)] max-w-[90rem]"
       classNames={{ backdrop: "modal-backdrop" }}
     >
       <ModalContent>
