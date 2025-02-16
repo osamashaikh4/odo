@@ -35,6 +35,7 @@ export interface TableProps {
     thead?: string;
     tbody?: string;
   };
+  renderRow?: (row: any, columns: Column[]) => React.ReactNode;
 }
 
 export default function Table({
@@ -50,6 +51,7 @@ export default function Table({
   outerAction,
   classNames,
   showEmptyMessage = true,
+  renderRow,
 }: TableProps) {
   return (
     <div className="flex flex-col">
@@ -187,46 +189,50 @@ export default function Table({
                     </tr>
                   ))
                 ) : rows.length > 0 ? (
-                  rows.map((row, i) => (
-                    <tr
-                      className="hover:bg-foreground-50 h-12"
-                      key={`row-${i}`}
-                    >
-                      {columns.map((column, ind) => (
-                        <td
-                          className="py-1 px-4 overflow-hidden text-ellipsis text-sm text-dark"
-                          key={`row-${i}-col-${ind}`}
-                          style={{
-                            minWidth: 45,
-                            width: column.width,
-                            maxWidth: column.width,
-                          }}
-                        >
-                          {column.render ? (
-                            column.render(row[column.field], row)
+                  rows.map((row, i) =>
+                    renderRow ? (
+                      renderRow(row, columns)
+                    ) : (
+                      <tr
+                        className="hover:bg-foreground-50 h-12"
+                        key={`row-${i}`}
+                      >
+                        {columns.map((column, ind) => (
+                          <td
+                            className="py-1 px-4 overflow-hidden text-ellipsis text-sm text-dark"
+                            key={`row-${i}-col-${ind}`}
+                            style={{
+                              minWidth: 45,
+                              width: column.width,
+                              maxWidth: column.width,
+                            }}
+                          >
+                            {column.render ? (
+                              column.render(row[column.field], row)
+                            ) : (
+                              <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
+                                {row[column.field]}
+                              </span>
+                            )}
+                          </td>
+                        ))}
+                        <td className="py-1 px-4 whitespace-nowrap space-x-2 text-right">
+                          {outerAction ? (
+                            outerAction(row)
                           ) : (
-                            <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
-                              {row[column.field]}
-                            </span>
+                            <Menu
+                              onAction={(a) => onAction(a, row)}
+                              options={options}
+                            >
+                              <Button isIconOnly variant="light">
+                                <LuEllipsis fontSize="1.25rem" />
+                              </Button>
+                            </Menu>
                           )}
                         </td>
-                      ))}
-                      <td className="py-1 px-4 whitespace-nowrap space-x-2 text-right">
-                        {outerAction ? (
-                          outerAction(row)
-                        ) : (
-                          <Menu
-                            onAction={(a) => onAction(a, row)}
-                            options={options}
-                          >
-                            <Button isIconOnly variant="light">
-                              <LuEllipsis fontSize="1.25rem" />
-                            </Button>
-                          </Menu>
-                        )}
-                      </td>
-                    </tr>
-                  ))
+                      </tr>
+                    )
+                  )
                 ) : showEmptyMessage ? (
                   <tr className="hover:bg-foreground-50 h-12">
                     <td colSpan={6}>

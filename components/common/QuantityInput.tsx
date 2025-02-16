@@ -14,11 +14,15 @@ const QuantityInput = ({ isDisabled, ...props }: InputProps) => {
         variant="bordered"
         radius="sm"
         onPress={() => {
+          let fin;
           if (value === undefined || value === "" || value <= 0) {
-            setValue(0);
+            fin = 0;
           } else {
-            setValue(value - 1);
+            fin = value - 1;
           }
+          setValue(fin);
+          if (props.onChange)
+            props.onChange({ target: { value: fin, name: props.name } } as any);
         }}
         className="border-small min-w-4 px-3 rounded-tr-none border-r-0 rounded-br-none"
       >
@@ -28,7 +32,10 @@ const QuantityInput = ({ isDisabled, ...props }: InputProps) => {
         {...props}
         isDisabled={isDisabled}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          if (props.onChange) props.onChange(e);
+          setValue(e.target.value);
+        }}
         onKeyPress={isNumber}
         classNames={{ inputWrapper: "px-0 rounded-none", input: "text-center" }}
       />
@@ -37,11 +44,15 @@ const QuantityInput = ({ isDisabled, ...props }: InputProps) => {
         variant="bordered"
         radius="sm"
         onPress={() => {
+          let fin;
           if (value === undefined || value === "") {
-            setValue(0);
+            fin = 0;
           } else {
-            setValue(value + 1);
+            fin = Number(value) + 1;
           }
+          setValue(fin);
+          if (props.onChange)
+            props.onChange({ target: { value: fin, name: props.name } } as any);
         }}
         className="border-small min-w-4 px-3 rounded-tl-none border-l-0 rounded-bl-none"
       >

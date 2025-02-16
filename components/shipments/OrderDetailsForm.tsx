@@ -5,21 +5,47 @@ import {
   getLocalTimeZone,
   now,
   parseAbsoluteToLocal,
-  parseZonedDateTime,
 } from "@internationalized/date";
 import FormInput from "../common/FormInput";
 import FormSelect from "../common/FormSelect";
 import FormTextArea from "../common/FormTextArea";
 import Table from "../common/Table";
 import { isNumber, PaymentMethods } from "@/helpers";
-import QuantityInput from "../common/QuantityInput";
 import { BsPlus, BsTrash } from "react-icons/bs";
+import ProductRow from "./ProductRow";
 
 interface OrderDetailsFormProps {
   values?: Order;
   isView?: boolean;
   isEdit?: boolean;
 }
+
+const columns = [
+  {
+    field: "orderItemName",
+    headerName: "Product Name",
+  },
+  {
+    field: "orderItemSku",
+    headerName: "SKU",
+  },
+  {
+    field: "orderItemQuantity",
+    headerName: "Quantity",
+  },
+  {
+    field: "orderItemPrice",
+    headerName: "Price",
+  },
+  {
+    field: "orderItemTax",
+    headerName: "Tax",
+  },
+  {
+    field: "orderItemTotal",
+    headerName: "Total",
+  },
+];
 
 const OrderDetailsForm = ({
   isView,
@@ -64,11 +90,11 @@ const OrderDetailsForm = ({
     ]);
   };
 
-  const handleChange = (rowID: string, e: any) => {
+  const handleChange = (rowID: string, total: number) => {
     const t = [...rows];
     const i = t.findIndex((r) => r.id == rowID);
     if (i >= 0) {
-      t[i][e.target.name.replace(rowID, "")] = e.target.value;
+      t[i].orderItemTotal = total;
     }
     setRows(t);
   };
@@ -200,122 +226,26 @@ const OrderDetailsForm = ({
             placeholder="Enter product name, code, color & size"
           />
           <Table
-            columns={[
-              {
-                field: "orderItemName",
-                headerName: "Product Name",
-                render(_, row) {
-                  return (
-                    <FormInput
-                      name={"orderItemName" + row.id}
-                      isRequired
-                      isDisabled={isView}
-                      defaultValue={row.orderItemName}
-                      onBlur={(e) => handleChange(row.id, e)}
-                    />
-                  );
-                },
-              },
-              {
-                field: "orderItemSku",
-                headerName: "SKU",
-                render(_, row) {
-                  return (
-                    <FormInput
-                      isDisabled={isView}
-                      name={"orderItemSku" + row.id}
-                      defaultValue={row.orderItemSku}
-                      onBlur={(e) => handleChange(row.id, e)}
-                    />
-                  );
-                },
-              },
-              {
-                field: "orderItemQuantity",
-                headerName: "Quantity",
-                render(_, row) {
-                  return (
-                    <QuantityInput
-                      name={"orderItemQuantity" + row.id}
-                      type="number"
-                      min={1}
-                      isDisabled={isView}
-                      defaultValue={row.orderItemQuantity ?? "1"}
-                      isRequired
-                      onBlur={(e) => handleChange(row.id, e)}
-                    />
-                  );
-                },
-              },
-              {
-                field: "orderItemPrice",
-                headerName: "Price",
-                render(_, row) {
-                  return (
-                    <FormInput
-                      name={"orderItemPrice" + row.id}
-                      endContent="SAR"
-                      isRequired
-                      isDisabled={isView}
-                      defaultValue={row.orderItemPrice}
-                      onBlur={(e) => handleChange(row.id, e)}
-                      onKeyPress={(e) => isNumber(e, true)}
-                    />
-                  );
-                },
-              },
-              {
-                field: "orderItemTax",
-                headerName: "Tax",
-                render(_, row) {
-                  return (
-                    <FormInput
-                      name={"orderItemTax" + row.id}
-                      onBlur={(e) => handleChange(row.id, e)}
-                      endContent="SAR"
-                      isDisabled={isView}
-                      defaultValue={row.orderItemTax}
-                      onKeyPress={(e) => isNumber(e, true)}
-                    />
-                  );
-                },
-              },
-              {
-                field: "orderItemTotal",
-                headerName: "Total",
-                render(_, row) {
-                  return (
-                    <FormInput
-                      name={"orderItemTotal" + row.id}
-                      isRequired
-                      isDisabled={isView}
-                      onBlur={(e) => handleChange(row.id, e)}
-                      endContent="SAR"
-                      defaultValue={row.orderItemTotal}
-                      onKeyPress={(e) => isNumber(e, true)}
-                    />
-                  );
-                },
-              },
-            ]}
+            renderRow={(row, columns) => (
+              <ProductRow
+                key={row.id}
+                {...{
+                  row,
+                  columns,
+                  isView,
+                  onChange: handleChange,
+                  onRowDelete(row) {
+                    setRows(rows.filter((r) => r.id !== row.id));
+                  },
+                }}
+              />
+            )}
+            columns={columns}
             showEmptyMessage={false}
             limit={10}
             rows={rows}
             filters={{}}
             onAction={console.log}
-            outerAction={(row) =>
-              isView ? null : (
-                <Button
-                  variant="bordered"
-                  color="danger"
-                  radius="sm"
-                  className="border-small min-w-4 px-3"
-                  onPress={() => setRows(rows.filter((r) => r.id !== row.id))}
-                >
-                  <BsTrash fontSize="1.125rem" />
-                </Button>
-              )
-            }
           />
           {!isView && (
             <div className="flex items-center gap-2">
