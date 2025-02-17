@@ -29,7 +29,7 @@ const DataGrid = ({
   return (
     <div
       className={cn(
-        "rounded border border-gray-200 overflow-hidden p-2",
+        "rounded border border-gray-200 overflow-hidden p-2 bg-white",
         classNames?.container ?? ""
       )}
     >

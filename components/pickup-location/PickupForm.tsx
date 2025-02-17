@@ -76,7 +76,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
       onSubmit={onSubmit}
       validationBehavior="native"
     >
-      <div className="flex items-center justify-between -mt-10 mb-10 mx-auto max-w-[58rem] min-w-[58rem] rounded-b border-b border-gray-200 border-r border-l px-4 py-2.5 gap-4">
+      <div className="flex items-center justify-between -mt-10 mb-10 mx-auto max-w-[58rem] min-w-[58rem] rounded-b border-b border-gray-200 border-r border-l px-4 py-2.5 gap-4 bg-white">
         <p className="text-lg font-semibold">Pickup Location</p>
         <Button
           isLoading={createWarehouse.isPending || updateWarehouse.isPending}
@@ -88,7 +88,7 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
         </Button>
       </div>
       <div
-        className="overflow-auto w-full gap-6 border border-gray-200 rounded flex flex-col p-8 max-h-full mx-auto max-w-[58rem] min-w-[58rem]"
+        className="bg-white overflow-auto w-full gap-6 border border-gray-200 rounded flex flex-col p-8 max-h-full mx-auto max-w-[58rem] min-w-[58rem]"
         style={{ height: "calc(100% - 2rem)" }}
       >
         <FormInput
@@ -143,27 +143,29 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
             value={senderPhone}
           />
         </div>
-        <FormAutoComplete
-          className="w-[42rem] mx-auto"
-          options={countries.map((country) => ({
-            label: country.countryName,
-            value: country.countryCode,
-          }))}
-          label="Country"
-          isRequired
-          selectedKey={country}
-          onSelectionChange={(k) => {
-            setCountry(k as any);
-            setState("");
-            setCity("");
-            setDistrict("");
-          }}
-          isDisabled
-          defaultSelectedKey="SA"
-          labelPlacement="outside"
-          name="senderCountry"
-          placeholder=" "
-        />
+        <div className="mx-auto">
+          <FormAutoComplete
+            className="w-[42rem] mx-auto"
+            options={countries.map((country) => ({
+              label: country.countryName,
+              value: country.countryCode,
+            }))}
+            label="Country"
+            isRequired
+            selectedKey={country}
+            onSelectionChange={(k) => {
+              setCountry(k as any);
+              setState("");
+              setCity("");
+              setDistrict("");
+            }}
+            isDisabled
+            defaultSelectedKey="SA"
+            labelPlacement="outside"
+            name="senderCountry"
+            placeholder=" "
+          />
+        </div>
         <FormInput
           className="w-[42rem] mx-auto"
           label="Full Address Line"
@@ -173,55 +175,61 @@ const PickupForm = ({ warehouse }: PickupFormProps) => {
           labelPlacement="outside"
           placeholder=" "
         />
-        <FormAutoComplete
-          className="w-[42rem] mx-auto"
-          options={states.map((state) => ({
-            label: state.stateName,
-            value: state.stateCode,
-          }))}
-          label="State/Region"
-          isRequired
-          selectedKey={state}
-          onSelectionChange={(k) => {
-            setCity("");
-            setState(k as any);
-          }}
-          labelPlacement="outside"
-          name="warehouseState"
-          placeholder="State"
-        />
-        <FormAutoComplete
-          className="w-[42rem] mx-auto"
-          options={cities.map((city) => ({
-            label: city.cityName,
-            value: city.cityName,
-          }))}
-          selectedKey={city}
-          onSelectionChange={(k) => {
-            setCity(k as any);
-            setDistrict("");
-          }}
-          label="City"
-          isRequired
-          labelPlacement="outside"
-          name="warehouseCity"
-          placeholder="City"
-        />
-        <FormAutoComplete
-          className="w-[42rem] mx-auto"
-          options={districts.map((district) => ({
-            label: district.name,
-            value: district.name,
-          }))}
-          selectedKey={district}
-          onSelectionChange={(k) => {
-            setDistrict(k as any);
-          }}
-          label="District"
-          labelPlacement="outside"
-          name="warehouseDistrict"
-          placeholder="-"
-        />
+        <div className="mx-auto">
+          <FormAutoComplete
+            className="w-[42rem] mx-auto"
+            options={states.map((state) => ({
+              label: state.stateName,
+              value: state.stateCode,
+            }))}
+            label="State/Region"
+            isRequired
+            selectedKey={state}
+            onSelectionChange={(k) => {
+              setCity("");
+              setState(k as any);
+            }}
+            labelPlacement="outside"
+            name="warehouseState"
+            placeholder="State"
+          />
+        </div>
+        <div className="mx-auto">
+          <FormAutoComplete
+            className="w-[42rem] mx-auto"
+            options={cities.map((city) => ({
+              label: city.cityName,
+              value: city.cityName,
+            }))}
+            selectedKey={city}
+            onSelectionChange={(k) => {
+              setCity(k as any);
+              setDistrict("");
+            }}
+            label="City"
+            isRequired
+            labelPlacement="outside"
+            name="warehouseCity"
+            placeholder="City"
+          />
+        </div>
+        <div className="mx-auto">
+          <FormAutoComplete
+            className="w-[42rem] mx-auto"
+            options={districts.map((district) => ({
+              label: district.name,
+              value: district.name,
+            }))}
+            selectedKey={district}
+            onSelectionChange={(k) => {
+              setDistrict(k as any);
+            }}
+            label="District"
+            labelPlacement="outside"
+            name="warehouseDistrict"
+            placeholder="-"
+          />
+        </div>
         <FormInput
           className="w-[42rem] mx-auto"
           label="Street Name"

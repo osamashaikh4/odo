@@ -15,7 +15,7 @@ export default async function page({ searchParams }: Props) {
       <div className="flex flex-col w-0 flex-1">
         <Header />
         <div className="flex flex-col flex-1 relative overflow-auto">
-          <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto p-10">
+          <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto p-10 bg-backgroundGrey">
             <OrderList searchParams={await searchParams} />
           </div>
         </div>

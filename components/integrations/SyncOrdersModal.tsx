@@ -17,6 +17,7 @@ import {
   useSyncOrdersMutation,
 } from "@/services/queries/integration";
 import { useQueryClient } from "@tanstack/react-query";
+import { RxCross2 } from "react-icons/rx";
 
 interface SyncOrdersModalProps {
   integration: Integration;
@@ -52,7 +53,15 @@ const SyncOrdersModal = ({ integration, onClose }: SyncOrdersModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={handleClose}>
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={handleClose}
+      radius="sm"
+      isDismissable={false}
+      classNames={{ backdrop: "modal-backdrop" }}
+      closeButton={<RxCross2 fontSize="2.25rem" color="#171717" />}
+      className="max-w-[34rem]"
+    >
       <ModalContent>
         {(onClose) => (
           <>

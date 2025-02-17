@@ -19,7 +19,7 @@ import { IoCartOutline } from "react-icons/io5";
 import OrderItemsModal from "../shipments/OrderItemsModal";
 import { SlPrinter } from "react-icons/sl";
 import { BiEditAlt } from "react-icons/bi";
-import { ImEye } from "react-icons/im";
+import { VscEye } from "react-icons/vsc";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -108,7 +108,7 @@ const menuOptions = [
   {
     label: "View Order",
     value: "view-order",
-    icon: <ImEye fontSize="1rem" className="text-gray-600" />,
+    icon: <VscEye fontSize="1.25rem" className="text-gray-600" />,
   },
   {
     label: "Print",

@@ -10,8 +10,8 @@ interface SectionHeaderProps {
 
 const SectionHeader = ({ onAdd }: SectionHeaderProps) => {
   return (
-    <div className="w-full flex items-center justify-between">
-      <Header title="Shipments" icon="shipment" />
+    <div className="w-full flex items-center justify-between mb-8">
+      <Header title="Shipments" icon="shipment" className="mb-0" />
       <div>
         <Button
           radius="sm"

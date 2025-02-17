@@ -33,7 +33,7 @@ const ConnectedStoreCard = ({
   onAction,
 }: ConnectedStoreCardProps) => {
   return (
-    <div className="flex flex-row justify-between items-center gap-10 rounded p-5 border border-gray-100">
+    <div className="flex flex-row justify-between items-center gap-10 rounded pl-4 pr-3 pt-4 pb-3 border border-gray-200">
       <div className="flex items-center gap-4">
         <Image
           className="rounded"

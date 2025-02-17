@@ -81,10 +81,12 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
 
   return integration ? (
     <div>
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 min-h-14 gap-4 -mt-10">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between pr-6 pl-4 py-4 border-b border-borderDarkGrey min-h-14 gap-4 -mt-10 bg-white mb-6">
+        <div className="flex items-center gap-2">
           <Link href="/integrations">
-            <MdArrowBack size="1.375rem" />
+            <Button isIconOnly variant="light">
+              <MdArrowBack size="1.375rem" />
+            </Button>
           </Link>
           <div>
             <p className="text-xs">Back to Integrations</p>
@@ -107,38 +109,40 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
             : "Connect"}
         </Button>
       </div>
-      <div className="">
-        <div className="px-8 py-6 flex items-center gap-6 w-full border-b border-gray-100">
-          <Image
-            className="rounded"
-            src={integration.integrationImage}
-            style={{
-              display: "block",
-              width: "4rem",
-              height: "4rem",
-            }}
-            alt={integration.integrationName}
-            width={64}
-            height={64}
-          />
-          <div className="flex flex-col">
-            <p className="text-lg font-semibold">
-              {integration.integrationName}
-            </p>
-            <p className="text-[0.825rem] text-foreground-600">
-              Check the guidelines below to integrate your Salla store into your
-              account.
-            </p>
+      <div className="px-6">
+        <div className="bg-white border-borderDarkGrey border-1">
+          <div className="px-8 py-6 flex items-center gap-6 w-full border-b border-borderDarkGrey">
+            <Image
+              className="rounded"
+              src={integration.integrationImage}
+              style={{
+                display: "block",
+                width: "4rem",
+                height: "4rem",
+              }}
+              alt={integration.integrationName}
+              width={64}
+              height={64}
+            />
+            <div className="flex flex-col">
+              <p className="text-lg font-semibold">
+                {integration.integrationName}
+              </p>
+              <p className="text-[0.825rem] text-foreground-600">
+                Check the guidelines below to integrate your Salla store into
+                your account.
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="p-8 integration-detail-grid-view border-b border-gray-100">
-          <div className="flex flex-col gap-1">
-            <p className="text-lg font-semibold">
-              About {integration.integrationName}
-            </p>
-            <p className="text-[0.825rem] text-foreground-600">
-              {integration.integrationAbout}
-            </p>
+          <div className="p-8 integration-detail-grid-view border-b border-gray-100">
+            <div className="flex flex-col gap-1">
+              <p className="text-base font-semibold">
+                About {integration.integrationName}
+              </p>
+              <p className="text-sm text-foreground-600">
+                {integration.integrationAbout}
+              </p>
+            </div>
           </div>
         </div>
       </div>

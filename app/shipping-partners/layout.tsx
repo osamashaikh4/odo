@@ -13,7 +13,7 @@ export default function RootLayout({
       <div className="flex flex-col w-0 flex-1">
         <Header />
         <div className="flex flex-col flex-1 relative overflow-auto">
-          <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto py-10">
+          <div className="flex flex-col h-full overflow-x-hidden overflow-y-auto py-10 bg-backgroundGrey">
             {children}
           </div>
         </div>

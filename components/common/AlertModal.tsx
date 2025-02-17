@@ -8,6 +8,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useEffect } from "react";
+import { RxCross2 } from "react-icons/rx";
 
 interface AlertModalProps {
   title?: string;
@@ -36,7 +37,14 @@ const AlertModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={handleClose}>
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={handleClose}
+      radius="sm"
+      classNames={{ backdrop: "modal-backdrop" }}
+      closeButton={<RxCross2 fontSize="2.25rem" color="#171717" />}
+      className="max-w-[34rem]"
+    >
       <ModalContent>
         {(onClose) => (
           <>

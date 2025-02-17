@@ -46,7 +46,7 @@ const OrderItemsModal = ({ orderID, onClose }: OrderItemsModal) => {
             <ModalHeader className="flex flex-col gap-1">
               Order Items {data?.orderNumber ? `(${data.orderNumber})` : ""}
             </ModalHeader>
-            <ModalBody className="px-1 overflow-auto">
+            <ModalBody className="px-3 pb-3 overflow-auto">
               <DataGrid
                 count={0}
                 showFooter={false}

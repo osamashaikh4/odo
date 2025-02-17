@@ -11,7 +11,7 @@ const StoreCard = ({
   integrationSlug,
 }: Integration) => {
   return (
-    <div className="flex rounded-md border border-gray-100 px-4 py-5 w-full gap-4">
+    <div className="flex rounded-md border border-gray-200 px-4 py-5 w-full gap-4">
       <Image
         className="rounded"
         src={integrationImage}

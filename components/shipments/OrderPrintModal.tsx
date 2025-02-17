@@ -37,16 +37,16 @@ const OrderPrintModal = ({ orderID, onClose }: OrderPrintModalProps) => {
       isDismissable={false}
       onOpenChange={handleClose}
       closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
-      className="max-h-[calc(100%_-_4rem)] max-w-[72rem]"
+      className="max-h-[calc(100%_-_5rem)] h-full max-w-[77rem]"
       classNames={{ backdrop: "modal-backdrop" }}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
               Order Details
             </ModalHeader>
-            <ModalBody className="px-1 overflow-auto">
+            <ModalBody className="px-3 pb-3 overflow-auto">
               {isFetching && (
                 <div
                   className="absolute h-full w-full flex items-center justify-center z-20"
@@ -55,13 +55,11 @@ const OrderPrintModal = ({ orderID, onClose }: OrderPrintModalProps) => {
                   <Spinner size="lg" />
                 </div>
               )}
-              <div className="p-2">
-                {data && (
-                  <PDFViewer width="100%" height={700}>
-                    <OrderDetailsDocument order={data} />
-                  </PDFViewer>
-                )}
-              </div>
+              {data && (
+                <PDFViewer width="100%" height="100%">
+                  <OrderDetailsDocument order={data} />
+                </PDFViewer>
+              )}
             </ModalBody>
           </>
         )}

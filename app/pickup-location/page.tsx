@@ -9,7 +9,7 @@ export default function page() {
       <Sidebar active="pickup-location" />
       <div className="flex flex-col w-0 flex-1">
         <Header />
-        <div className="flex flex-col flex-1 relative overflow-auto">
+        <div className="flex flex-col flex-1 relative overflow-auto bg-backgroundGrey">
           <PickupLocation />
         </div>
       </div>

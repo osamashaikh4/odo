@@ -77,7 +77,7 @@ const ReceiverDetailsForm = ({
       <AccordionItem
         className="shadow-none rounded border border-gray-200 px-0"
         classNames={{
-          trigger: "bg-backgroundGrey px-4 py-3 !outline-none",
+          trigger: "bg-backgroundLightGrey px-4 py-3 !outline-none",
           title: "font-medium",
         }}
         key="1"
@@ -176,7 +176,7 @@ const ReceiverDetailsForm = ({
         key="2"
         className="shadow-none rounded border border-gray-200 px-0"
         classNames={{
-          trigger: "bg-backgroundGrey px-4 py-3 !outline-none",
+          trigger: "bg-backgroundLightGrey px-4 py-3 !outline-none",
           title: "font-medium",
         }}
         aria-label="Receiver Address Details"

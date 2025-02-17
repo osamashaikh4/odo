@@ -13,8 +13,10 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        backgroundGrey: "var(--background-lightGrey)",
+        backgroundGrey: "var(--background-grey)",
+        backgroundLightGrey: "var(--background-lightGrey)",
         borderGrey: "var(--border-grey)",
+        borderDarkGrey: "var(--border-color)",
         blue: "var(--blue)",
       },
     },
