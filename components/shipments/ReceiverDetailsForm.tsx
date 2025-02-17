@@ -85,7 +85,7 @@ const ReceiverDetailsForm = ({
         title="Receiver Contact Details"
       >
         <div className="p-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {isEdit ? (
+          {isEdit || isView ? (
             <FormInput
               className="w-full"
               label="First Name"

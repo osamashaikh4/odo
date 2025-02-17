@@ -179,6 +179,7 @@ const OrderDetailsModal = ({
                   <>
                     {selectedTab === "receiver-details" ? (
                       <ReceiverDetailsForm
+                        isEdit
                         isView={isView}
                         values={{ ...data?.customer, ...data?.address }}
                       />
