@@ -37,7 +37,7 @@ const OrderPrintModal = ({ orderID, onClose }: OrderPrintModalProps) => {
       isDismissable={false}
       onOpenChange={handleClose}
       closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
-      className="max-h-[calc(100%_-_4rem)] max-w-[90rem]"
+      className="max-h-[calc(100%_-_4rem)] max-w-[72rem]"
       classNames={{ backdrop: "modal-backdrop" }}
     >
       <ModalContent>

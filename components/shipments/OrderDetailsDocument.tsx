@@ -27,7 +27,10 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View
-          style={{ ...styles.center, margin: 10, padding: 10, flexGrow: 0.3 }}
+          style={{
+            ...styles.center,
+            marginTop: 52,
+          }}
         >
           <Text
             style={{ fontWeight: 600, textAlign: "center", fontSize: "10pt" }}
@@ -36,7 +39,9 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
           </Text>
           <Image src={barcode} style={{ width: 200, height: 200 }} />
         </View>
-        <View style={styles.section}>
+        <View
+          style={{ flexGrow: 1, marginHorizontal: 10, paddingHorizontal: 10 }}
+        >
           <Text style={styles.text}>Order Number : {order.orderNumber}</Text>
           <Text style={styles.text}>
             Order Date : {moment(order.orderDate).format("DD/MM/YYYY")}
@@ -137,11 +142,6 @@ const styles = StyleSheet.create({
   center: {
     justifyContent: "center",
     alignItems: "center",
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
   },
   tableRow: {
     flexDirection: "row",
