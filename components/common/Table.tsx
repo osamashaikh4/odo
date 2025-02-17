@@ -199,7 +199,10 @@ export default function Table({
                       >
                         {columns.map((column, ind) => (
                           <td
-                            className="py-1 px-4 overflow-hidden text-ellipsis text-sm text-dark"
+                            className={cn(
+                              "py-1 px-4 overflow-hidden text-ellipsis text-sm text-dark",
+                              column.align ? `text-${column.align}` : ""
+                            )}
                             key={`row-${i}-col-${ind}`}
                             style={{
                               minWidth: 45,

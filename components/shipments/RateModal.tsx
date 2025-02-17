@@ -13,6 +13,7 @@ import {
 import DataGrid from "../common/DataGrid";
 import { Order } from "@/services/queries/order";
 import { useRouter } from "next/navigation";
+import { RxCross2 } from "react-icons/rx";
 
 interface RateModalProps {
   orders: Order[];
@@ -46,11 +47,22 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={handleClose} size="5xl">
+    <Modal
+      isOpen={isOpen}
+      shouldBlockScroll
+      radius="sm"
+      isDismissable={false}
+      onOpenChange={handleClose}
+      closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
+      className="max-h-[calc(100%_-_4rem)] max-w-[88rem]"
+      classNames={{ backdrop: "modal-backdrop" }}
+    >
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1"></ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">
+              Create Shipment
+            </ModalHeader>
             <ModalBody>
               <DataGrid
                 classNames={{ container: "p-0", thead: "border-0" }}
@@ -104,14 +116,6 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
               />
             </ModalBody>
             <ModalFooter>
-              {/* <Button
-                color="primary"
-                variant="light"
-                radius="sm"
-                onPress={onClose}
-              >
-                Cancel
-              </Button> */}
               <Button color="primary" radius="sm">
                 Create Shipment
               </Button>

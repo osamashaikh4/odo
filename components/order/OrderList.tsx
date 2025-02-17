@@ -13,10 +13,13 @@ import SectionHeader from "../shipments/SectionHeader";
 import OrderModal from "../shipments/OrderModal";
 import { useWarehouseQuery } from "@/services/queries/warehouse";
 import { onErrorToast } from "@/helpers/toast";
-import { BsPencilSquare } from "react-icons/bs";
-import { FaPrint, FaRegEye } from "react-icons/fa";
 import OrderDetailsModal from "../shipments/OrderDetailsModal";
 import OrderPrintModal from "../shipments/OrderPrintModal";
+import { IoCartOutline } from "react-icons/io5";
+import OrderItemsModal from "../shipments/OrderItemsModal";
+import { SlPrinter } from "react-icons/sl";
+import { BiEditAlt } from "react-icons/bi";
+import { ImEye } from "react-icons/im";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -96,10 +99,41 @@ const columns = [
   },
 ];
 
+const menuOptions = [
+  {
+    label: "Edit Order",
+    value: "edit-order",
+    icon: <BiEditAlt fontSize="1.125rem" className="text-gray-600" />,
+  },
+  {
+    label: "View Order",
+    value: "view-order",
+    icon: <ImEye fontSize="1rem" className="text-gray-600" />,
+  },
+  {
+    label: "Print",
+    value: "print-order",
+    icon: <SlPrinter fontSize="1rem" className="text-gray-600" />,
+  },
+  {
+    label: "Order Items",
+    value: "order-items",
+    icon: <IoCartOutline fontSize="1.125rem" className="text-gray-600" />,
+  },
+  {
+    label: "Create Shipment",
+    value: "create-shipment",
+    icon: (
+      <Image src="/assets/icons/truck.svg" alt="truck" width={22} height={22} />
+    ),
+  },
+];
+
 const OrderList = ({ searchParams }: OrderListProps) => {
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [orderModal, setOrderModal] = useState<any>(null);
+  const [orderItemsModal, setOrderItemsModal] = useState<any>(null);
   const [printModal, setPrintModal] = useState<any>(null);
   const [rateModal, setRateModal] = useState<Order[] | null>(null);
   const filters = {
@@ -108,7 +142,7 @@ const OrderList = ({ searchParams }: OrderListProps) => {
     ...searchParams,
   };
 
-  const { data: warehouse, isLoading } = useWarehouseQuery();
+  const { data: warehouse } = useWarehouseQuery();
 
   const { data = { results: [], count: 0 }, isFetching } =
     useOrdersQuery(filters);
@@ -130,6 +164,8 @@ const OrderList = ({ searchParams }: OrderListProps) => {
       setOrderDetails({ isView: true, orderID: data.orderID });
     } else if (action === "print-order") {
       setPrintModal({ orderID: data.orderID });
+    } else if (action === "order-items") {
+      setOrderItemsModal({ orderID: data.orderID });
     }
   };
 
@@ -137,40 +173,24 @@ const OrderList = ({ searchParams }: OrderListProps) => {
     <>
       <SectionHeader onAdd={() => handleAction("add-order", {})} />
       <DataGrid
+        // toolbar={
+        //   <div className="pb-2 pl-3 pr-1 flex items-center justify-between">
+        //     <div></div>
+        //     <Button
+        //       variant="bordered"
+        //       radius="sm"
+        //       className="min-w-10 border-small"
+        //     >
+        //       Export Data
+        //     </Button>
+        //   </div>
+        // }
         onAction={handleAction}
         filters={filters}
         count={data.count}
         rows={data.results}
         isLoading={isFetching}
-        options={[
-          {
-            label: "Edit Order",
-            value: "edit-order",
-            icon: <BsPencilSquare fontSize="1.125rem" />,
-          },
-          {
-            label: "View Order",
-            value: "view-order",
-            icon: <FaRegEye fontSize="1.125rem" />,
-          },
-          {
-            label: "Print",
-            value: "print-order",
-            icon: <FaPrint fontSize="1.125rem" />,
-          },
-          {
-            label: "Create Shipment",
-            value: "create-shipment",
-            icon: (
-              <Image
-                src="/assets/icons/truck.svg"
-                alt="truck"
-                width={22}
-                height={22}
-              />
-            ),
-          },
-        ]}
+        options={menuOptions}
         columns={columns}
         entity="orders"
         onFilter={(f) => {
@@ -191,6 +211,12 @@ const OrderList = ({ searchParams }: OrderListProps) => {
       )}
       {rateModal && (
         <RateModal orders={rateModal} onClose={() => setRateModal(null)} />
+      )}
+      {orderItemsModal && (
+        <OrderItemsModal
+          {...orderItemsModal}
+          onClose={() => setOrderItemsModal(null)}
+        />
       )}
     </>
   );

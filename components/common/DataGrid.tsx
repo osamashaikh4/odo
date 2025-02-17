@@ -8,6 +8,7 @@ interface DataGridProps extends Omit<TableProps, "limit"> {
   count: number;
   containerClassName?: string;
   showFooter?: boolean;
+  toolbar?: React.ReactNode;
 }
 
 const DataGrid = ({
@@ -22,6 +23,7 @@ const DataGrid = ({
   onAction,
   outerAction,
   classNames,
+  toolbar,
   showFooter = true,
 }: DataGridProps) => {
   return (
@@ -31,6 +33,7 @@ const DataGrid = ({
         classNames?.container ?? ""
       )}
     >
+      {toolbar}
       <Table
         options={options}
         columns={columns}

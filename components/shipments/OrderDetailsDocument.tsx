@@ -12,6 +12,7 @@ import { Order } from "@/services/queries/order";
 import moment from "moment";
 import { PaymentMethodsMap } from "@/helpers";
 import JsBarcode from "jsbarcode";
+import { useAppStore } from "@/store/appStore";
 
 interface OrderDetailsDocumentProps {
   order: Order;
@@ -23,6 +24,7 @@ Font.register({
 });
 
 const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
+  const { user } = useAppStore();
   let canvas;
 
   canvas = document.createElement("canvas");
@@ -43,7 +45,7 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
           >
             Order Details
           </Text>
-          <Image src={barcode} style={{ width: 200, height: 200 }} />
+          <Image src={barcode} style={{ width: 200, height: 150 }} />
         </View>
         <View
           style={{ flexGrow: 1, marginHorizontal: 10, paddingHorizontal: 10 }}
@@ -63,6 +65,11 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
             Telephone: {order.customer.customerPhone}
           </Text>
           <Text style={styles.text}>Address: {order.address.address}</Text>
+          {user && (
+            <Text style={styles.text}>
+              Sender Name: {user?.firstName} {user?.lastName}
+            </Text>
+          )}
           <View style={{ borderBottom: "1px solid #dee3e7" }}></View>
           <View style={{ marginTop: 26 }}>
             <Text
