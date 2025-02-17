@@ -6,6 +6,7 @@ import {
   Document,
   StyleSheet,
   Image,
+  Font,
 } from "@react-pdf/renderer";
 import { Order } from "@/services/queries/order";
 import moment from "moment";
@@ -15,6 +16,11 @@ import JsBarcode from "jsbarcode";
 interface OrderDetailsDocumentProps {
   order: Order;
 }
+
+Font.register({
+  family: "Arabic",
+  src: "/assets/fonts/arabic.ttf",
+});
 
 const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
   let canvas;
@@ -81,8 +87,8 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
                     <Text style={styles.tableCell}>Quantity</Text>
                     <Text style={styles.tableCell}>Total</Text>
                   </View>
-                  {order.items.map((item) => (
-                    <View style={styles.tableRow} key={item.orderItemID}>
+                  {order.items.map((item, i) => (
+                    <View style={styles.tableRow} key={i}>
                       <Text style={styles.tableCell}>{item.orderItemName}</Text>
                       <Text style={styles.tableCell}>
                         {item.orderItemSku || "-"}
@@ -113,11 +119,11 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   borderBottom: "1px solid #dee3e7",
-                  paddingBottom: 4,
+                  paddingBottom: 2,
                 }}
               >
-                <Text style={{ fontSize: "8pt" }}>Order Grand Total </Text>
-                <Text style={{ fontSize: "8pt" }}>
+                <Text style={{ fontSize: "9pt" }}>Order Grand Total </Text>
+                <Text style={{ fontSize: "9pt" }}>
                   {order.orderAmount} {order.orderCurrency}
                 </Text>
               </View>
@@ -134,6 +140,7 @@ export default OrderDetailsDocument;
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#FFFFFF",
+    fontFamily: "Arabic",
   },
   text: {
     fontSize: "9pt",
@@ -152,7 +159,7 @@ const styles = StyleSheet.create({
   tableCell: {
     paddingVertical: 4,
     paddingHorizontal: 8,
-    fontSize: "8pt",
+    fontSize: "9pt",
     fontWeight: 500,
   },
 });
