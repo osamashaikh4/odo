@@ -39,7 +39,7 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
           }}
         >
           <Text
-            style={{ fontWeight: 600, textAlign: "center", fontSize: "10pt" }}
+            style={{ fontWeight: 600, textAlign: "center", fontSize: "12pt" }}
           >
             Order Details
           </Text>
@@ -48,25 +48,25 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
         <View
           style={{ flexGrow: 1, marginHorizontal: 10, paddingHorizontal: 10 }}
         >
-          <Text style={styles.text}>Order Number : {order.orderNumber}</Text>
+          <Text style={styles.text}>Order Number: {order.orderNumber}</Text>
           <Text style={styles.text}>
-            Order Date : {moment(order.orderDate).format("DD/MM/YYYY")}
+            Order Date: {moment(order.orderDate).format("DD/MM/YYYY")}
           </Text>
           <Text style={styles.text}>
-            Payment : {PaymentMethodsMap[order.paymentMethod]}
+            Payment: {PaymentMethodsMap[order.paymentMethod]}
           </Text>
           <Text style={styles.text}>
-            Full Name : {order.customer.customerFirstName}{" "}
+            Full Name: {order.customer.customerFirstName}{" "}
             {order.customer.customerLastName}
           </Text>
           <Text style={styles.text}>
-            Telephone : {order.customer.customerPhone}
+            Telephone: {order.customer.customerPhone}
           </Text>
-          <Text style={styles.text}>Address : {order.address.address}</Text>
+          <Text style={styles.text}>Address: {order.address.address}</Text>
           <View style={{ borderBottom: "1px solid #dee3e7" }}></View>
           <View style={{ marginTop: 26 }}>
             <Text
-              style={{ fontSize: "10pt", marginBottom: 4, fontWeight: 600 }}
+              style={{ fontSize: "12pt", marginBottom: 4, fontWeight: 600 }}
             >
               Order Items
             </Text>
@@ -113,17 +113,16 @@ const OrderDetailsDocument = ({ order }: OrderDetailsDocumentProps) => {
             }}
           >
             <View style={{ flexGrow: 1 }}></View>
-            <View style={{ flexGrow: 0.5 }}>
+            <View style={{ flexGrow: 0.4 }}>
               <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
                   borderBottom: "1px solid #dee3e7",
-                  paddingBottom: 2,
                 }}
               >
-                <Text style={{ fontSize: "9pt" }}>Order Grand Total </Text>
-                <Text style={{ fontSize: "9pt" }}>
+                <Text style={{ fontSize: "10pt" }}>Order Grand Total </Text>
+                <Text style={{ fontSize: "10pt" }}>
                   {order.orderAmount} {order.orderCurrency}
                 </Text>
               </View>
@@ -143,8 +142,8 @@ const styles = StyleSheet.create({
     fontFamily: "Arabic",
   },
   text: {
-    fontSize: "9pt",
-    marginBottom: 8,
+    fontSize: "10pt",
+    marginBottom: 6,
   },
   center: {
     justifyContent: "center",
@@ -157,9 +156,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   tableCell: {
-    paddingVertical: 4,
+    paddingTop: 4,
     paddingHorizontal: 8,
-    fontSize: "9pt",
+    fontSize: "10pt",
     fontWeight: 500,
   },
 });
