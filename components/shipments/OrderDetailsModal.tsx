@@ -21,6 +21,7 @@ import ReceiverDetailsForm from "./ReceiverDetailsForm";
 import OrderDetailsForm from "./OrderDetailsForm";
 import Tabs from "../common/Tabs";
 import { FaPrint, FaSave } from "react-icons/fa";
+import OrderPrintModal from "./OrderPrintModal";
 
 interface OrderDetailsModalProps {
   orderID: string;
@@ -35,6 +36,7 @@ const OrderDetailsModal = ({
 }: OrderDetailsModalProps) => {
   const queryClient = useQueryClient();
   const submitButtoRef = useRef<HTMLButtonElement>(null);
+  const [printModal, setPrintModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState("receiver-details");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -132,108 +134,121 @@ const OrderDetailsModal = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      shouldBlockScroll
-      radius="sm"
-      isDismissable={false}
-      onOpenChange={handleClose}
-      closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
-      className="max-h-[calc(100%_-_4rem)] max-w-[90rem]"
-      classNames={{ backdrop: "modal-backdrop" }}
-    >
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
-              {isView ? "View Order" : "Edit Order"}{" "}
-              {data?.orderNumber ? `(${data.orderNumber})` : ""}
-            </ModalHeader>
-            <ModalBody className="px-1 overflow-auto">
-              {isFetching && (
-                <div
-                  className="absolute h-full w-full flex items-center justify-center z-20"
-                  style={{ backdropFilter: "blur(1px)" }}
-                >
-                  <Spinner size="lg" />
-                </div>
-              )}
-              <Tabs
-                selected={selectedTab}
-                options={[
-                  {
-                    title: "Receiver Details",
-                    key: "receiver-details",
-                    href: "",
-                  },
-                  {
-                    title: "Order Details",
-                    key: "order-details",
-                    href: "",
-                  },
-                ]}
-                onSelectionChange={setSelectedTab as any}
-              />
-              <Form onSubmit={onSubmit} validationBehavior="native">
-                {data ? (
-                  <>
-                    {selectedTab === "receiver-details" ? (
-                      <ReceiverDetailsForm
-                        isEdit
-                        isView={isView}
-                        values={{ ...data?.customer, ...data?.address }}
-                      />
-                    ) : (
-                      <OrderDetailsForm
-                        isEdit
-                        isView={isView}
-                        values={{ ...data }}
-                      />
-                    )}
-                  </>
-                ) : null}
-                <button
-                  ref={submitButtoRef}
-                  type="submit"
-                  className="invisible"
+    <>
+      <Modal
+        isOpen={isOpen}
+        shouldBlockScroll
+        radius="sm"
+        isDismissable={false}
+        onOpenChange={handleClose}
+        closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
+        className="max-h-[calc(100%_-_4rem)] max-w-[90rem]"
+        classNames={{ backdrop: "modal-backdrop" }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {isView ? "View Order" : "Edit Order"}{" "}
+                {data?.orderNumber ? `(${data.orderNumber})` : ""}
+              </ModalHeader>
+              <ModalBody className="px-1 overflow-auto">
+                {isFetching && (
+                  <div
+                    className="absolute h-full w-full flex items-center justify-center z-20"
+                    style={{ backdropFilter: "blur(1px)" }}
+                  >
+                    <Spinner size="lg" />
+                  </div>
+                )}
+                <Tabs
+                  selected={selectedTab}
+                  options={[
+                    {
+                      title: "Receiver Details",
+                      key: "receiver-details",
+                      href: "",
+                    },
+                    {
+                      title: "Order Details",
+                      key: "order-details",
+                      href: "",
+                    },
+                  ]}
+                  onSelectionChange={setSelectedTab as any}
                 />
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              {!isView && (
+                <Form onSubmit={onSubmit} validationBehavior="native">
+                  {data ? (
+                    <>
+                      {selectedTab === "receiver-details" ? (
+                        <ReceiverDetailsForm
+                          isEdit
+                          isView={isView}
+                          values={{ ...data?.customer, ...data?.address }}
+                        />
+                      ) : (
+                        <OrderDetailsForm
+                          isEdit
+                          isView={isView}
+                          values={{ ...data }}
+                        />
+                      )}
+                    </>
+                  ) : null}
+                  <button
+                    ref={submitButtoRef}
+                    type="submit"
+                    className="invisible"
+                  />
+                </Form>
+              </ModalBody>
+              <ModalFooter>
+                {!isView && (
+                  <Button
+                    color="primary"
+                    variant="light"
+                    radius="sm"
+                    onPress={onClose}
+                  >
+                    Cancel
+                  </Button>
+                )}
                 <Button
                   color="primary"
-                  variant="light"
                   radius="sm"
-                  onPress={onClose}
+                  className={isView ? "border-small" : ""}
+                  variant={isView ? "bordered" : undefined}
+                  startContent={
+                    isView ? (
+                      <FaPrint className="h-4 w-4" />
+                    ) : (
+                      <FaSave className="h-4 w-4" />
+                    )
+                  }
+                  isLoading={updateOrder.isPending}
+                  onPress={() => {
+                    if (isView) {
+                      setPrintModal(true);
+                    } else {
+                      if (submitButtoRef.current)
+                        submitButtoRef.current.click();
+                    }
+                  }}
                 >
-                  Cancel
+                  {isView ? "Print" : "Save"}
                 </Button>
-              )}
-              <Button
-                color="primary"
-                radius="sm"
-                className={isView ? "border-small" : ""}
-                variant={isView ? "bordered" : undefined}
-                startContent={
-                  isView ? (
-                    <FaPrint className="h-4 w-4" />
-                  ) : (
-                    <FaSave className="h-4 w-4" />
-                  )
-                }
-                isLoading={updateOrder.isPending}
-                onPress={() => {
-                  if (submitButtoRef.current) submitButtoRef.current.click();
-                }}
-              >
-                {isView ? "Print" : "Save"}
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {printModal && (
+        <OrderPrintModal
+          orderID={orderID}
+          onClose={() => setPrintModal(false)}
+        />
+      )}
+    </>
   );
 };
 

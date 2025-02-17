@@ -1,2 +1,3 @@
 https://lordicon.com/icons/system/regular?c=138
 SALLA-ORDER-ID: 884361694
+https://github.com/diegomura/react-pdf/issues/2638
