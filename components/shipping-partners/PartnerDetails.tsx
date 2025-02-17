@@ -36,10 +36,12 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
 
   return shippingPartner ? (
     <div className="h-full">
-      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100 min-h-14 gap-4 -mt-10 mb-7">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between pr-6 pl-4 py-3 border-b border-gray-100 min-h-14 gap-4 -mt-10 mb-6 bg-white">
+        <div className="flex items-center gap-2">
           <Link href="/shipping-partners">
-            <MdArrowBack size="1.375rem" />
+            <Button isIconOnly variant="light">
+              <MdArrowBack size="1.375rem" />
+            </Button>
           </Link>
           <div>
             <p className="text-base">Shipping Partners</p>
@@ -65,7 +67,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
         </div>
       </div>
       <div className="px-6" style={{ height: "calc(100% - 50px)" }}>
-        <div className="p-8 rounded border border-gray-200 overflow-auto h-full">
+        <div className="p-8 rounded border border-borderDarkGrey overflow-auto h-full bg-white">
           <Form
             onSubmit={onSubmit}
             validationBehavior="native"

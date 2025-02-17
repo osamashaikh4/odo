@@ -15,12 +15,12 @@ const Options: any = [
   {
     label: "Sync Orders",
     value: "sync-orders",
-    icon: <GoSync fontSize="1.125rem" />,
+    icon: <GoSync fontSize="1rem" />,
   },
   {
     label: "Remove",
     value: "remove",
-    icon: <LuTrash2 className="text-danger" fontSize="1.125rem" />,
+    icon: <LuTrash2 className="text-danger" fontSize="1rem" />,
     color: "danger",
     className: "text-danger",
   },
