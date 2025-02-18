@@ -3,7 +3,7 @@ import Image from "next/image";
 import { cn } from "@/helpers";
 
 interface SectionHeaderProps {
-  icon: string;
+  icon?: string;
   title: string;
   className?: string;
   iconProps?: { width?: number; height?: number };
@@ -23,13 +23,15 @@ const SectionHeader = ({
       )}
     >
       <div className="flex items-center w-full h-full flex-1 gap-4">
-        <Image
-          width={32}
-          height={32}
-          {...iconProps}
-          src={`/assets/icons/${icon}.svg`}
-          alt={icon}
-        />
+        {icon && (
+          <Image
+            width={32}
+            height={32}
+            {...iconProps}
+            src={`/assets/icons/${icon}.svg`}
+            alt={icon}
+          />
+        )}
         <p className="text-3xl font-bold">{title}</p>
       </div>
     </div>

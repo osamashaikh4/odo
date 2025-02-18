@@ -5,12 +5,16 @@ import { useNotificationsQuery } from "@/services/queries/notification";
 import { Button, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { BsBell } from "react-icons/bs";
 import { FiPackage, FiRefreshCw } from "react-icons/fi";
+import Link from "next/link";
 
 const Notification = () => {
-  const { data: notifications } = useNotificationsQuery({
-    refetchInterval: 15000,
-  });
-  console.log(notifications);
+  const { data: notifications } = useNotificationsQuery(
+    { limit: 5, offset: 0 },
+    {
+      refetchInterval: 15000,
+    }
+  );
+
   return (
     <Popover radius="sm">
       <PopoverTrigger>
@@ -41,7 +45,7 @@ const Notification = () => {
                     <p className="text-[0.825rem] font-normal">
                       {notification.notificationText}
                     </p>
-                    <span className="text-xs font-normal text-foreground-600">
+                    <span className="text-xs font-normal text-foreground-500">
                       {moment(notification.createdAt).format(
                         "DD/MM/YYYY HH:MM"
                       )}
@@ -55,9 +59,11 @@ const Notification = () => {
             </li>
           ))}
           <li className="px-4 py-3 bg-white hover:bg-backgroundLightGrey cursor-pointer">
-            <div className="flex items-center justify-center">
-              <p className="text-sm text-blue">View all notifications</p>
-            </div>
+            <Link href="/notifications">
+              <div className="flex items-center justify-center">
+                <p className="text-sm text-blue">View all notifications</p>
+              </div>
+            </Link>
           </li>
         </ul>
       </PopoverContent>

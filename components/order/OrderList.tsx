@@ -178,7 +178,11 @@ const OrderList = ({ searchParams }: OrderListProps) => {
 
   return (
     <>
-      <SectionHeader onAdd={() => handleAction("add-order", {})} />
+      <SectionHeader
+        title="Shipments"
+        icon="shipment"
+        onAdd={() => handleAction("add-order", {})}
+      />
       <DataGrid
         toolbar={
           <div className="pb-2 pl-3 pr-1 flex items-center justify-between">
