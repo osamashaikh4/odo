@@ -25,6 +25,7 @@ const filters = { limit: 5, offset: 0 };
 
 const Notification = () => {
   const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
   const [showNotification, setShowNotification] =
     useState<NotificationT | null>(null);
 
@@ -45,12 +46,17 @@ const Notification = () => {
     if (!n.read) {
       readNotification.mutate({ notificationIDs: [n.notificationID] });
     }
+    setIsOpen(false);
     setShowNotification(n);
   };
 
   return (
     <>
-      <Popover radius="sm">
+      <Popover
+        radius="sm"
+        isOpen={isOpen}
+        onOpenChange={(open) => setIsOpen(open)}
+      >
         <PopoverTrigger>
           <Button isIconOnly radius="sm" variant="light">
             <BsBell fontSize="1.25rem" />
