@@ -11,6 +11,10 @@ const FormSelect = ({
   return (
     <Select
       {...props}
+      popoverProps={{
+        radius: "sm",
+        classNames: { content: "shadow-containerShadow px-1" },
+      }}
       radius="sm"
       variant="bordered"
       classNames={{
@@ -22,7 +26,12 @@ const FormSelect = ({
       }}
     >
       {options.map((option) => (
-        <SelectItem key={option.value}>{option.label}</SelectItem>
+        <SelectItem
+          className="data-[hover=true]:bg-backgroundLightGrey data-[selectable=true]:focus:bg-backgroundLightGrey"
+          key={option.value}
+        >
+          {option.label}
+        </SelectItem>
       ))}
     </Select>
   );

@@ -5,7 +5,6 @@ import { useNotificationsQuery } from "@/services/queries/notification";
 import { Button, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { BsBell } from "react-icons/bs";
 import { FiPackage, FiRefreshCw } from "react-icons/fi";
-import { FiRefreshCcw } from "react-icons/fi";
 
 const Notification = () => {
   const { data: notifications } = useNotificationsQuery({

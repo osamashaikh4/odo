@@ -14,6 +14,7 @@ import DataGrid from "../common/DataGrid";
 import { Order } from "@/services/queries/order";
 import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
+import FormAutoComplete from "../common/FormAutoComplete";
 
 interface RateModalProps {
   orders: Order[];
@@ -70,13 +71,10 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                 columns={columns.map((col) => {
                   if (col.field === "deliveryCompany") {
                     col.render = () => (
-                      <Autocomplete
+                      <FormAutoComplete
                         className="w-[20rem] mx-auto"
-                        defaultItems={[]}
+                        options={[]}
                         variant="bordered"
-                        inputProps={{
-                          classNames: { inputWrapper: "border-small rounded" },
-                        }}
                         listboxProps={{
                           topContent: (
                             <Button
@@ -97,13 +95,7 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                         size="md"
                         radius="sm"
                         placeholder="Search"
-                      >
-                        {(item) => (
-                          <AutocompleteItem key={item.value}>
-                            {item.label}
-                          </AutocompleteItem>
-                        )}
-                      </Autocomplete>
+                      />
                     );
                   }
                   return { ...col };

@@ -25,6 +25,10 @@ const FormAutoComplete = ({
         variant="bordered"
         className="w-full"
         {...props}
+        popoverProps={{
+          radius: "sm",
+          classNames: { content: "shadow-containerShadow" },
+        }}
         defaultItems={options}
         selectedKey={selectedKey}
         inputProps={{
@@ -39,7 +43,11 @@ const FormAutoComplete = ({
         }}
       >
         {(item: any) => (
-          <AutocompleteItem key={item.value} textValue={item.label}>
+          <AutocompleteItem
+            key={item.value}
+            textValue={item.label}
+            className="data-[hover=true]:bg-backgroundLightGrey"
+          >
             {typeof render === "function" ? render(item) : item.label}
           </AutocompleteItem>
         )}
