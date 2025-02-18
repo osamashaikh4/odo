@@ -6,3 +6,6 @@ export const getNotifications = (filters: Filter) =>
   axios
     .get(`/notifications?${queryString.stringify(filters)}`)
     .then((res) => res.data);
+
+export const readNotification = (data: any) =>
+  axios.put(`/notifications/read`, data).then((res) => res.data);

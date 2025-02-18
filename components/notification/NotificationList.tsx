@@ -1,7 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import moment from "moment";
-import { useNotificationsQuery } from "@/services/queries/notification";
+import {
+  Notification,
+  useNotificationsQuery,
+  useReadNotificationMutation,
+} from "@/services/queries/notification";
 import { FiPackage, FiRefreshCw } from "react-icons/fi";
 import { Button, Spinner } from "@heroui/react";
 import SectionHeader from "../shipments/SectionHeader";
@@ -10,6 +14,8 @@ import Link from "next/link";
 import FormSelect from "../common/FormSelect";
 import List from "../common/List";
 import EmptyRecords from "../common/EmptyRecords";
+import NotificationDetailsModal from "./NotificationDetailsModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DateOptions = [
   {
@@ -52,11 +58,18 @@ const DateOptionsMap = DateOptions.reduce((acc: any, curr) => {
 }, {});
 
 const NotificationList = () => {
+  const queryClient = useQueryClient();
+  const [mutate, setMutate] = useState(false);
+  const [showNotification, setShowNotification] = useState<Notification | null>(
+    null
+  );
+
   const [filters, setFilters] = useState({
     offset: 0,
     limit: 10,
     ...DateOptionsMap["7"].range,
   });
+
   const { data: notifications = [], isFetching } = useNotificationsQuery(
     filters,
     {
@@ -64,21 +77,44 @@ const NotificationList = () => {
     }
   );
 
+  const readNotification = useReadNotificationMutation({
+    onSuccess() {
+      setMutate(true);
+      queryClient.invalidateQueries({ queryKey: ["notifications", filters] });
+    },
+  });
+
+  const onShowNotification = (n: Notification) => {
+    if (!n.read) {
+      readNotification.mutate({ notificationIDs: [n.notificationID] });
+    }
+    setShowNotification(n);
+  };
+
   return (
     <>
       <SectionHeader
         title="Notifications"
         rightAction={
-          <Button
-            color="primary"
-            variant="light"
-            radius="sm"
-            startContent={
-              <BsCheckCircleFill fontSize="0.875rem" className="text-blue" />
-            }
-          >
-            Mark All As Read
-          </Button>
+          notifications.some((notification) => !notification.read) ? (
+            <Button
+              color="primary"
+              variant="light"
+              radius="sm"
+              onPress={() => {
+                readNotification.mutate({
+                  notificationIDs: ["all"],
+                });
+              }}
+              startContent={
+                <BsCheckCircleFill fontSize="0.875rem" className="text-blue" />
+              }
+            >
+              Mark All As Read
+            </Button>
+          ) : (
+            <></>
+          )
         }
       />
       <div className="max-h-[90dvh] overflow-auto border border-borderDarkGrey p-6 rounded flex flex-col gap-3 bg-white">
@@ -89,6 +125,7 @@ const NotificationList = () => {
               options={DateOptions}
               defaultSelectedKeys={["7"]}
               onChange={(e) => {
+                setMutate(false);
                 const v = e.target.value;
                 setFilters({ ...filters, ...DateOptionsMap[v].range });
               }}
@@ -99,7 +136,7 @@ const NotificationList = () => {
           <List
             items={notifications}
             listEmptyComponent={
-              isFetching ? (
+              mutate ? null : isFetching ? (
                 <div className="flex p-6 w-full justify-center">
                   <Spinner size="lg" />
                 </div>
@@ -114,6 +151,7 @@ const NotificationList = () => {
               <li
                 key={notification.notificationID}
                 className="border-b border-b-borderGrey px-2 py-3 bg-white hover:bg-backgroundLightGrey cursor-pointer"
+                onClick={() => onShowNotification(notification)}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex-1 flex items-start gap-3">
@@ -160,6 +198,12 @@ const NotificationList = () => {
           />
         </ul>
       </div>
+      {showNotification && (
+        <NotificationDetailsModal
+          notification={showNotification}
+          onClose={() => setShowNotification(null)}
+        />
+      )}
     </>
   );
 };

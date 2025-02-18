@@ -1,6 +1,6 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getNotifications } from "../api/notification";
-import { Filter } from "./types";
+import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { getNotifications, readNotification } from "../api/notification";
+import { Filter, MutationParams } from "./types";
 
 export interface Notification {
   notificationID: string;
@@ -23,5 +23,11 @@ export const useNotificationsQuery = (
   useQuery<Notification[]>({
     queryKey: ["notifications", filters],
     queryFn: () => getNotifications(filters),
+    ...params,
+  });
+
+export const useReadNotificationMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: readNotification,
     ...params,
   });
