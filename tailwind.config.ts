@@ -18,6 +18,7 @@ export default {
         borderGrey: "var(--border-grey)",
         borderDarkGrey: "var(--border-color)",
         blue: "var(--blue)",
+        containerShadow: "var(--container-box-shadow)",
       },
     },
   },
