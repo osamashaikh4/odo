@@ -1,7 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import DataGrid from "../common/DataGrid";
-import { Order, useOrdersQuery } from "@/services/queries/order";
+import {
+  Order,
+  useExportOrdersMutation,
+  useOrdersQuery,
+} from "@/services/queries/order";
 import { NumericFormat } from "react-number-format";
 import moment from "moment";
 import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
@@ -20,6 +24,7 @@ import OrderItemsModal from "../shipments/OrderItemsModal";
 import { SlPrinter } from "react-icons/sl";
 import { BiEditAlt } from "react-icons/bi";
 import { VscEye } from "react-icons/vsc";
+import { Button } from "@heroui/react";
 
 interface OrderListProps {
   searchParams?: { [key: string]: any };
@@ -147,6 +152,8 @@ const OrderList = ({ searchParams }: OrderListProps) => {
   const { data = { results: [], count: 0 }, isFetching } =
     useOrdersQuery(filters);
 
+  const exportOrders = useExportOrdersMutation({});
+
   const handleAction = (action: string, data: any) => {
     if (action === "create-shipment") {
       setRateModal([data]);
@@ -173,18 +180,20 @@ const OrderList = ({ searchParams }: OrderListProps) => {
     <>
       <SectionHeader onAdd={() => handleAction("add-order", {})} />
       <DataGrid
-        // toolbar={
-        //   <div className="pb-2 pl-3 pr-1 flex items-center justify-between">
-        //     <div></div>
-        //     <Button
-        //       variant="bordered"
-        //       radius="sm"
-        //       className="min-w-10 border-small"
-        //     >
-        //       Export Data
-        //     </Button>
-        //   </div>
-        // }
+        toolbar={
+          <div className="pb-2 pl-3 pr-1 flex items-center justify-between">
+            <div></div>
+            <Button
+              variant="bordered"
+              radius="sm"
+              isLoading={exportOrders.isPending}
+              className="min-w-10 border-small"
+              onPress={() => exportOrders.mutate()}
+            >
+              Export Data
+            </Button>
+          </div>
+        }
         onAction={handleAction}
         filters={filters}
         count={data.count}

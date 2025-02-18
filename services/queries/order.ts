@@ -1,6 +1,7 @@
 import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import {
   createOrder,
+  exportOrders,
   getCustomerSuggestion,
   getOrder,
   getOrderNumber,
@@ -115,4 +116,11 @@ export const useCustomerSuggestionQuery = (
     queryKey: ["customer-suggestion", search],
     queryFn: () => getCustomerSuggestion(search),
     ...params,
+  });
+
+export const useExportOrdersMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: exportOrders,
+    ...params,
+    ...defaultParams(params),
   });

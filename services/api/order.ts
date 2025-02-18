@@ -29,3 +29,6 @@ export const getCustomerSuggestion = (search?: string) =>
   axios
     .get(`/orders/getCustomerSuggestion${search ? `?search=${search}` : ""}`)
     .then((res) => res.data);
+
+export const exportOrders = () =>
+  axios.post("/orders/export").then((res) => res.data);
