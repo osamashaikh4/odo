@@ -101,7 +101,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 labelPlacement="outside"
                 isRequired
                 name="customerCode"
-                defaultValue="J0086005003"
+                defaultValue="J0086004989"
                 placeholder=" "
               />
               <FormInput
@@ -109,8 +109,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 name="apiAccount"
                 labelPlacement="outside"
                 isRequired
-                // defaultValue="344471219040423945"
-                defaultValue="292508153084379141"
+                defaultValue="762307940458700828"
                 placeholder=" "
               />
               <FormInput
@@ -118,8 +117,7 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 name="privateKey"
                 labelPlacement="outside"
                 isRequired
-                defaultValue="a0a1047cce70493c9d5d29704f05d0d9"
-                // defaultValue="17e26fb32fc440f3b4497651dbb2159e"
+                defaultValue="6b5ff8c7703a4a54b7cb77c8ed065d81"
                 placeholder=" "
               />
               <FormInput

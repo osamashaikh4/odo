@@ -1,5 +1,5 @@
-import PartnerDetails from "@/components/shipping-partners/PartnerDetails";
 import React from "react";
+import PartnerDetails from "@/components/shipping-partners/PartnerDetails";
 
 type Props = {
   params: { slug: string };
