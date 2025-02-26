@@ -59,10 +59,10 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
           <Button
             radius="sm"
             color="primary"
-            endContent={<IoChevronForward fontSize="1.125rem" />}
+            // endContent={<IoChevronForward fontSize="1.125rem" />}
             onPress={onConnect}
           >
-            Next Step
+            Save
           </Button>
         </div>
       </div>
