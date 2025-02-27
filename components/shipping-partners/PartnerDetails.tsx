@@ -1,37 +1,62 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import { Alert, Button, Form, Spinner } from "@heroui/react";
 import Link from "next/link";
 import { MdArrowBack } from "react-icons/md";
 import Image from "next/image";
-import { IoChevronForward } from "react-icons/io5";
 import FormInput from "../common/FormInput";
 import { FaPlug } from "react-icons/fa";
 import {
+  useSaveShippingPartnerConnectionMutation,
   useShippingPartnerQuery,
   useTestConnectionMutation,
 } from "@/services/queries/shipping-partner";
 import EmptyRecords from "../common/EmptyRecords";
+import { useRouter } from "next/navigation";
 
 interface PartnerDetailsProps {
   id: string;
 }
 
 const PartnerDetails = ({ id }: PartnerDetailsProps) => {
+  const ref = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
   const { data: shippingPartner, isFetching } = useShippingPartnerQuery(id);
+
   const testConnection = useTestConnectionMutation({});
 
-  const onConnect = () => {};
+  const saveConnection = useSaveShippingPartnerConnectionMutation({
+    onSuccess() {
+      router.push("/shipping-partners");
+    },
+  });
+
+  const onConnect = () => {
+    if (ref.current) ref.current.click();
+  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const bType = document.activeElement?.id;
+
     const values: any = Object.fromEntries(
       new FormData(e.currentTarget as any)
     );
-    testConnection.mutate({
-      ...values,
-      shippingPartnerID: shippingPartner?.shippingPartnerID,
-    });
+
+    if (bType === "test-connection") {
+      testConnection.mutate({
+        ...values,
+        shippingPartnerID: shippingPartner?.shippingPartnerID,
+      });
+    } else if (
+      bType === "save-connection" ||
+      bType === "save-connection-bogus"
+    ) {
+      saveConnection.mutate({
+        ...values,
+        shippingPartnerID: shippingPartner?.shippingPartnerID,
+      });
+    }
   };
 
   return shippingPartner ? (
@@ -51,18 +76,31 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
           <Button
             radius="sm"
             color="primary"
+            type="button"
             variant="bordered"
             className="border-small"
+            onPress={() => router.push("/shipping-partners")}
           >
             Cancel
           </Button>
           <Button
+            isDisabled={Boolean(
+              shippingPartner.shippingPartnerConnection &&
+                shippingPartner.shippingPartnerConnection
+                  .shippingPartnerConnectionID
+            )}
             radius="sm"
             color="primary"
+            isLoading={saveConnection.isPending}
+            id="save-connection-bogus"
             // endContent={<IoChevronForward fontSize="1.125rem" />}
             onPress={onConnect}
           >
-            Save
+            {shippingPartner.shippingPartnerConnection &&
+            shippingPartner.shippingPartnerConnection
+              .shippingPartnerConnectionID
+              ? "Saved"
+              : "Save"}
           </Button>
         </div>
       </div>
@@ -207,7 +245,14 @@ const PartnerDetails = ({ id }: PartnerDetailsProps) => {
                 defaultValue="1"
               />
               <div>
+                <button
+                  type="submit"
+                  ref={ref}
+                  id="save-connection"
+                  className="h-0 invisible"
+                ></button>
                 <Button
+                  id="test-connection"
                   type="submit"
                   color="primary"
                   radius="sm"

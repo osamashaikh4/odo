@@ -16,6 +16,7 @@ interface AlertModalProps {
   onClose: () => void;
   onAction: () => void;
   isLoading?: boolean;
+  primaryButtonText?: string;
 }
 
 const AlertModal = ({
@@ -24,6 +25,7 @@ const AlertModal = ({
   content,
   onAction,
   isLoading,
+  primaryButtonText,
 }: AlertModalProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -60,7 +62,7 @@ const AlertModal = ({
                 color="danger"
                 onPress={onAction}
               >
-                Remove Integration
+                {primaryButtonText}
               </Button>
             </ModalFooter>
           </>

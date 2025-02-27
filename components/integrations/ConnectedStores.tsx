@@ -104,6 +104,7 @@ const ConnectedStores = () => {
                   </p>
                 </div>
               }
+              primaryButtonText="Remove Integration"
               isLoading={removeConnection.isPending}
               onAction={() => onAction("confirm-remove")}
               onClose={() => setAlert(null)}
