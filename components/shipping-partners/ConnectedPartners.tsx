@@ -13,8 +13,10 @@ import {
   useRemoveShippingPartnerConnectionMutation,
 } from "@/services/queries/shipping-partner";
 import ConnectedPartnerCard from "./ConnectedPartnerCard";
+import { useRouter } from "next/navigation";
 
 const ConnectedPartners = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce<string>(query, 500);
@@ -34,6 +36,9 @@ const ConnectedPartners = () => {
 
   const onAction = (action: string, data?: ShippingPartner) => {
     if (action === "edit") {
+      router.push(
+        `/shipping-partners/${data?.shippingPartnerSlug}?connectionID=${data?.shippingPartnerConnection?.shippingPartnerConnectionID}`
+      );
     } else if (action === "delete") {
       if (data) setAlert(data);
     } else if (action === "confirm-delete") {

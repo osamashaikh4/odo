@@ -6,8 +6,20 @@ export const getShippingPartners = () =>
 export const getConnectedShippingPartners = () =>
   axios.get("/shipping-partners/connected").then((res) => res.data);
 
-export const getShippingPartner = (id: string) =>
-  axios.get("/shipping-partners/" + id).then((res) => res.data);
+export const getShippingPartner = ({
+  id,
+  connectionID,
+}: {
+  id: string;
+  connectionID?: string;
+}) =>
+  axios
+    .get(
+      connectionID
+        ? `/shipping-partners/connected/${connectionID}`
+        : `/shipping-partners/${id}`
+    )
+    .then((res) => res.data);
 
 export const testConnection = (data: any) =>
   axios

@@ -18,7 +18,7 @@ export default function RootLayout({
       </div>
       <div className="px-6">
         <Tabs
-          selected="online-stores"
+          selected="more-connection"
           options={[
             {
               title: "More Connections",

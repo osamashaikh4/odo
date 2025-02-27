@@ -18,6 +18,7 @@ export type ShippingPartner = {
   shippingPartnerStatus: number;
   shippingPartnerConnection?: {
     createdAt: string;
+    fields: { [key: string]: string };
     shippingPartnerConnectionID: string;
   };
 };
@@ -41,12 +42,12 @@ export const useConnectedShippingPartnersQuery = (
   });
 
 export const useShippingPartnerQuery = (
-  id: string,
+  payload: { id: string; connectionID?: string },
   params?: Omit<UseQueryOptions<ShippingPartner>, "queryKey">
 ) =>
   useQuery<ShippingPartner>({
-    queryKey: ["shipping-partners", id],
-    queryFn: () => getShippingPartner(id),
+    queryKey: ["shipping-partners", payload],
+    queryFn: () => getShippingPartner(payload),
     ...params,
   });
 
