@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 
 const protectedRoutes = [
   "home",
@@ -15,17 +15,17 @@ export default async function middleware(req: NextRequest) {
   const token = cookieStore.get("odo-access-token")?.value;
 
   if (token) {
-    const decoded = jwtDecode<{ user: { userID: string; type: string } }>(
-      token
-    );
-
+    // const decoded = jwtDecode<{ user: { userID: string; type: string } }>(
+    //   token
+    // );
+    // (decoded &&
+    //   decoded.user &&
+    //   decoded.user.type !== "admin" &&
+    //   path.startsWith("/admin")
     if (
+      path === "/" ||
       path.startsWith("/login") ||
-      path.startsWith("/register") ||
-      (decoded &&
-        decoded.user &&
-        decoded.user.type !== "admin" &&
-        path.startsWith("/admin"))
+      path.startsWith("/register")
     ) {
       return NextResponse.redirect(new URL("/home", req.url));
     }

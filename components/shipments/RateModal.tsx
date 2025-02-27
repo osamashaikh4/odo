@@ -15,6 +15,7 @@ import { Order } from "@/services/queries/order";
 import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
 import FormAutoComplete from "../common/FormAutoComplete";
+import { useConnectedShippingPartnersQuery } from "@/services/queries/shipping-partner";
 
 interface RateModalProps {
   orders: Order[];
@@ -37,6 +38,8 @@ const columns = [
 const RateModal = ({ orders, onClose }: RateModalProps) => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { data: connectedShippingPartners = [], isFetching } =
+    useConnectedShippingPartnersQuery();
 
   useEffect(() => {
     onOpen();
@@ -73,23 +76,32 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                     col.render = () => (
                       <FormAutoComplete
                         className="w-[20rem] mx-auto"
-                        options={[]}
+                        options={connectedShippingPartners.map(
+                          (connectedShippingPartner) => ({
+                            label: connectedShippingPartner.shippingPartnerName,
+                            value:
+                              connectedShippingPartner.shippingPartnerConnection
+                                ?.shippingPartnerConnectionID ?? "",
+                          })
+                        )}
+                        isLoading={isFetching}
                         variant="bordered"
                         listboxProps={{
-                          topContent: (
-                            <Button
-                              onPress={() => {
-                                onClose();
-                                router.push("/shipping-partners");
-                              }}
-                              color="primary"
-                              variant="light"
-                              size="sm"
-                              radius="sm"
-                            >
-                              Connect Shipping Partners
-                            </Button>
-                          ),
+                          topContent:
+                            connectedShippingPartners.length > 0 ? null : (
+                              <Button
+                                onPress={() => {
+                                  onClose();
+                                  router.push("/shipping-partners");
+                                }}
+                                color="primary"
+                                variant="light"
+                                size="sm"
+                                radius="sm"
+                              >
+                                Connect Shipping Partners
+                              </Button>
+                            ),
                         }}
                         popoverProps={{ radius: "sm" }}
                         size="md"
