@@ -29,5 +29,8 @@ export const testConnection = (data: any) =>
 export const saveShippingPartnerConnection = (data: any) =>
   axios.post("/shipping-partners/save", data).then((res) => res.data);
 
+export const updateShippingPartnerConnection = ({ id, ...data }: any) =>
+  axios.put(`/shipping-partners/connected/${id}`, data).then((res) => res.data);
+
 export const removeShippingPartnerConnection = (id: string) =>
   axios.delete("/shipping-partners/connected/" + id).then((res) => res.data);

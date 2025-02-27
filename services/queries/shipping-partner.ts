@@ -6,6 +6,7 @@ import {
   saveShippingPartnerConnection,
   testConnection,
   removeShippingPartnerConnection,
+  updateShippingPartnerConnection,
 } from "../api/shipping-partner";
 import { MutationParams } from "./types";
 import { defaultParams } from "./utils";
@@ -63,6 +64,15 @@ export const useSaveShippingPartnerConnectionMutation = (
 ) =>
   useMutation({
     mutationFn: saveShippingPartnerConnection,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useUpdateShippingPartnerConnectionMutation = (
+  params: MutationParams
+) =>
+  useMutation({
+    mutationFn: updateShippingPartnerConnection,
     ...params,
     ...defaultParams(params),
   });

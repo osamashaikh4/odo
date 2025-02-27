@@ -10,6 +10,7 @@ import {
   useSaveShippingPartnerConnectionMutation,
   useShippingPartnerQuery,
   useTestConnectionMutation,
+  useUpdateShippingPartnerConnectionMutation,
 } from "@/services/queries/shipping-partner";
 import EmptyRecords from "../common/EmptyRecords";
 import { useRouter } from "next/navigation";
@@ -30,6 +31,12 @@ const PartnerDetails = ({ id, connectionID }: PartnerDetailsProps) => {
   const testConnection = useTestConnectionMutation({});
 
   const saveConnection = useSaveShippingPartnerConnectionMutation({
+    onSuccess() {
+      router.push("/shipping-partners/connected-partners");
+    },
+  });
+
+  const updateConnection = useUpdateShippingPartnerConnectionMutation({
     onSuccess() {
       router.push("/shipping-partners/connected-partners");
     },
@@ -56,10 +63,18 @@ const PartnerDetails = ({ id, connectionID }: PartnerDetailsProps) => {
       bType === "save-connection" ||
       bType === "save-connection-bogus"
     ) {
-      saveConnection.mutate({
-        ...values,
-        shippingPartnerID: shippingPartner?.shippingPartnerID,
-      });
+      if (connectionID) {
+        updateConnection.mutate({
+          id: connectionID,
+          ...values,
+          shippingPartnerID: shippingPartner?.shippingPartnerID,
+        });
+      } else {
+        saveConnection.mutate({
+          ...values,
+          shippingPartnerID: shippingPartner?.shippingPartnerID,
+        });
+      }
     }
   };
 
@@ -96,7 +111,7 @@ const PartnerDetails = ({ id, connectionID }: PartnerDetailsProps) => {
             )}
             radius="sm"
             color="primary"
-            isLoading={saveConnection.isPending}
+            isLoading={saveConnection.isPending || updateConnection.isPending}
             id="save-connection-bogus"
             // endContent={<IoChevronForward fontSize="1.125rem" />}
             onPress={onConnect}
