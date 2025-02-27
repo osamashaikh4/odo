@@ -6,6 +6,7 @@ import {
   getOrder,
   getOrderNumber,
   getOrders,
+  shipOrders,
   updateOrder,
 } from "../api/order";
 import { Filter, MutationParams } from "./types";
@@ -121,6 +122,13 @@ export const useCustomerSuggestionQuery = (
 export const useExportOrdersMutation = (params: MutationParams) =>
   useMutation({
     mutationFn: exportOrders,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useShipOrdersMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: shipOrders,
     ...params,
     ...defaultParams(params),
   });

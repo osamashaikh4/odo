@@ -32,3 +32,6 @@ export const getCustomerSuggestion = (search?: string) =>
 
 export const exportOrders = () =>
   axios.post("/orders/export").then((res) => res.data);
+
+export const shipOrders = (data: any) =>
+  axios.post("/orders/shipment", data).then((res) => res.data);

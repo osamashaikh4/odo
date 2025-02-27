@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Autocomplete,
-  AutocompleteItem,
   Button,
   Modal,
   ModalBody,
@@ -11,7 +9,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import DataGrid from "../common/DataGrid";
-import { Order } from "@/services/queries/order";
+import { Order, useShipOrdersMutation } from "@/services/queries/order";
 import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
 import FormAutoComplete from "../common/FormAutoComplete";
@@ -38,8 +36,17 @@ const columns = [
 const RateModal = ({ orders, onClose }: RateModalProps) => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [shipments, setShipments] = useState<
+    { orderID: string; shippingPartnerConnectionID: string }[]
+  >([]);
   const { data: connectedShippingPartners = [], isFetching } =
     useConnectedShippingPartnersQuery();
+
+  const shipOrders = useShipOrdersMutation({
+    onSuccess() {
+      onClose();
+    },
+  });
 
   useEffect(() => {
     onOpen();
@@ -48,6 +55,10 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
   const handleClose = (openState: boolean) => {
     if (!openState) onClose();
     onOpenChange();
+  };
+
+  const onCreateShipment = () => {
+    shipOrders.mutate({ orders: shipments });
   };
 
   return (
@@ -73,7 +84,7 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                 showFooter={false}
                 columns={columns.map((col) => {
                   if (col.field === "deliveryCompany") {
-                    col.render = () => (
+                    col.render = (_, row) => (
                       <FormAutoComplete
                         className="w-[20rem] mx-auto"
                         options={connectedShippingPartners.map(
@@ -103,6 +114,25 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                               </Button>
                             ),
                         }}
+                        onSelectionChange={(k: any) => {
+                          const tmp = [...shipments];
+                          const i = shipments.findIndex(
+                            (s) => s.orderID === row.orderID
+                          );
+
+                          if (i >= 0) {
+                            tmp[i] = {
+                              orderID: row.orderID,
+                              shippingPartnerConnectionID: k,
+                            };
+                          } else {
+                            tmp.push({
+                              orderID: row.orderID,
+                              shippingPartnerConnectionID: k,
+                            });
+                          }
+                          setShipments(tmp);
+                        }}
                         popoverProps={{ radius: "sm" }}
                         size="md"
                         radius="sm"
@@ -120,7 +150,12 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" radius="sm">
+              <Button
+                isLoading={shipOrders.isPending}
+                color="primary"
+                radius="sm"
+                onPress={onCreateShipment}
+              >
                 Create Shipment
               </Button>
             </ModalFooter>
