@@ -38,7 +38,14 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [shipments, setShipments] = useState<
     { orderID: string; shippingPartnerConnectionID: string }[]
-  >([]);
+  >(
+    orders && orders.length > 0
+      ? orders.map((order) => ({
+          orderID: order.orderID,
+          shippingPartnerConnectionID: "automatic",
+        }))
+      : []
+  );
   const { data: connectedShippingPartners = [], isFetching } =
     useConnectedShippingPartnersQuery();
 
@@ -58,7 +65,16 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
   };
 
   const onCreateShipment = () => {
-    shipOrders.mutate({ orders: shipments });
+    shipOrders.mutate({
+      orders: shipments.map((shipment) => ({
+        ...shipment,
+        shippingPartnerConnectionID:
+          shipment.shippingPartnerConnectionID === "automatic"
+            ? connectedShippingPartners[0].shippingPartnerConnection
+                ?.shippingPartnerConnectionID
+            : shipment.shippingPartnerConnectionID,
+      })),
+    });
   };
 
   return (
@@ -87,14 +103,31 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                     col.render = (_, row) => (
                       <FormAutoComplete
                         className="w-[20rem] mx-auto"
-                        options={connectedShippingPartners.map(
-                          (connectedShippingPartner) => ({
-                            label: connectedShippingPartner.shippingPartnerName,
-                            value:
-                              connectedShippingPartner.shippingPartnerConnection
-                                ?.shippingPartnerConnectionID ?? "",
-                          })
-                        )}
+                        options={[
+                          ...(connectedShippingPartners.length > 0
+                            ? [
+                                {
+                                  label: "Automatic Shipment",
+                                  value: "automatic",
+                                },
+                              ]
+                            : []),
+                          ...connectedShippingPartners.map(
+                            (connectedShippingPartner) => ({
+                              label:
+                                connectedShippingPartner.shippingPartnerName,
+                              value:
+                                connectedShippingPartner
+                                  .shippingPartnerConnection
+                                  ?.shippingPartnerConnectionID ?? "",
+                            })
+                          ),
+                        ]}
+                        selectedKey={
+                          connectedShippingPartners.length > 0
+                            ? "automatic"
+                            : undefined
+                        }
                         isLoading={isFetching}
                         variant="bordered"
                         listboxProps={{
@@ -154,6 +187,7 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                 isLoading={shipOrders.isPending}
                 color="primary"
                 radius="sm"
+                isDisabled={connectedShippingPartners.length === 0}
                 onPress={onCreateShipment}
               >
                 Create Shipment
