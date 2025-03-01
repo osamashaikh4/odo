@@ -18,6 +18,7 @@ import { Column } from "../common/Table";
 
 interface RateModalProps {
   orders: Order[];
+  onFinish?: () => void;
   onClose: () => void;
 }
 
@@ -34,7 +35,7 @@ const columns: Column[] = [
   },
 ];
 
-const RateModal = ({ orders, onClose }: RateModalProps) => {
+const RateModal = ({ orders, onClose, onFinish }: RateModalProps) => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [shipments, setShipments] = useState<
@@ -53,6 +54,7 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
   const shipOrders = useShipOrdersMutation({
     onSuccess() {
       onClose();
+      if (onFinish) onFinish();
     },
   });
 

@@ -2,10 +2,10 @@ import axios from "./axios";
 import queryString from "query-string";
 import { Filter } from "../queries/types";
 
-export const getOrders = (filters: Filter) =>
+export const getOrders = ({ type, ...filters }: Filter) =>
   axios
     .get(
-      "/orders?" +
+      `/orders/${type}?` +
         queryString.stringify(filters, {
           skipEmptyString: true,
           skipNull: true,

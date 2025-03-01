@@ -4,6 +4,7 @@ export type MutationParams = {
 };
 
 export type Filter = {
+  type?: string;
   limit: number;
   startDate?: string;
   endDate?: string;

@@ -74,7 +74,7 @@ export const useOrdersQuery = (
   params?: Omit<UseQueryOptions<GetOrdersResponse>, "queryKey">
 ) =>
   useQuery<GetOrdersResponse>({
-    queryKey: ["orders", filters],
+    queryKey: ["pending-orders", filters],
     queryFn: () => getOrders(filters),
     ...params,
   });

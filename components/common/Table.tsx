@@ -175,13 +175,13 @@ const Table = ({
                             onChange={(v: any) => {
                               if (v) {
                                 onFilter({
-                                  startDate: v.start.toString(),
-                                  endDate: v.end.toString(),
+                                  [`${column.field}Start`]: v.start.toString(),
+                                  [`${column.field}End`]: v.end.toString(),
                                 });
                               } else {
                                 onFilter({
-                                  startDate: undefined,
-                                  endDate: undefined,
+                                  [`${column.field}Start`]: undefined,
+                                  [`${column.field}End`]: undefined,
                                 });
                               }
                             }}

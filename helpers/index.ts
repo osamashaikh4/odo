@@ -17,6 +17,7 @@ export const PaymentMethodsMap = PaymentMethods.reduce((acc: any, curr) => {
 
 export const OrderStateMap: { [key: string]: string } = {
   assigned: "Assigned to Warehouse",
+  awaitingPickup: "Awaiting Pickup",
 };
 
 export const isNumber = (e: any, allowDecimal?: boolean) => {

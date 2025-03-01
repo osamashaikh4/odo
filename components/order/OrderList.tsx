@@ -6,9 +6,6 @@ import {
   useExportOrdersMutation,
   useOrdersQuery,
 } from "@/services/queries/order";
-import { NumericFormat } from "react-number-format";
-import moment from "moment";
-import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
 import Image from "next/image";
@@ -19,136 +16,18 @@ import { useWarehouseQuery } from "@/services/queries/warehouse";
 import { onErrorToast } from "@/helpers/toast";
 import OrderDetailsModal from "../shipments/OrderDetailsModal";
 import OrderPrintModal from "../shipments/OrderPrintModal";
-import { IoCartOutline } from "react-icons/io5";
 import OrderItemsModal from "../shipments/OrderItemsModal";
 import { SlPrinter } from "react-icons/sl";
-import { BiEditAlt } from "react-icons/bi";
-import { VscEye } from "react-icons/vsc";
-import { Button, Checkbox } from "@heroui/react";
-import { Column } from "../common/Table";
+import { Button } from "@heroui/react";
+import Tabs from "../common/Tabs";
+import { SelectionMap } from "./OrderListConfig";
 
 interface OrderListProps {
+  type: string;
   searchParams?: { [key: string]: any };
 }
 
-const columns: Column[] = [
-  {
-    field: "orderID",
-    headerName: "",
-    type: "checkbox",
-    render: ({ selection = [], onSelectionChange, row }) => (
-      <Checkbox
-        isSelected={selection.includes(row.orderID)}
-        onValueChange={() => {
-          if (onSelectionChange) {
-            onSelectionChange(row);
-          }
-        }}
-      />
-    ),
-  },
-  { field: "orderNumber", headerName: "Order ID", type: "text" },
-  {
-    field: "orderDate",
-    headerName: "Order Date",
-    render: ({ value }) => (
-      <span className="whitespace-nowrap">
-        {moment(value).format("DD/MM/YYYY hh:mm")}
-      </span>
-    ),
-    type: "date",
-  },
-  {
-    field: "orderState",
-    headerName: "Status",
-    type: "dropdown",
-    render: ({ value }) => (
-      <span className="whitespace-nowrap">{OrderStateMap[value] || value}</span>
-    ),
-  },
-  {
-    field: "warehouse",
-    headerName: "Pickup Location",
-    render: ({ value }) => (
-      <span className="whitespace-nowrap">{value.warehouseName}</span>
-    ),
-    type: "dropdown",
-  },
-  {
-    field: "customerName",
-    headerName: "Customer Name",
-    render: ({ row }) => <>{row.customer.fullName}</>,
-    type: "text",
-  },
-  {
-    field: "address",
-    headerName: "Customer Address",
-    width: 150,
-    render: ({ row }) => (
-      <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
-        {row.address.address}
-      </span>
-    ),
-    type: "text",
-  },
-  {
-    field: "city",
-    headerName: "Destination City",
-    render: ({ row }) => <>{row.address.city}</>,
-    type: "dropdown",
-  },
-  {
-    field: "orderAmount",
-    headerName: "Order Grand Total",
-    render: ({ row }) => (
-      <NumericFormat
-        value={row.orderAmount}
-        thousandSeparator
-        suffix={` ${row.orderCurrency}`}
-        displayType="text"
-      />
-    ),
-    type: "number",
-  },
-  {
-    field: "paymentMethod",
-    headerName: "Payment Method",
-    render: ({ value }) => <>{PaymentMethodsMap[value] || value}</>,
-    type: "dropdown",
-  },
-];
-
-const menuOptions = [
-  {
-    label: "Edit Order",
-    value: "edit-order",
-    icon: <BiEditAlt fontSize="1.125rem" className="text-gray-600" />,
-  },
-  {
-    label: "View Order",
-    value: "view-order",
-    icon: <VscEye fontSize="1.25rem" className="text-gray-600" />,
-  },
-  {
-    label: "Print",
-    value: "print-order",
-    icon: <SlPrinter fontSize="1rem" className="text-gray-600" />,
-  },
-  {
-    label: "Order Items",
-    value: "order-items",
-    icon: <IoCartOutline fontSize="1.125rem" className="text-gray-600" />,
-  },
-  {
-    label: "Create Shipment",
-    value: "create-shipment",
-    icon: (
-      <Image src="/assets/icons/truck.svg" alt="truck" width={22} height={22} />
-    ),
-  },
-];
-
-const OrderList = ({ searchParams }: OrderListProps) => {
+const OrderList = ({ searchParams, type }: OrderListProps) => {
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [orderModal, setOrderModal] = useState<any>(null);
@@ -164,8 +43,10 @@ const OrderList = ({ searchParams }: OrderListProps) => {
 
   const { data: warehouse } = useWarehouseQuery();
 
-  const { data = { results: [], count: 0 }, isFetching } =
-    useOrdersQuery(filters);
+  const { data = { results: [], count: 0 }, isFetching } = useOrdersQuery({
+    ...filters,
+    type,
+  });
 
   const exportOrders = useExportOrdersMutation({});
 
@@ -210,33 +91,55 @@ const OrderList = ({ searchParams }: OrderListProps) => {
         icon="shipment"
         onAdd={() => handleAction("add-order", {})}
       />
+      <Tabs
+        selected={SelectionMap[type].selectedKey}
+        options={[
+          {
+            title: "Pending Orders",
+            key: "pending-orders",
+            href: "/shipments/pending-orders",
+          },
+          {
+            title: "Awaiting Pickup",
+            key: "awaiting-pickup",
+            href: "/shipments/awaiting-pickup",
+          },
+          {
+            title: "All Orders",
+            key: "all-orders",
+            href: "/shipments/all-orders",
+          },
+        ]}
+      />
       <DataGrid
         onSelectionChange={handleSelection}
         onSelectAll={setSelection}
         selection={selection.map((s) => s.orderID)}
         toolbar={
-          <div className="pb-2 pl-3 pr-1 flex items-center justify-between">
+          <div className="pb-2 pr-1 flex items-center justify-between">
             <div className="flex items-center gap-5">
-              <Button
-                isDisabled={selection.length === 0}
-                radius="sm"
-                color="primary"
-                startContent={
-                  <Image
-                    src="/assets/icons/truck-white.svg"
-                    alt="truck"
-                    width={22}
-                    height={22}
-                  />
-                }
-                onPress={() => {
-                  if (selection.length > 0) {
-                    setRateModal(selection);
+              {type === "getPendingOrders" && (
+                <Button
+                  isDisabled={selection.length === 0}
+                  radius="sm"
+                  color="primary"
+                  startContent={
+                    <Image
+                      src="/assets/icons/truck-white.svg"
+                      alt="truck"
+                      width={22}
+                      height={22}
+                    />
                   }
-                }}
-              >
-                Create Shipment
-              </Button>
+                  onPress={() => {
+                    if (selection.length > 0) {
+                      setRateModal(selection);
+                    }
+                  }}
+                >
+                  Create Shipment
+                </Button>
+              )}
               <Button
                 isDisabled={selection.length === 0}
                 variant="light"
@@ -264,12 +167,14 @@ const OrderList = ({ searchParams }: OrderListProps) => {
         count={data.count}
         rows={data.results}
         isLoading={isFetching}
-        options={menuOptions}
-        columns={columns}
+        options={SelectionMap[type].menuOptions}
+        columns={SelectionMap[type].columns}
         entity="orders"
         onFilter={(f) => {
           router.push(
-            `/shipments?${queryString.stringify({ ...filters, ...f })}`
+            `/shipments/${
+              SelectionMap[type].selectedKey
+            }?${queryString.stringify({ ...filters, ...f })}`
           );
         }}
       />
@@ -284,7 +189,11 @@ const OrderList = ({ searchParams }: OrderListProps) => {
         <OrderPrintModal {...printModal} onClose={() => setPrintModal(null)} />
       )}
       {rateModal && (
-        <RateModal orders={rateModal} onClose={() => setRateModal(null)} />
+        <RateModal
+          orders={rateModal}
+          onClose={() => setRateModal(null)}
+          onFinish={() => setSelection([])}
+        />
       )}
       {orderItemsModal && (
         <OrderItemsModal

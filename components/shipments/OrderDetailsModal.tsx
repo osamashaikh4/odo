@@ -244,7 +244,7 @@ const OrderDetailsModal = ({
       </Modal>
       {printModal && (
         <OrderPrintModal
-          orderID={orderID}
+          orderIDs={[orderID]}
           onClose={() => setPrintModal(false)}
         />
       )}
