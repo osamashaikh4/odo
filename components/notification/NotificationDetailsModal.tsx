@@ -38,6 +38,7 @@ const NotificationDetailsModal = ({
             variant="bordered"
             color="primary"
             className="border-small"
+            onPress={onClose}
           >
             Close
           </Button>

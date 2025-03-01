@@ -231,6 +231,82 @@ const getAwaitingPickupOrdersColumns: Column[] = [
   },
 ];
 
+const getAllOrdersColumns: Column[] = [
+  {
+    field: "orderID",
+    headerName: "",
+    type: "checkbox",
+    render: ({ selection = [], onSelectionChange, row }) => (
+      <Checkbox
+        isSelected={selection.includes(row.orderID)}
+        onValueChange={() => {
+          if (onSelectionChange) {
+            onSelectionChange(row);
+          }
+        }}
+      />
+    ),
+  },
+  { field: "orderNumber", headerName: "Order ID", type: "text" },
+  {
+    field: "orderDate",
+    headerName: "Order Date",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">
+        {moment(value).format("DD/MM/YYYY hh:mm")}
+      </span>
+    ),
+    type: "date",
+  },
+  {
+    field: "orderState",
+    headerName: "Status",
+    type: "dropdown",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">{OrderStateMap[value] || value}</span>
+    ),
+  },
+  {
+    field: "warehouse",
+    headerName: "Pickup Location",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">{value.warehouseName}</span>
+    ),
+    type: "dropdown",
+  },
+  {
+    field: "customerName",
+    headerName: "Customer Name",
+    render: ({ row }) => <>{row.customer.fullName}</>,
+    type: "text",
+  },
+  {
+    field: "orderAmount",
+    headerName: "Order Grand Total",
+    render: ({ row }) => (
+      <NumericFormat
+        value={row.orderAmount}
+        thousandSeparator
+        suffix={` ${row.orderCurrency}`}
+        displayType="text"
+      />
+    ),
+    type: "number",
+  },
+  {
+    field: "paymentMethod",
+    headerName: "Payment Method",
+    render: ({ value }) => <>{PaymentMethodsMap[value] || value}</>,
+    type: "dropdown",
+  },
+  {
+    field: "shipmentNumber",
+    headerName: "Shipment Number",
+    render: ({ row }) => <>{row.shipment.shipmentNumber}</>,
+    type: "text",
+  },
+];
+
 export const SelectionMap: {
   [key: string]: { selectedKey: string; columns: Column[]; menuOptions: any[] };
 } = {
@@ -243,5 +319,10 @@ export const SelectionMap: {
     selectedKey: "awaiting-pickup",
     menuOptions: getAwaitingPickupOrdersMenuOptions,
     columns: getAwaitingPickupOrdersColumns,
+  },
+  getAllOrders: {
+    selectedKey: "all-orders",
+    columns: getAllOrdersColumns,
+    menuOptions: getAwaitingPickupOrdersMenuOptions,
   },
 };
