@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useOrderQuery } from "@/services/queries/order";
+import { useOrderQuery, useOrdersDetailQuery } from "@/services/queries/order";
 import {
   Modal,
   ModalBody,
@@ -9,17 +9,17 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { RxCross2 } from "react-icons/rx";
-import { PDFViewer } from "@react-pdf/renderer";
+import { Document, PDFViewer } from "@react-pdf/renderer";
 import OrderDetailsDocument from "./OrderDetailsDocument";
 
 interface OrderPrintModalProps {
-  orderID: string;
+  orderIDs: string[];
   onClose: () => void;
 }
 
-const OrderPrintModal = ({ orderID, onClose }: OrderPrintModalProps) => {
+const OrderPrintModal = ({ orderIDs, onClose }: OrderPrintModalProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { data, isFetching } = useOrderQuery(orderID);
+  const { data, isFetching } = useOrdersDetailQuery(orderIDs);
 
   useEffect(() => {
     onOpen();
@@ -57,7 +57,11 @@ const OrderPrintModal = ({ orderID, onClose }: OrderPrintModalProps) => {
               )}
               {data && (
                 <PDFViewer width="100%" height="100%">
-                  <OrderDetailsDocument order={data} />
+                  <Document>
+                    {data.map((d) => (
+                      <OrderDetailsDocument key={d.orderID} order={d} />
+                    ))}
+                  </Document>
                 </PDFViewer>
               )}
             </ModalBody>

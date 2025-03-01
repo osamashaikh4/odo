@@ -6,6 +6,7 @@ import {
   getOrder,
   getOrderNumber,
   getOrders,
+  getOrdersDetail,
   shipOrders,
   updateOrder,
 } from "../api/order";
@@ -85,6 +86,16 @@ export const useOrderQuery = (
   useQuery<Order>({
     queryKey: ["order", orderID],
     queryFn: () => getOrder(orderID),
+    ...params,
+  });
+
+export const useOrdersDetailQuery = (
+  orderIDs: string[],
+  params?: Omit<UseQueryOptions<Order[]>, "queryKey">
+) =>
+  useQuery<Order[]>({
+    queryKey: ["orders-detail", ...orderIDs],
+    queryFn: () => getOrdersDetail(orderIDs),
     ...params,
   });
 

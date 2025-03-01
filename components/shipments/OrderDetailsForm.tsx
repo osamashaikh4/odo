@@ -175,7 +175,6 @@ const OrderDetailsForm = ({
             label="Payment Method"
             options={PaymentMethods}
           />
-
           <div className="flex items-baseline">
             <FormInput
               className="w-full"

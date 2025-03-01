@@ -76,8 +76,9 @@ const Notification = () => {
                   </div>
                 ) : (
                   <EmptyRecords
-                    title="You don't have any new notifications in this date period."
-                    description="You can select other date periods to see older notifications."
+                    className="p-4"
+                    title="You don't have any new notifications."
+                    description="When you do they will appear here."
                   />
                 )
               }

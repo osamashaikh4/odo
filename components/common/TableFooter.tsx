@@ -1,6 +1,11 @@
+import React from "react";
 import { cn } from "@/helpers";
 import { Pagination, PaginationItemType, PaginationProps } from "@heroui/react";
-import React from "react";
+
+interface TableFooterProps {
+  total: PaginationProps["total"];
+  initialPage: PaginationProps["initialPage"];
+}
 
 export const ChevronIcon = (props: any) => {
   return (
@@ -82,13 +87,8 @@ const renderItem = ({
   );
 };
 
-const TableFooter = ({
-  total,
-  initialPage,
-}: {
-  total: PaginationProps["total"];
-  initialPage: PaginationProps["initialPage"];
-}) => {
+const TableFooter = ({ total, initialPage }: TableFooterProps) => {
+  console.log(total);
   return (
     <div className="flex items-center justify-between p-4">
       <div></div>

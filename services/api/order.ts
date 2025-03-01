@@ -14,7 +14,12 @@ export const getOrders = (filters: Filter) =>
     .then((res) => res.data);
 
 export const getOrder = (orderID: string) =>
-  axios.get("/orders/" + orderID).then((res) => res.data);
+  axios.get(`/orders/${orderID}`).then((res) => res.data);
+
+export const getOrdersDetail = (orderIDs: string[]) =>
+  axios
+    .get(`/orders/getOrdersDetail?${queryString.stringify({ orderIDs })}`)
+    .then((res) => res.data);
 
 export const getOrderNumber = () =>
   axios.get("/orders/getOrderNumber").then((res) => res.data);

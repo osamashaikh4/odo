@@ -1,7 +1,7 @@
 import { cn } from "@/helpers";
 import React from "react";
 import Menu, { MenuProps } from "./Menu";
-import { Button, DateRangePicker } from "@heroui/react";
+import { Button, Checkbox, DateRangePicker } from "@heroui/react";
 import { LuEllipsis } from "react-icons/lu";
 import FilterList from "./FilterList";
 import FilterInput from "./FilterInput";
@@ -13,7 +13,13 @@ export type Column = {
   width?: string | number;
   headerName: string;
   type?: string;
-  render?: (value: any, row: any) => React.ReactElement;
+  render?: (def: {
+    value: any;
+    row: any;
+    column: Column;
+    selection?: string[];
+    onSelectionChange?: (selection: any[]) => void;
+  }) => React.ReactElement;
 };
 
 export interface TableProps {
@@ -26,6 +32,7 @@ export interface TableProps {
   entity?: string;
   filters: any;
   showEmptyMessage?: boolean;
+  selection?: string[];
   options?: MenuProps["options"];
   outerAction?: (row: any) => React.ReactNode;
   onFilter?: (filter: any) => void;
@@ -35,10 +42,12 @@ export interface TableProps {
     thead?: string;
     tbody?: string;
   };
+  onSelectAll?: (selection: any[]) => void;
+  onSelectionChange?: (selection: any) => void;
   renderRow?: (row: any, columns: Column[]) => React.ReactNode;
 }
 
-export default function Table({
+const Table = ({
   columns,
   rows,
   isLoading,
@@ -52,7 +61,10 @@ export default function Table({
   classNames,
   showEmptyMessage = true,
   renderRow,
-}: TableProps) {
+  selection = [],
+  onSelectionChange,
+  onSelectAll,
+}: TableProps) => {
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto">
@@ -101,6 +113,23 @@ export default function Table({
                             onChange={(e) =>
                               onFilter({ [column.field]: e.target.value })
                             }
+                          />
+                        ) : column.type === "checkbox" ? (
+                          <Checkbox
+                            isDisabled={rows.length === 0}
+                            isSelected={
+                              selection.length > 0 &&
+                              selection.length === rows.length
+                            }
+                            onValueChange={() => {
+                              if (onSelectAll) {
+                                if (selection.length === rows.length) {
+                                  onSelectAll([]);
+                                } else {
+                                  onSelectAll(rows);
+                                }
+                              }
+                            }}
                           />
                         ) : column.type === "number" ? (
                           <div className="flex items-center gap-2">
@@ -211,7 +240,13 @@ export default function Table({
                             }}
                           >
                             {column.render ? (
-                              column.render(row[column.field], row)
+                              column.render({
+                                value: row[column.field],
+                                row,
+                                column,
+                                selection,
+                                onSelectionChange,
+                              })
                             ) : (
                               <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
                                 {row[column.field]}
@@ -238,7 +273,7 @@ export default function Table({
                   )
                 ) : showEmptyMessage ? (
                   <tr className="hover:bg-foreground-50 h-12">
-                    <td colSpan={6}>
+                    <td colSpan={12}>
                       <EmptyRecords />
                     </td>
                   </tr>
@@ -250,4 +285,6 @@ export default function Table({
       </div>
     </div>
   );
-}
+};
+
+export default Table;

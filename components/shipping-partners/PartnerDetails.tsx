@@ -14,6 +14,7 @@ import {
 } from "@/services/queries/shipping-partner";
 import EmptyRecords from "../common/EmptyRecords";
 import { useRouter } from "next/navigation";
+import FormSelect from "../common/FormSelect";
 
 interface PartnerDetailsProps {
   id: string;
@@ -285,30 +286,42 @@ const PartnerDetails = ({ id, connectionID }: PartnerDetailsProps) => {
                   }
                 />
                 {/* Dropdown CC_CASH, PP_PM */}
-                <FormInput
+                <FormSelect
                   label="payType"
                   name="payType"
+                  className="w-full"
                   labelPlacement="outside"
                   isRequired
-                  defaultValue={
+                  options={["PP_PM", "CC_CASH"].map((c) => ({
+                    label: c,
+                    value: c,
+                  }))}
+                  variant="bordered"
+                  defaultSelectedKeys={
                     shippingPartner?.shippingPartnerConnection?.fields
-                      ? shippingPartner.shippingPartnerConnection.fields.payType
-                      : "PP_PM"
+                      ? [
+                          shippingPartner.shippingPartnerConnection.fields
+                            .payType,
+                        ]
+                      : ["PP_PM"]
                   }
-                  placeholder=" "
                 />
                 {/* Dropdown 0, 1 */}
-                <FormInput
+                <FormSelect
                   label="isNeedOfferFee"
                   name="isNeedOfferFee"
+                  className="w-full"
                   labelPlacement="outside"
                   isRequired
-                  placeholder=" "
-                  defaultValue={
+                  options={["0", "1"].map((c) => ({ label: c, value: c }))}
+                  variant="bordered"
+                  defaultSelectedKeys={
                     shippingPartner?.shippingPartnerConnection?.fields
-                      ? shippingPartner.shippingPartnerConnection.fields
-                          .isNeedOfferFee
-                      : "1"
+                      ? [
+                          shippingPartner.shippingPartnerConnection.fields
+                            .isNeedOfferFee,
+                        ]
+                      : ["1"]
                   }
                 />
                 {/* Dropdown True, False */}
@@ -337,6 +350,7 @@ const PartnerDetails = ({ id, connectionID }: PartnerDetailsProps) => {
                     type="submit"
                     color="primary"
                     radius="sm"
+                    isLoading={testConnection.isPending}
                     startContent={<FaPlug fontSize="1rem" />}
                   >
                     Test Connection

@@ -14,18 +14,19 @@ import { useRouter } from "next/navigation";
 import { RxCross2 } from "react-icons/rx";
 import FormAutoComplete from "../common/FormAutoComplete";
 import { useConnectedShippingPartnersQuery } from "@/services/queries/shipping-partner";
+import { Column } from "../common/Table";
 
 interface RateModalProps {
   orders: Order[];
   onClose: () => void;
 }
 
-const columns = [
+const columns: Column[] = [
   { field: "orderNumber", headerName: "Order ID" },
   {
     field: "city",
     headerName: "Destination",
-    render: (_: string, row: Order) => <>{row.address.city}</>,
+    render: ({ row }) => <>{row.address.city}</>,
   },
   {
     field: "deliveryCompany",
@@ -85,7 +86,7 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
       isDismissable={false}
       onOpenChange={handleClose}
       closeButton={<RxCross2 fontSize="2.5rem" color="#171717" />}
-      className="max-h-[calc(100%_-_4rem)] max-w-[88rem]"
+      className="max-h-[calc(100%_-_4rem)] max-w-[80rem]"
       classNames={{ backdrop: "modal-backdrop" }}
     >
       <ModalContent>
@@ -100,7 +101,7 @@ const RateModal = ({ orders, onClose }: RateModalProps) => {
                 showFooter={false}
                 columns={columns.map((col) => {
                   if (col.field === "deliveryCompany") {
-                    col.render = (_, row) => (
+                    col.render = ({ row }: { row: Order }) => (
                       <FormAutoComplete
                         className="w-[20rem] mx-auto"
                         options={[

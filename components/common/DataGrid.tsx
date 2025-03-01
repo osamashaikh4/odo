@@ -25,6 +25,9 @@ const DataGrid = ({
   classNames,
   toolbar,
   showFooter = true,
+  selection,
+  onSelectionChange,
+  onSelectAll,
 }: DataGridProps) => {
   return (
     <div
@@ -44,12 +47,15 @@ const DataGrid = ({
         filters={filters}
         onAction={onAction}
         rows={rows}
+        onSelectAll={onSelectAll}
+        onSelectionChange={onSelectionChange}
+        selection={selection}
         outerAction={outerAction}
         onFilter={onFilter}
       />
       {showFooter && (
         <TableFooter
-          total={count}
+          total={Math.ceil(count / filters.limit)}
           initialPage={filters.limit / filters.offset + 1}
         />
       )}
