@@ -7,6 +7,7 @@ import {
   removeConnection,
   saveIntegration,
   syncOrders,
+  syncProducts,
 } from "../api/integration";
 import { MutationParams } from "./types";
 import { defaultParams } from "./utils";
@@ -85,6 +86,13 @@ export const useRemoveConnectionMutation = (params: MutationParams) =>
 export const useSyncOrdersMutation = (params: MutationParams) =>
   useMutation({
     mutationFn: syncOrders,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useSyncProductsMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: syncProducts,
     ...params,
     ...defaultParams(params),
   });

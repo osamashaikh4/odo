@@ -18,6 +18,11 @@ const Options: any = [
     icon: <GoSync fontSize="1rem" />,
   },
   {
+    label: "Sync Products",
+    value: "sync-products",
+    icon: <GoSync fontSize="1rem" />,
+  },
+  {
     label: "Remove",
     value: "remove",
     icon: <LuTrash2 className="text-danger" fontSize="1rem" />,

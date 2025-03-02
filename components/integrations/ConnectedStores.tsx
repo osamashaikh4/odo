@@ -5,6 +5,7 @@ import {
   Integration,
   useConnectionsQuery,
   useRemoveConnectionMutation,
+  useSyncProductsMutation,
 } from "@/services/queries/integration";
 import { Spinner } from "@heroui/react";
 import ConnectedStoreCard from "./ConnectedStoreCard";
@@ -29,6 +30,8 @@ const ConnectedStores = () => {
   const { data: warehouse } = useWarehouseQuery();
   const { data: connections = [], isFetching } = useConnectionsQuery();
 
+  const syncProducts = useSyncProductsMutation({});
+
   const removeConnection = useRemoveConnectionMutation({
     onSuccess() {
       queryClient.invalidateQueries({
@@ -47,6 +50,8 @@ const ConnectedStores = () => {
           response: { data: { error: "Please add a pickup location first" } },
         });
       }
+    } else if (action === "sync-products") {
+      syncProducts.mutate({ integrationID: data?.integration?.integrationID });
     } else if (action === "remove") {
       if (data) setAlert(data);
     } else if (action === "confirm-remove") {

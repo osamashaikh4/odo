@@ -22,3 +22,6 @@ export const removeConnection = (id: string) =>
 
 export const syncOrders = (data: any) =>
   axios.post("/integrations/sync-orders", data).then((res) => res.data);
+
+export const syncProducts = (data: any) =>
+  axios.post("/integrations/sync-products", data).then((res) => res.data);
