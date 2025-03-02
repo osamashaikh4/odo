@@ -24,6 +24,7 @@ import Tabs from "../common/Tabs";
 import { SelectionMap } from "./OrderListConfig";
 import CancelModal from "../shipments/CancelModal";
 import { useQueryClient } from "@tanstack/react-query";
+import { BsPlus } from "react-icons/bs";
 
 interface OrderListProps {
   type: string;
@@ -69,9 +70,11 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
     ...searchParams,
   };
 
-  const { data: warehouse } = useWarehouseQuery();
+  const { data: warehouse, isLoading: isGettingWarehouse } =
+    useWarehouseQuery();
+
   const reallocateOrder = useReallocateOrderMutation({
-    onSuccess(data) {
+    onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
@@ -126,7 +129,17 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
       <SectionHeader
         title="Shipments"
         icon="shipment"
-        onAdd={() => handleAction("add-order", {})}
+        rightAction={
+          <Button
+            isDisabled={isGettingWarehouse}
+            radius="sm"
+            color="primary"
+            onPress={() => handleAction("add-order", {})}
+            startContent={<BsPlus className="h-6 w-6" />}
+          >
+            Add Order
+          </Button>
+        }
       />
       <Tabs selected={SelectionMap[type].selectedKey} options={tabs} />
       <DataGrid

@@ -24,7 +24,7 @@ interface OrderModalProps {
 
 const OrderModal = ({ onClose }: OrderModalProps) => {
   const queryClient = useQueryClient();
-  const submitButtoRef = useRef<HTMLButtonElement>(null);
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
   const [active, setActive] = useState(0);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [values, setValues] = useState({});
@@ -147,7 +147,7 @@ const OrderModal = ({ onClose }: OrderModalProps) => {
                   <OrderDetailsForm />
                 )}
                 <button
-                  ref={submitButtoRef}
+                  ref={submitButtonRef}
                   type="submit"
                   className="invisible"
                 />
@@ -181,7 +181,7 @@ const OrderModal = ({ onClose }: OrderModalProps) => {
                 }
                 isLoading={createOrder.isPending}
                 onPress={() => {
-                  if (submitButtoRef.current) submitButtoRef.current.click();
+                  if (submitButtonRef.current) submitButtonRef.current.click();
                 }}
               >
                 {active === 1 ? "Add" : "Next Step"}

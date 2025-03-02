@@ -10,7 +10,7 @@ import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
 import { NumericFormat } from "react-number-format";
 import { MdBlockFlipped } from "react-icons/md";
 
-const icons: { [key: string]: any } = {
+export const OrderIcons: { [key: string]: any } = {
   edit: <BiEditAlt size={18} className="text-gray-600" />,
   view: <VscEye size={18} className="text-gray-600" />,
   print: <SlPrinter size={16} className="text-gray-600" />,
@@ -25,34 +25,34 @@ const getPendingOrdersMenuOptions = [
   {
     label: "Edit Order",
     value: "edit-order",
-    icon: icons.edit,
+    icon: OrderIcons.edit,
   },
   {
     label: "View Order",
     value: "view-order",
-    icon: icons.view,
+    icon: OrderIcons.view,
   },
   {
     label: "Print",
     value: "print-order",
-    icon: icons.print,
+    icon: OrderIcons.print,
   },
   {
     label: "Order Items",
     value: "order-items",
-    icon: icons.cart,
+    icon: OrderIcons.cart,
   },
   {
     label: "Create Shipment",
     value: "create-shipment",
-    icon: icons.truck,
+    icon: OrderIcons.truck,
   },
   {
     label: "Cancel Order",
     value: "cancel-order",
     color: "danger",
     className: "text-danger",
-    icon: icons.block,
+    icon: OrderIcons.block,
   },
 ];
 
@@ -147,24 +147,24 @@ const getAwaitingPickupOrdersMenuOptions = [
   {
     label: "View Order",
     value: "view-order",
-    icon: icons.view,
+    icon: OrderIcons.view,
   },
   {
     label: "Print",
     value: "print-order",
-    icon: icons.print,
+    icon: OrderIcons.print,
   },
   {
     label: "Order Items",
     value: "order-items",
-    icon: icons.cart,
+    icon: OrderIcons.cart,
   },
   {
     label: "Cancel Order",
     value: "cancel-order",
     color: "danger",
     className: "text-danger",
-    icon: icons.block,
+    icon: OrderIcons.block,
   },
 ];
 
@@ -172,22 +172,22 @@ const getCanceledOrdersMenuOptions = [
   {
     label: "View Order",
     value: "view-order",
-    icon: icons.view,
+    icon: OrderIcons.view,
   },
   {
     label: "Print",
     value: "print-order",
-    icon: icons.print,
+    icon: OrderIcons.print,
   },
   {
     label: "Order Items",
     value: "order-items",
-    icon: icons.cart,
+    icon: OrderIcons.cart,
   },
   {
     label: "Reallocate Order",
     value: "reallocate-order",
-    icon: icons.truck,
+    icon: OrderIcons.truck,
   },
 ];
 

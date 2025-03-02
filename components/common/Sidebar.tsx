@@ -4,6 +4,7 @@ import Image from "next/image";
 import { cn } from "@/helpers";
 import { Avatar, Button } from "@heroui/react";
 import UserAvatar from "./UserAvatar";
+import { BsBasket, BsBasket2 } from "react-icons/bs";
 
 interface SidebarProps {
   active: string;
@@ -42,6 +43,11 @@ const SidebarItems = [
     icon: (
       <Image src="/assets/icons/truck.svg" alt="truck" width={30} height={30} />
     ),
+  },
+  {
+    label: "Products",
+    value: "products",
+    icon: <BsBasket2 size={22} />,
   },
   {
     label: "Pickup Location",
