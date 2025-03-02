@@ -8,12 +8,14 @@ import {
   getOrderNumber,
   getOrders,
   getOrdersDetail,
+  getProductsAutoComplete,
   reallocateOrder,
   shipOrders,
   updateOrder,
 } from "../api/order";
 import { Filter, MutationParams } from "./types";
 import { defaultParams } from "./utils";
+import { Product } from "./product";
 
 export type Order = {
   orderID: string;
@@ -129,6 +131,16 @@ export const useCustomerSuggestionQuery = (
   useQuery<CustomerSuggestion[]>({
     queryKey: ["customer-suggestion", search],
     queryFn: () => getCustomerSuggestion(search),
+    ...params,
+  });
+
+export const useProductsAutoCompleteQuery = (
+  search?: string,
+  params?: Omit<UseQueryOptions<Product[]>, "queryKey">
+) =>
+  useQuery<Product[]>({
+    queryKey: ["products-autocomplete", search],
+    queryFn: () => getProductsAutoComplete(search),
     ...params,
   });
 

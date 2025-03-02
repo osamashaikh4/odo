@@ -35,6 +35,11 @@ export const getCustomerSuggestion = (search?: string) =>
     .get(`/orders/getCustomerSuggestion${search ? `?search=${search}` : ""}`)
     .then((res) => res.data);
 
+export const getProductsAutoComplete = (search?: string) =>
+  axios
+    .get(`/orders/getProductsAutoComplete${search ? `?search=${search}` : ""}`)
+    .then((res) => res.data);
+
 export const exportOrders = () =>
   axios.post("/orders/export").then((res) => res.data);
 
