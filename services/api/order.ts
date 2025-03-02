@@ -40,3 +40,6 @@ export const exportOrders = () =>
 
 export const shipOrders = (data: any) =>
   axios.post("/orders/shipment", data).then((res) => res.data);
+
+export const cancelOrder = ({ orderID, ...data }: any) =>
+  axios.post(`/orders/${orderID}/cancel`, data).then((res) => res.data);

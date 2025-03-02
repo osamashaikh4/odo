@@ -8,34 +8,51 @@ import { Column } from "../common/Table";
 import moment from "moment";
 import { OrderStateMap, PaymentMethodsMap } from "@/helpers";
 import { NumericFormat } from "react-number-format";
+import { MdBlockFlipped } from "react-icons/md";
+
+const icons: { [key: string]: any } = {
+  edit: <BiEditAlt size={18} className="text-gray-600" />,
+  view: <VscEye size={18} className="text-gray-600" />,
+  print: <SlPrinter size={16} className="text-gray-600" />,
+  cart: <IoCartOutline size={18} className="text-gray-600" />,
+  truck: (
+    <Image src="/assets/icons/truck.svg" alt="truck" width={22} height={22} />
+  ),
+  block: <MdBlockFlipped size={16} className="text-red-600" />,
+};
 
 const getPendingOrdersMenuOptions = [
   {
     label: "Edit Order",
     value: "edit-order",
-    icon: <BiEditAlt fontSize="1.125rem" className="text-gray-600" />,
+    icon: icons.edit,
   },
   {
     label: "View Order",
     value: "view-order",
-    icon: <VscEye fontSize="1.25rem" className="text-gray-600" />,
+    icon: icons.view,
   },
   {
     label: "Print",
     value: "print-order",
-    icon: <SlPrinter fontSize="1rem" className="text-gray-600" />,
+    icon: icons.print,
   },
   {
     label: "Order Items",
     value: "order-items",
-    icon: <IoCartOutline fontSize="1.125rem" className="text-gray-600" />,
+    icon: icons.cart,
   },
   {
     label: "Create Shipment",
     value: "create-shipment",
-    icon: (
-      <Image src="/assets/icons/truck.svg" alt="truck" width={22} height={22} />
-    ),
+    icon: icons.truck,
+  },
+  {
+    label: "Cancel Order",
+    value: "cancel-order",
+    color: "danger",
+    className: "text-danger",
+    icon: icons.block,
   },
 ];
 
@@ -130,12 +147,40 @@ const getAwaitingPickupOrdersMenuOptions = [
   {
     label: "View Order",
     value: "view-order",
-    icon: <VscEye fontSize="1.25rem" className="text-gray-600" />,
+    icon: icons.view,
+  },
+  {
+    label: "Print",
+    value: "print-order",
+    icon: icons.print,
   },
   {
     label: "Order Items",
     value: "order-items",
-    icon: <IoCartOutline fontSize="1.125rem" className="text-gray-600" />,
+    icon: icons.cart,
+  },
+];
+
+const getCanceledOrdersMenuOptions = [
+  {
+    label: "View Order",
+    value: "view-order",
+    icon: icons.view,
+  },
+  {
+    label: "Reallocate Order",
+    value: "reallocate-order",
+    icon: icons.truck,
+  },
+  {
+    label: "Print",
+    value: "print-order",
+    icon: icons.print,
+  },
+  {
+    label: "Order Items",
+    value: "order-items",
+    icon: icons.cart,
   },
 ];
 
@@ -307,6 +352,55 @@ const getAllOrdersColumns: Column[] = [
   },
 ];
 
+const getCanceledOrdersColumns: Column[] = [
+  {
+    field: "orderID",
+    headerName: "",
+    type: "checkbox",
+    render: ({ selection = [], onSelectionChange, row }) => (
+      <Checkbox
+        isSelected={selection.includes(row.orderID)}
+        onValueChange={() => {
+          if (onSelectionChange) {
+            onSelectionChange(row);
+          }
+        }}
+      />
+    ),
+  },
+  { field: "orderNumber", headerName: "Order ID", type: "text" },
+  {
+    field: "orderDate",
+    headerName: "Order Date",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">
+        {moment(value).format("DD/MM/YYYY hh:mm")}
+      </span>
+    ),
+    type: "date",
+  },
+  {
+    field: "orderState",
+    headerName: "Status",
+    type: "dropdown",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">{OrderStateMap[value] || value}</span>
+    ),
+  },
+  {
+    field: "customerName",
+    headerName: "Customer Name",
+    render: ({ row }) => <>{row.customer.fullName}</>,
+    type: "text",
+  },
+  {
+    field: "cancellationReason",
+    headerName: "Cancel Reason",
+    render: ({ row }) => <>{row.cancellation.cancellationReason}</>,
+    type: "text",
+  },
+];
+
 export const SelectionMap: {
   [key: string]: { selectedKey: string; columns: Column[]; menuOptions: any[] };
 } = {
@@ -324,5 +418,10 @@ export const SelectionMap: {
     selectedKey: "all-orders",
     columns: getAllOrdersColumns,
     menuOptions: getAwaitingPickupOrdersMenuOptions,
+  },
+  getCanceledOrders: {
+    selectedKey: "canceled-orders",
+    columns: getCanceledOrdersColumns,
+    menuOptions: getCanceledOrdersMenuOptions,
   },
 };

@@ -21,11 +21,35 @@ import { SlPrinter } from "react-icons/sl";
 import { Button } from "@heroui/react";
 import Tabs from "../common/Tabs";
 import { SelectionMap } from "./OrderListConfig";
+import CancelModal from "../shipments/CancelModal";
 
 interface OrderListProps {
   type: string;
   searchParams?: { [key: string]: any };
 }
+
+const tabs = [
+  {
+    title: "Pending Orders",
+    key: "pending-orders",
+    href: "/shipments/pending-orders",
+  },
+  {
+    title: "Awaiting Pickup",
+    key: "awaiting-pickup",
+    href: "/shipments/awaiting-pickup",
+  },
+  {
+    title: "Canceled Orders",
+    key: "canceled-orders",
+    href: "/shipments/canceled-orders",
+  },
+  {
+    title: "All Orders",
+    key: "all-orders",
+    href: "/shipments/all-orders",
+  },
+];
 
 const OrderList = ({ searchParams, type }: OrderListProps) => {
   const router = useRouter();
@@ -34,6 +58,7 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
   const [orderItemsModal, setOrderItemsModal] = useState<any>(null);
   const [printModal, setPrintModal] = useState<any>(null);
   const [selection, setSelection] = useState<Order[]>([]);
+  const [cancelModal, setCancelModal] = useState<Order | null>(null);
   const [rateModal, setRateModal] = useState<Order[] | null>(null);
   const filters = {
     limit: 10,
@@ -69,6 +94,9 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
       setPrintModal({ orderIDs: [data.orderID] });
     } else if (action === "order-items") {
       setOrderItemsModal({ orderID: data.orderID });
+    } else if (action === "cancel-order") {
+      setCancelModal(data);
+    } else if (action === "reallocate-order") {
     }
   };
 
@@ -91,26 +119,7 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
         icon="shipment"
         onAdd={() => handleAction("add-order", {})}
       />
-      <Tabs
-        selected={SelectionMap[type].selectedKey}
-        options={[
-          {
-            title: "Pending Orders",
-            key: "pending-orders",
-            href: "/shipments/pending-orders",
-          },
-          {
-            title: "Awaiting Pickup",
-            key: "awaiting-pickup",
-            href: "/shipments/awaiting-pickup",
-          },
-          {
-            title: "All Orders",
-            key: "all-orders",
-            href: "/shipments/all-orders",
-          },
-        ]}
-      />
+      <Tabs selected={SelectionMap[type].selectedKey} options={tabs} />
       <DataGrid
         onSelectionChange={handleSelection}
         onSelectAll={setSelection}
@@ -187,6 +196,9 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
       )}
       {printModal && (
         <OrderPrintModal {...printModal} onClose={() => setPrintModal(null)} />
+      )}
+      {cancelModal && (
+        <CancelModal {...cancelModal} onClose={() => setCancelModal(null)} />
       )}
       {rateModal && (
         <RateModal
