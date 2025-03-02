@@ -159,6 +159,13 @@ const getAwaitingPickupOrdersMenuOptions = [
     value: "order-items",
     icon: icons.cart,
   },
+  {
+    label: "Cancel Order",
+    value: "cancel-order",
+    color: "danger",
+    className: "text-danger",
+    icon: icons.block,
+  },
 ];
 
 const getCanceledOrdersMenuOptions = [
@@ -166,11 +173,6 @@ const getCanceledOrdersMenuOptions = [
     label: "View Order",
     value: "view-order",
     icon: icons.view,
-  },
-  {
-    label: "Reallocate Order",
-    value: "reallocate-order",
-    icon: icons.truck,
   },
   {
     label: "Print",
@@ -181,6 +183,11 @@ const getCanceledOrdersMenuOptions = [
     label: "Order Items",
     value: "order-items",
     icon: icons.cart,
+  },
+  {
+    label: "Reallocate Order",
+    value: "reallocate-order",
+    icon: icons.truck,
   },
 ];
 

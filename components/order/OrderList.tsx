@@ -5,6 +5,7 @@ import {
   Order,
   useExportOrdersMutation,
   useOrdersQuery,
+  useReallocateOrderMutation,
 } from "@/services/queries/order";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
@@ -22,6 +23,7 @@ import { Button } from "@heroui/react";
 import Tabs from "../common/Tabs";
 import { SelectionMap } from "./OrderListConfig";
 import CancelModal from "../shipments/CancelModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OrderListProps {
   type: string;
@@ -53,6 +55,7 @@ const tabs = [
 
 const OrderList = ({ searchParams, type }: OrderListProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [orderModal, setOrderModal] = useState<any>(null);
   const [orderItemsModal, setOrderItemsModal] = useState<any>(null);
@@ -67,6 +70,11 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
   };
 
   const { data: warehouse } = useWarehouseQuery();
+  const reallocateOrder = useReallocateOrderMutation({
+    onSuccess(data) {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
 
   const { data = { results: [], count: 0 }, isFetching } = useOrdersQuery({
     ...filters,
@@ -97,6 +105,7 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
     } else if (action === "cancel-order") {
       setCancelModal(data);
     } else if (action === "reallocate-order") {
+      reallocateOrder.mutate({ orderID: data.orderID });
     }
   };
 

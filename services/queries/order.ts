@@ -8,6 +8,7 @@ import {
   getOrderNumber,
   getOrders,
   getOrdersDetail,
+  reallocateOrder,
   shipOrders,
   updateOrder,
 } from "../api/order";
@@ -75,7 +76,7 @@ export const useOrdersQuery = (
   params?: Omit<UseQueryOptions<GetOrdersResponse>, "queryKey">
 ) =>
   useQuery<GetOrdersResponse>({
-    queryKey: ["pending-orders", filters],
+    queryKey: ["orders", filters],
     queryFn: () => getOrders(filters),
     ...params,
   });
@@ -145,9 +146,16 @@ export const useShipOrdersMutation = (params: MutationParams) =>
     ...defaultParams(params),
   });
 
-export const useCancelOrdersMutation = (params: MutationParams) =>
+export const useCancelOrderMutation = (params: MutationParams) =>
   useMutation({
     mutationFn: cancelOrder,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useReallocateOrderMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: reallocateOrder,
     ...params,
     ...defaultParams(params),
   });

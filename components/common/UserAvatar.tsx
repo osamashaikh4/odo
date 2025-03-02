@@ -31,7 +31,7 @@ const UserAvatar = () => {
     }
   };
 
-  return (
+  return user ? (
     <Menu options={MenuItems} onAction={handleActions} placement="right-end">
       <Button
         radius="sm"
@@ -46,7 +46,7 @@ const UserAvatar = () => {
         </div>
       </Button>
     </Menu>
-  );
+  ) : null;
 };
 
 export default UserAvatar;

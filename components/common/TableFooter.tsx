@@ -88,7 +88,6 @@ const renderItem = ({
 };
 
 const TableFooter = ({ total, initialPage }: TableFooterProps) => {
-  console.log(total);
   return (
     <div className="flex items-center justify-between p-4">
       <div></div>

@@ -43,3 +43,6 @@ export const shipOrders = (data: any) =>
 
 export const cancelOrder = ({ orderID, ...data }: any) =>
   axios.post(`/orders/${orderID}/cancel`, data).then((res) => res.data);
+
+export const reallocateOrder = ({ orderID, ...data }: any) =>
+  axios.post(`/orders/${orderID}/reallocate`, data).then((res) => res.data);

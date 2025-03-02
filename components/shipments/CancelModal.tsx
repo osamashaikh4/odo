@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Order, useCancelOrdersMutation } from "@/services/queries/order";
+import { Order, useCancelOrderMutation } from "@/services/queries/order";
 import {
   Button,
   Form,
@@ -14,16 +14,23 @@ import { FaSave } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import FormInput from "../common/FormInput";
 import FormTextArea from "../common/FormTextArea";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CancelModalProps extends Order {
   onClose: () => void;
 }
 
 const CancelModal = ({ orderID, orderNumber, onClose }: CancelModalProps) => {
+  const queryClient = useQueryClient();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  const cancelOrder = useCancelOrdersMutation({});
+  const cancelOrder = useCancelOrderMutation({
+    onSuccess(data) {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      onClose();
+    },
+  });
 
   useEffect(() => {
     onOpen();
