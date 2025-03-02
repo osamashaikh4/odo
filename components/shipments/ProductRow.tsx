@@ -5,6 +5,9 @@ import QuantityInput from "../common/QuantityInput";
 import { isNumber } from "@/helpers";
 import { Button } from "@heroui/react";
 import { BsTrash } from "react-icons/bs";
+import useDebounce from "@/hooks/useDebounce";
+import { useProductsAutoCompleteQuery } from "@/services/queries/order";
+import FormAutoComplete from "../common/FormAutoComplete";
 
 interface ProductRowProps {
   row: any;
@@ -21,7 +24,16 @@ const ProductRow = ({
   onChange,
   onRowDelete,
 }: ProductRowProps) => {
+  const [query, setQuery] = useState("");
+  const [price, setPrice] = useState("");
+  const [sku, setSku] = useState("");
+  const [tax, setTax] = useState("");
   const [total, setTotal] = useState("");
+
+  const debouncedQuery = useDebounce<string>(query, 500);
+
+  const { data: products = [], isFetching } =
+    useProductsAutoCompleteQuery(debouncedQuery);
 
   const handleTotalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const priceInput: any = document.querySelector(
@@ -49,6 +61,18 @@ const ProductRow = ({
     setTotal(total as any);
   };
 
+  const onSelectionChange = (k: any) => {
+    const match = products.find((p) => p.productID == k);
+    if (match) {
+      setSku(match.productSku);
+      setPrice(match.productPrice as any);
+      setTax(match.productTax as any);
+      setTimeout(() => {
+        handleTotalChange({ target: { name: "" } } as any);
+      }, 0);
+    }
+  };
+
   return (
     <tr className="hover:bg-foreground-50 h-12 align-top">
       {columns.map((column, ind) => (
@@ -62,16 +86,39 @@ const ProductRow = ({
           }}
         >
           {column.field === "orderItemName" ? (
-            <FormInput
+            // <FormInput
+            //   name={"orderItemName" + row.id}
+            //   isRequired
+            //   isDisabled={isView}
+            //   defaultValue={row.orderItemName}
+            // />
+            <FormAutoComplete
+              allowsCustomValue
+              className="w-full"
               name={"orderItemName" + row.id}
-              isRequired
               isDisabled={isView}
-              defaultValue={row.orderItemName}
+              isRequired
+              onInputChange={setQuery}
+              onSelectionChange={onSelectionChange}
+              render={(item) => (
+                <div className="grid grid-cols-2 gap-4">
+                  <p>{item.productName}</p>
+                  <p>{item.productSku}</p>
+                </div>
+              )}
+              options={products.map((p) => ({
+                label: p.productName,
+                value: p.productID,
+                ...p,
+              }))}
+              isLoading={isFetching}
             />
           ) : column.field === "orderItemSku" ? (
             <FormInput
               isDisabled={isView}
               name={"orderItemSku" + row.id}
+              value={sku}
+              onChange={(e) => setSku(e.target.value)}
               defaultValue={row.orderItemSku}
             />
           ) : column.field === "orderItemQuantity" ? (
@@ -89,8 +136,12 @@ const ProductRow = ({
               name={"orderItemPrice" + row.id}
               endContent="SAR"
               isRequired
+              value={price}
               isDisabled={isView}
-              onChange={handleTotalChange}
+              onChange={(e) => {
+                setPrice(e.target.value);
+                handleTotalChange(e);
+              }}
               defaultValue={row.orderItemPrice}
               onKeyPress={(e) => isNumber(e, true)}
             />
@@ -99,7 +150,11 @@ const ProductRow = ({
               name={"orderItemTax" + row.id}
               endContent="SAR"
               isDisabled={isView}
-              onChange={handleTotalChange}
+              value={tax}
+              onChange={(e) => {
+                setTax(e.target.value);
+                handleTotalChange(e);
+              }}
               defaultValue={row.orderItemTax}
               onKeyPress={(e) => isNumber(e, true)}
             />
