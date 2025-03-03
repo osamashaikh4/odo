@@ -22,6 +22,7 @@ import FormSelect from "../common/FormSelect";
 import { isNumber } from "@/helpers";
 import { useQueryClient } from "@tanstack/react-query";
 import { GrDocumentUpload } from "react-icons/gr";
+import { useUploadAssetMutation } from "@/services/queries/asset";
 
 interface ProductModalProps {
   data?: Product;
@@ -51,6 +52,8 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
 
   const updateProduct = useUpdateProductMutation({ onSuccess });
 
+  const uploadAsset = useUploadAssetMutation({});
+
   useEffect(() => {
     onOpen();
   }, []);
@@ -60,14 +63,19 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
     onOpenChange();
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const values: any = Object.fromEntries(
       new FormData(e.currentTarget as any)
     );
 
     if (file) {
-      // values.productImage = '';
+      const formData = new FormData();
+      formData.append("file", file);
+      const f = await uploadAsset.mutateAsync(formData);
+      if (f && f.length > 0) {
+        values.productImage = f[0];
+      }
     } else {
       values.productImage = null;
     }
@@ -84,7 +92,7 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
       addProduct.mutate(fin);
     }
   };
-  console.log(file);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -270,7 +278,11 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
                   <Button
                     color="primary"
                     radius="sm"
-                    isLoading={addProduct.isPending || updateProduct.isPending}
+                    isLoading={
+                      addProduct.isPending ||
+                      updateProduct.isPending ||
+                      uploadAsset.isPending
+                    }
                     onPress={() => {
                       if (submitButtonRef.current)
                         submitButtonRef.current.click();
