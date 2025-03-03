@@ -38,9 +38,9 @@ const IntegrationDetails = ({ id }: IntegrationDetailsProps) => {
   });
 
   const saveIntegration = useSaveIntegrationMutation({
-    onSuccess(data) {
+    onSuccess() {
       setLoading(false);
-      router.push("/integrations");
+      router.push("/integrations/connected-stores");
     },
   });
 
