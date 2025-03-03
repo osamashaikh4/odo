@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
+import { deleteCookie } from "cookies-next";
 
 export const baseURL = process.env.NEXT_PUBLIC_BASE_URL + "/api";
 
@@ -85,6 +86,7 @@ axiosInstance.interceptors.response.use(
               localStorage.removeItem("odo-store");
               localStorage.removeItem("odo-access-token");
               localStorage.removeItem("odo-refresh-token");
+              deleteCookie("odo-access-token");
               window.location.href = "/";
             }
           })
