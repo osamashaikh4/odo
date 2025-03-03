@@ -12,6 +12,7 @@ import { Column } from "../common/Table";
 import { RiBarcodeLine } from "react-icons/ri";
 import { BsPlus } from "react-icons/bs";
 import ProductModal from "./ProductModal";
+import BarcodeGeneratorModal from "./BarcodeGeneratorModal";
 
 interface ProductListProps {
   searchParams?: { [key: string]: any };
@@ -67,6 +68,9 @@ const ProductList = ({ searchParams }: ProductListProps) => {
   const [productModal, setProductModal] = useState<
     (Product & { isView?: boolean }) | null
   >(null);
+  const [barcodeGenerator, setBarcodeGenerator] = useState<Product | null>(
+    null
+  );
   const [selection, setSelection] = useState<Product[]>([]);
   const filters = {
     limit: 10,
@@ -84,6 +88,8 @@ const ProductList = ({ searchParams }: ProductListProps) => {
       setProductModal({ ...data, isView: true });
     } else if (action === "edit-product") {
       setProductModal(data);
+    } else if (action === "barcode-generator") {
+      setBarcodeGenerator(data);
     }
   };
 
@@ -145,6 +151,12 @@ const ProductList = ({ searchParams }: ProductListProps) => {
           );
         }}
       />
+      {barcodeGenerator && (
+        <BarcodeGeneratorModal
+          product={barcodeGenerator}
+          onClose={() => setBarcodeGenerator(null)}
+        />
+      )}
       {productModal && (
         <ProductModal
           isView={productModal.isView}
