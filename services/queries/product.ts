@@ -2,6 +2,7 @@ import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Filter, MutationParams } from "./types";
 import {
   addProduct,
+  exportProducts,
   getProduct,
   getProducts,
   updateProduct,
@@ -52,6 +53,13 @@ export const useAddProductMutation = (params: MutationParams) =>
 export const useUpdateProductMutation = (params: MutationParams) =>
   useMutation({
     mutationFn: updateProduct,
+    ...params,
+    ...defaultParams(params),
+  });
+
+export const useExportProductsMutation = (params: MutationParams) =>
+  useMutation({
+    mutationFn: exportProducts,
     ...params,
     ...defaultParams(params),
   });

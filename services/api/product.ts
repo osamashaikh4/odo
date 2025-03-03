@@ -21,3 +21,6 @@ export const addProduct = (data: any) =>
 
 export const updateProduct = ({ productID, ...data }: any) =>
   axios.put(`/products/${productID}`, data).then((res) => res.data);
+
+export const exportProducts = () =>
+  axios.post("/products/export").then((res) => res.data);

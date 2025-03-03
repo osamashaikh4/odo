@@ -8,17 +8,16 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { RxCross2 } from "react-icons/rx";
-import { Product } from "@/services/queries/product";
 import { Document, PDFViewer } from "@react-pdf/renderer";
 import BarcodeDocument from "./BarcodeDocument";
 
 interface BarcodeGeneratorModalProps {
-  product: Product;
+  barcodes: string[];
   onClose: () => void;
 }
 
 const BarcodeGeneratorModal = ({
-  product,
+  barcodes,
   onClose,
 }: BarcodeGeneratorModalProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -52,7 +51,9 @@ const BarcodeGeneratorModal = ({
             <ModalBody className="px-1 overflow-auto">
               <PDFViewer width="100%" height="500px">
                 <Document>
-                  <BarcodeDocument barcode={product.productBarcode} />
+                  {barcodes.map((barcode) => (
+                    <BarcodeDocument barcode={barcode} />
+                  ))}
                 </Document>
               </PDFViewer>
             </ModalBody>

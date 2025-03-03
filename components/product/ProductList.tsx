@@ -2,8 +2,12 @@
 import React, { useState } from "react";
 import DataGrid from "../common/DataGrid";
 import SectionHeader from "../shipments/SectionHeader";
-import { Product, useProductsQuery } from "@/services/queries/product";
-import { Button } from "@heroui/react";
+import {
+  Product,
+  useExportProductsMutation,
+  useProductsQuery,
+} from "@/services/queries/product";
+import { Button, Checkbox } from "@heroui/react";
 import { OrderIcons } from "../order/OrderListConfig";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
@@ -13,12 +17,28 @@ import { RiBarcodeLine } from "react-icons/ri";
 import { BsPlus } from "react-icons/bs";
 import ProductModal from "./ProductModal";
 import BarcodeGeneratorModal from "./BarcodeGeneratorModal";
+import { onErrorToast } from "@/helpers/toast";
 
 interface ProductListProps {
   searchParams?: { [key: string]: any };
 }
 
 const columns: Column[] = [
+  {
+    field: "productID",
+    headerName: "",
+    type: "checkbox",
+    render: ({ selection = [], onSelectionChange, row }) => (
+      <Checkbox
+        isSelected={selection.includes(row.productID)}
+        onValueChange={() => {
+          if (onSelectionChange) {
+            onSelectionChange(row);
+          }
+        }}
+      />
+    ),
+  },
   { field: "productName", headerName: "Product Name", type: "text" },
   {
     field: "productSku",
@@ -68,7 +88,7 @@ const ProductList = ({ searchParams }: ProductListProps) => {
   const [productModal, setProductModal] = useState<
     (Product & { isView?: boolean }) | null
   >(null);
-  const [barcodeGenerator, setBarcodeGenerator] = useState<Product | null>(
+  const [barcodeGenerator, setBarcodeGenerator] = useState<string[] | null>(
     null
   );
   const [selection, setSelection] = useState<Product[]>([]);
@@ -78,10 +98,12 @@ const ProductList = ({ searchParams }: ProductListProps) => {
     ...searchParams,
   };
 
+  const exportProducts = useExportProductsMutation({});
+
   const { data = { results: [], count: 0 }, isFetching } =
     useProductsQuery(filters);
 
-  const handleAction = (action: string, data: any) => {
+  const handleAction = (action: string, data: Product) => {
     if (action === "add-product") {
       setProductModal({} as any);
     } else if (action === "view-product") {
@@ -89,7 +111,13 @@ const ProductList = ({ searchParams }: ProductListProps) => {
     } else if (action === "edit-product") {
       setProductModal(data);
     } else if (action === "barcode-generator") {
-      setBarcodeGenerator(data);
+      if (!data.productBarcode) {
+        onErrorToast({
+          response: { data: { error: "Please add product barcode first." } },
+        });
+      } else {
+        setBarcodeGenerator([data.productBarcode]);
+      }
     }
   };
 
@@ -114,7 +142,7 @@ const ProductList = ({ searchParams }: ProductListProps) => {
           <Button
             radius="sm"
             color="primary"
-            onPress={() => handleAction("add-product", {})}
+            onPress={() => handleAction("add-product", {} as any)}
             startContent={<BsPlus className="h-6 w-6" />}
           >
             Add Product
@@ -127,10 +155,37 @@ const ProductList = ({ searchParams }: ProductListProps) => {
         selection={selection.map((s) => s.productID)}
         toolbar={
           <div className="pb-2 pr-1 flex items-center justify-between">
-            <div className="flex items-center gap-5"></div>
+            <div className="flex items-center gap-5">
+              <Button
+                isDisabled={selection.length === 0}
+                variant="light"
+                onPress={() => {
+                  if (selection.some((s) => s.productBarcode)) {
+                    setBarcodeGenerator(
+                      selection
+                        .filter((s) => s.productBarcode)
+                        .map((s) => s.productBarcode)
+                    );
+                  } else {
+                    onErrorToast({
+                      response: {
+                        data: { error: "Please add product barcode first." },
+                      },
+                    });
+                  }
+                }}
+                startContent={
+                  <RiBarcodeLine size={18} className="text-gray-600" />
+                }
+              >
+                Barcode Generator
+              </Button>
+            </div>
             <Button
               variant="bordered"
               radius="sm"
+              isLoading={exportProducts.isPending}
+              onPress={() => exportProducts.mutate()}
               className="min-w-10 border-small"
             >
               Export Data
@@ -153,7 +208,7 @@ const ProductList = ({ searchParams }: ProductListProps) => {
       />
       {barcodeGenerator && (
         <BarcodeGeneratorModal
-          product={barcodeGenerator}
+          barcodes={barcodeGenerator}
           onClose={() => setBarcodeGenerator(null)}
         />
       )}
