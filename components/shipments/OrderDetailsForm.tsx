@@ -262,7 +262,9 @@ const OrderDetailsForm = ({
                 variant="light"
                 isDisabled={totalRowsAmount <= 0}
                 color="primary"
-                onPress={() => setOrderAmount(totalRowsAmount)}
+                onPress={() => {
+                  setOrderAmount(totalRowsAmount);
+                }}
               >
                 Adjust Order Value
               </Button>

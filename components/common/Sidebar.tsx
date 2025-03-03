@@ -47,7 +47,14 @@ const SidebarItems = [
   {
     label: "Products",
     value: "products",
-    icon: <BsBasket2 size={22} />,
+    icon: (
+      <Image
+        src="/assets/icons/basket.svg"
+        alt="location"
+        width={24}
+        height={24}
+      />
+    ),
   },
   {
     label: "Pickup Location",

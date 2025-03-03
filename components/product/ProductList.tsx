@@ -18,6 +18,7 @@ import { BsPlus } from "react-icons/bs";
 import ProductModal from "./ProductModal";
 import BarcodeGeneratorModal from "./BarcodeGeneratorModal";
 import { onErrorToast } from "@/helpers/toast";
+import ProductImage from "./ProductImage";
 
 interface ProductListProps {
   searchParams?: { [key: string]: any };
@@ -39,7 +40,19 @@ const columns: Column[] = [
       />
     ),
   },
-  { field: "productName", headerName: "Product Name", type: "text" },
+  {
+    field: "productName",
+    headerName: "Product Name",
+    type: "text",
+    render: ({ value, row }) => (
+      <div className="flex items-center gap-2">
+        <ProductImage image={row.productImage} altText={value} />
+        <span className="overflow-hidden block text-ellipsis whitespace-nowrap">
+          {value}
+        </span>
+      </div>
+    ),
+  },
   {
     field: "productSku",
     headerName: "SKU",
@@ -92,11 +105,11 @@ const ProductList = ({ searchParams }: ProductListProps) => {
     null
   );
   const [selection, setSelection] = useState<Product[]>([]);
-  const filters = {
+  const [filters, setFilters] = useState({
     limit: 10,
     offset: 0,
     ...searchParams,
-  };
+  });
 
   const exportProducts = useExportProductsMutation({});
 
@@ -133,11 +146,17 @@ const ProductList = ({ searchParams }: ProductListProps) => {
     setSelection(tmp);
   };
 
+  const onFilter = (_filters: any) => {
+    const tmp = { ...filters, ..._filters };
+    setFilters(tmp);
+    router.push(`/products?${queryString.stringify(tmp)}`);
+  };
+
   return (
     <>
       <SectionHeader
         title="Products"
-        icon="shipment"
+        icon="basket"
         rightAction={
           <Button
             radius="sm"
@@ -200,11 +219,7 @@ const ProductList = ({ searchParams }: ProductListProps) => {
         options={menuOptions}
         columns={columns}
         entity="orders"
-        onFilter={(f) => {
-          router.push(
-            `/products?${queryString.stringify({ ...filters, ...f })}`
-          );
-        }}
+        onFilter={onFilter}
       />
       {barcodeGenerator && (
         <BarcodeGeneratorModal

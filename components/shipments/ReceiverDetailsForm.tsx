@@ -28,6 +28,7 @@ const ReceiverDetailsForm = ({
   const [customerPhone, setCustomerPhone] = useState(
     values?.customerPhone ?? ""
   );
+  const [firstName, setFirstName] = useState(values?.customerFirstName ?? "");
   const [state, setState] = useState(values?.state ?? "");
   const [city, setCity] = useState(values?.city ?? "");
   const [lastName, setLastName] = useState(values?.customerLastName ?? "");
@@ -54,6 +55,7 @@ const ReceiverDetailsForm = ({
   const onSuggestionSelect = (k: any) => {
     const match = customerSuggestions.find((c) => c.customerID == k);
     if (match) {
+      setFirstName(match.customerFirstName);
       setLastName(match.customerLastName);
       setEmail(match.customerEmail);
       setCustomerPhone(match.customerPhone);
@@ -97,30 +99,40 @@ const ReceiverDetailsForm = ({
               placeholder=" "
             />
           ) : (
-            <FormAutoComplete
-              allowsCustomValue
-              className="w-full"
-              name="customerFirstName"
-              labelPlacement="outside"
-              placeholder=" "
-              isRequired
-              onInputChange={setQuery}
-              onSelectionChange={onSuggestionSelect}
-              render={(item) => (
-                <div className="grid grid-cols-3">
-                  <p>{item.customerFirstName}</p>
-                  <p>{item.customerLastName}</p>
-                  <p>{item.customerPhone}</p>
-                </div>
-              )}
-              label="First Name"
-              options={customerSuggestions.map((c, i) => ({
-                label: c.customerFirstName,
-                value: c.customerID,
-                ...c,
-              }))}
-              isLoading={isFetching}
-            />
+            <div>
+              <FormAutoComplete
+                allowsCustomValue
+                className="w-full"
+                labelPlacement="outside"
+                placeholder=" "
+                isRequired
+                onInputChange={(v) => {
+                  setQuery(v);
+                  setFirstName(v);
+                }}
+                onSelectionChange={onSuggestionSelect}
+                render={(item) => (
+                  <div className="grid grid-cols-3">
+                    <p>{item.customerFirstName}</p>
+                    <p>{item.customerLastName}</p>
+                    <p>{item.customerPhone}</p>
+                  </div>
+                )}
+                label="First Name"
+                options={customerSuggestions.map((c, i) => ({
+                  label: c.customerFirstName,
+                  value: c.customerID,
+                  ...c,
+                }))}
+                isLoading={isFetching}
+              />
+              <input
+                type="hidden"
+                value={firstName}
+                onChange={() => {}}
+                name="customerFirstName"
+              />
+            </div>
           )}
           <FormInput
             size="md"

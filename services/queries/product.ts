@@ -18,6 +18,7 @@ export type Product = {
   productDescription: string;
   productCurrency: string;
   productBarcode: string;
+  productImage: string;
   productCategory: string;
 };
 

@@ -1,5 +1,5 @@
-import { cn } from "@/helpers";
 import React from "react";
+import { cn } from "@/helpers";
 import Menu, { MenuProps } from "./Menu";
 import { Button, Checkbox, DateRangePicker } from "@heroui/react";
 import { LuEllipsis } from "react-icons/lu";
@@ -55,7 +55,7 @@ const Table = ({
   entity = "",
   onAction,
   filters,
-  onFilter = () => {},
+  onFilter,
   options = [],
   outerAction,
   classNames,
@@ -109,10 +109,12 @@ const Table = ({
                         {column.type === "text" ? (
                           <FilterInput
                             size="sm"
+                            filters={filters}
                             defaultValue={filters[column.field]}
-                            onChange={(e) =>
-                              onFilter({ [column.field]: e.target.value })
-                            }
+                            onChange={(e) => {
+                              if (onFilter)
+                                onFilter({ [column.field]: e.target.value });
+                            }}
                           />
                         ) : column.type === "checkbox" ? (
                           <Checkbox
@@ -135,23 +137,27 @@ const Table = ({
                           <div className="flex items-center gap-2">
                             <FilterInput
                               size="sm"
+                              filters={filters}
                               placeholder="Min"
                               defaultValue={filters[column.field + "Min"]}
-                              onChange={(e) =>
-                                onFilter({
-                                  [column.field + "Min"]: e.target.value,
-                                })
-                              }
+                              onChange={(e) => {
+                                if (onFilter)
+                                  onFilter({
+                                    [column.field + "Min"]: e.target.value,
+                                  });
+                              }}
                             />
                             <FilterInput
                               size="sm"
+                              filters={filters}
                               placeholder="Max"
                               defaultValue={filters[column.field + "Max"]}
-                              onChange={(e) =>
-                                onFilter({
-                                  [column.field + "Max"]: e.target.value,
-                                })
-                              }
+                              onChange={(e) => {
+                                if (onFilter)
+                                  onFilter({
+                                    [column.field + "Max"]: e.target.value,
+                                  });
+                              }}
                             />
                           </div>
                         ) : column.type === "dropdown" ? (
@@ -160,7 +166,9 @@ const Table = ({
                               filters={filters}
                               column={column.field}
                               entity={entity}
-                              onFilter={onFilter}
+                              onFilter={(f) => {
+                                if (onFilter) onFilter(f);
+                              }}
                             />
                           </div>
                         ) : column.type === "date" ? (
@@ -173,16 +181,19 @@ const Table = ({
                             }}
                             selectorButtonPlacement="start"
                             onChange={(v: any) => {
-                              if (v) {
-                                onFilter({
-                                  [`${column.field}Start`]: v.start.toString(),
-                                  [`${column.field}End`]: v.end.toString(),
-                                });
-                              } else {
-                                onFilter({
-                                  [`${column.field}Start`]: undefined,
-                                  [`${column.field}End`]: undefined,
-                                });
+                              if (onFilter) {
+                                if (v) {
+                                  onFilter({
+                                    [`${column.field}Start`]:
+                                      v.start.toString(),
+                                    [`${column.field}End`]: v.end.toString(),
+                                  });
+                                } else {
+                                  onFilter({
+                                    [`${column.field}Start`]: undefined,
+                                    [`${column.field}End`]: undefined,
+                                  });
+                                }
                               }
                             }}
                           />

@@ -64,11 +64,11 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
   const [selection, setSelection] = useState<Order[]>([]);
   const [cancelModal, setCancelModal] = useState<Order | null>(null);
   const [rateModal, setRateModal] = useState<Order[] | null>(null);
-  const filters = {
+  const [filters, setFilters] = useState({
     limit: 10,
     offset: 0,
     ...searchParams,
-  };
+  });
 
   const { data: warehouse, isLoading: isGettingWarehouse } =
     useWarehouseQuery();
@@ -122,6 +122,16 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
       tmp.push(row);
     }
     setSelection(tmp);
+  };
+
+  const onFilter = (_filters: any) => {
+    const tmp = { ...filters, ..._filters };
+    setFilters(tmp);
+    router.push(
+      `/shipments/${SelectionMap[type].selectedKey}?${queryString.stringify(
+        tmp
+      )}`
+    );
   };
 
   return (
@@ -201,13 +211,7 @@ const OrderList = ({ searchParams, type }: OrderListProps) => {
         options={SelectionMap[type].menuOptions}
         columns={SelectionMap[type].columns}
         entity="orders"
-        onFilter={(f) => {
-          router.push(
-            `/shipments/${
-              SelectionMap[type].selectedKey
-            }?${queryString.stringify({ ...filters, ...f })}`
-          );
-        }}
+        onFilter={onFilter}
       />
       {orderModal && <OrderModal onClose={() => setOrderModal(null)} />}
       {orderDetails && (

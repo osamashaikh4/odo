@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Column } from "../common/Table";
 import FormInput from "../common/FormInput";
 import QuantityInput from "../common/QuantityInput";
-import { isNumber } from "@/helpers";
+import { cn, isNumber } from "@/helpers";
 import { Button } from "@heroui/react";
 import { BsTrash } from "react-icons/bs";
 import useDebounce from "@/hooks/useDebounce";
 import { useProductsAutoCompleteQuery } from "@/services/queries/order";
 import FormAutoComplete from "../common/FormAutoComplete";
+import ProductImage from "../product/ProductImage";
 
 interface ProductRowProps {
   row: any;
@@ -25,10 +26,11 @@ const ProductRow = ({
   onRowDelete,
 }: ProductRowProps) => {
   const [query, setQuery] = useState("");
-  const [price, setPrice] = useState("");
-  const [sku, setSku] = useState("");
-  const [tax, setTax] = useState("");
-  const [total, setTotal] = useState("");
+  const [name, setName] = useState(row.orderItemName ?? "");
+  const [price, setPrice] = useState(row.orderItemPrice ?? "");
+  const [sku, setSku] = useState(row.orderItemSku ?? "");
+  const [tax, setTax] = useState(row.orderItemTax ?? "");
+  const [total, setTotal] = useState(row.orderItemTotal ?? "");
 
   const debouncedQuery = useDebounce<string>(query, 500);
 
@@ -64,6 +66,7 @@ const ProductRow = ({
   const onSelectionChange = (k: any) => {
     const match = products.find((p) => p.productID == k);
     if (match) {
+      setName(match.productName);
       setSku(match.productSku);
       setPrice(match.productPrice as any);
       setTax(match.productTax as any);
@@ -77,7 +80,10 @@ const ProductRow = ({
     <tr className="hover:bg-foreground-50 h-12 align-top">
       {columns.map((column, ind) => (
         <td
-          className="py-2 px-4 overflow-hidden text-ellipsis text-sm text-dark"
+          className={cn(
+            "py-2 px-4 overflow-hidden text-ellipsis text-sm text-dark",
+            column.field === "orderItemName" ? "px-3" : ""
+          )}
           key={`row--col-${ind}`}
           style={{
             minWidth: 45,
@@ -92,27 +98,39 @@ const ProductRow = ({
             //   isDisabled={isView}
             //   defaultValue={row.orderItemName}
             // />
-            <FormAutoComplete
-              allowsCustomValue
-              className="w-full"
-              name={"orderItemName" + row.id}
-              isDisabled={isView}
-              isRequired
-              onInputChange={setQuery}
-              onSelectionChange={onSelectionChange}
-              render={(item) => (
-                <div className="grid grid-cols-2 gap-4">
-                  <p>{item.productName}</p>
-                  <p>{item.productSku}</p>
-                </div>
-              )}
-              options={products.map((p) => ({
-                label: p.productName,
-                value: p.productID,
-                ...p,
-              }))}
-              isLoading={isFetching}
-            />
+            <div className="flex items-center gap-2">
+              <ProductImage image="" />
+              <FormAutoComplete
+                allowsCustomValue
+                className="w-full"
+                isDisabled={isView}
+                isRequired
+                defaultInputValue={row.orderItemName}
+                onInputChange={(v) => {
+                  setQuery(v);
+                  setName(v);
+                }}
+                onSelectionChange={onSelectionChange}
+                render={(item) => (
+                  <div className="grid grid-cols-2 gap-4">
+                    <p>{item.productName}</p>
+                    <p>{item.productSku}</p>
+                  </div>
+                )}
+                options={products.map((p) => ({
+                  label: p.productName,
+                  value: p.productID,
+                  ...p,
+                }))}
+                isLoading={isFetching}
+              />
+              <input
+                type="hidden"
+                value={name}
+                onChange={() => {}}
+                name={"orderItemName" + row.id}
+              />
+            </div>
           ) : column.field === "orderItemSku" ? (
             <FormInput
               isDisabled={isView}
@@ -163,7 +181,11 @@ const ProductRow = ({
               name={"orderItemTotal" + row.id}
               isRequired
               value={total}
-              onChange={(e) => setTotal(e.target.value)}
+              onChange={(e) => {
+                if (onChange)
+                  onChange(row.id, parseFloat(e.target.value || "0"));
+                setTotal(e.target.value);
+              }}
               isDisabled={isView}
               endContent="SAR"
               defaultValue={row.orderItemTotal}

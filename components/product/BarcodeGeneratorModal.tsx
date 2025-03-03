@@ -43,7 +43,7 @@ const BarcodeGeneratorModal = ({
       classNames={{ backdrop: "modal-backdrop" }}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
               Barcode Generator

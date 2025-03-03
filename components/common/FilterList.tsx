@@ -34,7 +34,14 @@ const FilterList = ({ column, entity, filters, onFilter }: FilterListProps) => {
           : []
       }
       onSelectionChange={(s) => {
-        onFilter({ [column]: s });
+        const sel = Array.isArray(filters[column])
+          ? filters[column]
+          : typeof filters[column] === "string"
+          ? [filters[column]]
+          : [];
+
+        if ((sel.length > 0 && s.length === 0) || s.length > 0)
+          onFilter({ [column]: s });
       }}
     />
   );

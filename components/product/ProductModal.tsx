@@ -23,6 +23,7 @@ import { isNumber } from "@/helpers";
 import { useQueryClient } from "@tanstack/react-query";
 import { GrDocumentUpload } from "react-icons/gr";
 import { useUploadAssetMutation } from "@/services/queries/asset";
+import ProductImage from "./ProductImage";
 
 interface ProductModalProps {
   data?: Product;
@@ -35,6 +36,7 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
   const fileInput = useRef<HTMLInputElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [prodImage, setProdImage] = useState(data?.productImage ?? "");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { data: product, isFetching } = useProductQuery(data?.productID ?? "", {
@@ -76,6 +78,8 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
       if (f && f.length > 0) {
         values.productImage = f[0];
       }
+    } else if (prodImage) {
+      values.productImage = prodImage;
     } else {
       values.productImage = null;
     }
@@ -205,37 +209,73 @@ const ProductModal = ({ data, isView, onClose }: ProductModalProps) => {
                       labelPlacement="outside"
                       placeholder=" "
                     />
-                    <div className="flex items-end relative">
-                      <FormInput
-                        className="w-full"
-                        label="Image"
-                        ref={fileInput}
-                        isDisabled={isView}
-                        isReadOnly
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) setFile(e.target.files[0]);
-                        }}
-                        accept="image/png, image/jpeg, image/jpg"
-                        multiple={false}
-                        defaultValue="Select File"
-                        name="productImage"
-                        labelPlacement="outside"
-                        placeholder=" "
-                      />
-                      <Button
-                        variant="bordered"
-                        radius="sm"
-                        isDisabled={isView}
-                        className="border-small absolute right-0"
-                        startContent={<GrDocumentUpload className="h-4 w-4" />}
-                        onPress={() => {
-                          if (fileInput.current) fileInput.current.click();
-                        }}
-                      >
-                        Upload
-                      </Button>
-                    </div>
+                    {prodImage || file ? (
+                      <div className="flex flex-col gap-1">
+                        <label
+                          className="pointer-events-none text-small"
+                          htmlFor="productImage"
+                        >
+                          Image
+                        </label>
+                        <div className="flex items-center justify-between">
+                          <ProductImage
+                            containerClassName="h-10 w-10"
+                            image={
+                              prodImage
+                                ? prodImage
+                                : file
+                                ? URL.createObjectURL(file)
+                                : ""
+                            }
+                            modalClassName="max-h-[calc(100%_-_12rem)] h-full max-w-[45rem]"
+                            modalImageClassName="h-full"
+                          />
+                          <RxCross2
+                            className="cursor-pointer appearance-none select-none end-1 p-2 text-foreground-500 rounded-full hover:bg-default-100 active:bg-default-200 tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2"
+                            fontSize="2rem"
+                            color="#171717"
+                            onClick={() => {
+                              setFile(null);
+                              setProdImage("");
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-end relative">
+                        <FormInput
+                          className="w-full"
+                          label="Image"
+                          ref={fileInput}
+                          isDisabled={isView}
+                          isReadOnly
+                          type="file"
+                          onChange={(e) => {
+                            if (e.target.files) setFile(e.target.files[0]);
+                          }}
+                          accept="image/png, image/jpeg, image/jpg"
+                          multiple={false}
+                          defaultValue="Select File"
+                          name="productImage"
+                          labelPlacement="outside"
+                          placeholder=" "
+                        />
+                        <Button
+                          variant="bordered"
+                          radius="sm"
+                          isDisabled={isView}
+                          className="border-small absolute right-0"
+                          startContent={
+                            <GrDocumentUpload className="h-4 w-4" />
+                          }
+                          onPress={() => {
+                            if (fileInput.current) fileInput.current.click();
+                          }}
+                        >
+                          Upload
+                        </Button>
+                      </div>
+                    )}
                     <FormInput
                       className="w-full"
                       label="Barcode"

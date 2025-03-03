@@ -2,7 +2,6 @@ import React from "react";
 import {
   Autocomplete,
   AutocompleteItem,
-  AutocompleteItemProps,
   AutocompleteProps,
 } from "@heroui/react";
 import { cn } from "@/helpers";
