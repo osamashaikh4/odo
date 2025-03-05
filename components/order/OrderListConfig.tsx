@@ -168,6 +168,24 @@ const getAwaitingPickupOrdersMenuOptions = [
   },
 ];
 
+const getShippingOrdersMenuOptions = [
+  {
+    label: "View Order",
+    value: "view-order",
+    icon: OrderIcons.view,
+  },
+  {
+    label: "Print",
+    value: "print-order",
+    icon: OrderIcons.print,
+  },
+  {
+    label: "Order Items",
+    value: "order-items",
+    icon: OrderIcons.cart,
+  },
+];
+
 const getCanceledOrdersMenuOptions = [
   {
     label: "View Order",
@@ -408,6 +426,142 @@ const getCanceledOrdersColumns: Column[] = [
   },
 ];
 
+const getShippingOrdersColumns: Column[] = [
+  {
+    field: "orderID",
+    headerName: "",
+    type: "checkbox",
+    render: ({ selection = [], onSelectionChange, row }) => (
+      <Checkbox
+        isSelected={selection.includes(row.orderID)}
+        onValueChange={() => {
+          if (onSelectionChange) {
+            onSelectionChange(row);
+          }
+        }}
+      />
+    ),
+  },
+  { field: "orderNumber", headerName: "Order ID", type: "text" },
+  {
+    field: "orderDate",
+    headerName: "Order Date",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">
+        {moment(value).format("DD/MM/YYYY hh:mm")}
+      </span>
+    ),
+    type: "date",
+  },
+  {
+    field: "orderState",
+    headerName: "Status",
+    type: "dropdown",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">{OrderStateMap[value] || value}</span>
+    ),
+  },
+  {
+    field: "customerName",
+    headerName: "Customer Name",
+    render: ({ row }) => <>{row.customer.fullName}</>,
+    type: "text",
+  },
+  {
+    field: "city",
+    headerName: "Destination City",
+    render: ({ row }) => <>{row.address.city}</>,
+    type: "dropdown",
+  },
+  {
+    field: "shipmentNumber",
+    headerName: "Shipment Number",
+    render: ({ row }) => <>{row.shipment.shipmentNumber}</>,
+    type: "text",
+  },
+  {
+    field: "shippingPartnerName",
+    headerName: "Delivery Company",
+    type: "dropdown",
+    render: ({ row }) => (
+      <>{row.shipment.shippingPartner.shippingPartnerName}</>
+    ),
+  },
+];
+
+const getReturnedOrdersColumns: Column[] = [
+  {
+    field: "orderID",
+    headerName: "",
+    type: "checkbox",
+    render: ({ selection = [], onSelectionChange, row }) => (
+      <Checkbox
+        isSelected={selection.includes(row.orderID)}
+        onValueChange={() => {
+          if (onSelectionChange) {
+            onSelectionChange(row);
+          }
+        }}
+      />
+    ),
+  },
+  { field: "orderNumber", headerName: "Order ID", type: "text" },
+  {
+    field: "orderDate",
+    headerName: "Order Date",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">
+        {moment(value).format("DD/MM/YYYY hh:mm")}
+      </span>
+    ),
+    type: "date",
+  },
+  {
+    field: "orderState",
+    headerName: "Status",
+    type: "dropdown",
+    render: ({ value }) => (
+      <span className="whitespace-nowrap">{OrderStateMap[value] || value}</span>
+    ),
+  },
+  {
+    field: "customerName",
+    headerName: "Customer Name",
+    render: ({ row }) => <>{row.customer.fullName}</>,
+    type: "text",
+  },
+  {
+    field: "shipmentNumber",
+    headerName: "Shipment Number",
+    render: ({ row }) => <>{row.shipment.shipmentNumber}</>,
+    type: "text",
+  },
+  {
+    field: "shippingPartnerName",
+    headerName: "Delivery Company",
+    type: "dropdown",
+    render: ({ row }) => (
+      <>{row.shipment.shippingPartner.shippingPartnerName}</>
+    ),
+  },
+  {
+    field: "returnReason",
+    headerName: "Return Reason",
+    render: ({ row }) => <>{row.return.orderReturnReason}</>,
+    type: "text",
+  },
+  {
+    field: "returnDate",
+    headerName: "Return Date",
+    render: ({ row }) => (
+      <span className="whitespace-nowrap">
+        {moment(row.return.orderReturnDate).format("DD/MM/YYYY hh:mm")}
+      </span>
+    ),
+    type: "date",
+  },
+];
+
 export const SelectionMap: {
   [key: string]: { selectedKey: string; columns: Column[]; menuOptions: any[] };
 } = {
@@ -430,5 +584,15 @@ export const SelectionMap: {
     selectedKey: "canceled-orders",
     columns: getCanceledOrdersColumns,
     menuOptions: getCanceledOrdersMenuOptions,
+  },
+  getShippingOrders: {
+    selectedKey: "currently-shipping",
+    columns: getShippingOrdersColumns,
+    menuOptions: getShippingOrdersMenuOptions,
+  },
+  getReturnedOrders: {
+    selectedKey: "returned-orders",
+    columns: getReturnedOrdersColumns,
+    menuOptions: getShippingOrdersMenuOptions,
   },
 };

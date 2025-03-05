@@ -19,6 +19,8 @@ export const OrderStateMap: { [key: string]: string } = {
   assigned: "Assigned to Warehouse",
   awaitingPickup: "Awaiting Pickup",
   canceled: "Canceled Order",
+  currentlyShipping: "Currently Shipping",
+  returned: "Returned",
 };
 
 export const isNumber = (e: any, allowDecimal?: boolean) => {

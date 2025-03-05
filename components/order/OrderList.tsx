@@ -43,6 +43,21 @@ const tabs = [
     href: "/shipments/awaiting-pickup",
   },
   {
+    title: "Currently Shipping",
+    key: "currently-shipping",
+    href: "/shipments/currently-shipping",
+  },
+  {
+    title: "Delivered",
+    key: "delivered-orders",
+    href: "/shipments/delivered-orders",
+  },
+  {
+    title: "Returned",
+    key: "returned-orders",
+    href: "/shipments/returned-orders",
+  },
+  {
     title: "Canceled Orders",
     key: "canceled-orders",
     href: "/shipments/canceled-orders",
