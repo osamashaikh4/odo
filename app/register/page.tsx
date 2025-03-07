@@ -11,8 +11,8 @@ export default function page() {
       <div>
         <Image
           className="absolute -top-[73px] -left-[34px]"
-          src="/assets/images/odo-logo.png"
-          alt="odo-logo"
+          src="/assets/images/black-bolt-logo.jpg"
+          alt="black-bolt-logo"
           width={250}
           height={250}
         />

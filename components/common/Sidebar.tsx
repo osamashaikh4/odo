@@ -83,8 +83,8 @@ const Sidebar = ({ active }: SidebarProps) => {
         <div className="flex items-center justify-between p-4 h-16 relative overflow-hidden">
           <Image
             className="absolute -top-[73px] -left-[34px]"
-            src="/assets/images/odo-logo.png"
-            alt="odo-logo"
+            src="/assets/images/black-bolt-logo.jpg"
+            alt="black-bolt-logo"
             width={500}
             height={500}
           />
