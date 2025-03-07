@@ -2,9 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/helpers";
-import { Avatar, Button } from "@heroui/react";
 import UserAvatar from "./UserAvatar";
-import { BsBasket, BsBasket2 } from "react-icons/bs";
 
 interface SidebarProps {
   active: string;
@@ -80,13 +78,12 @@ const Sidebar = ({ active }: SidebarProps) => {
         className="h-full bg-white"
         style={{ maxHeight: "calc(-23rem + 100dvh)" }}
       >
-        <div className="flex items-center justify-between p-4 h-16 relative overflow-hidden">
-          <Image
-            className="absolute -top-[73px] -left-[34px]"
-            src="/assets/images/black-bolt-logo.jpg"
+        <div className="flex items-center justify-between -left-7 h-24 relative overflow-hidden">
+          <img
+            src="/assets/images/black-bolt-logo.png"
             alt="black-bolt-logo"
-            width={500}
-            height={500}
+            width={150}
+            height={150}
           />
         </div>
         <div className="relative flex-1 flex flex-col min-h-0 bg-white pt-0">
